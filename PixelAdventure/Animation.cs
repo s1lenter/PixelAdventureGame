@@ -51,8 +51,6 @@ namespace PixelAdventure
             }
         }
 
-        
-
         public Rectangle CreateRectangle(int frameWidth)
         {
             return new Rectangle(currentFrame.X * frameWidth, currentFrame.Y * frameHeight, frameWidth, frameHeight);

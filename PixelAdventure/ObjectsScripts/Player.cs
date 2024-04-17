@@ -10,12 +10,12 @@ using System.Data;
 using System.Threading;
 using System.Reflection.Metadata.Ecma335;
 using System.Net.Mime;
+using System.Reflection.Metadata;
 
 namespace PixelAdventure.ObjectsScripts
 {
     internal static class Player
     {
-        private static Game1 game;
         public static Point Size { get; private set; }
         public static Point Spawn { get; private set; }
 
@@ -30,15 +30,13 @@ namespace PixelAdventure.ObjectsScripts
 
         public static bool IsMove = false; 
 
-        public static Animation walkRight;
-        public static Animation walkLeft;
-        private static Animation idleAnim;
-        private static Animation idleAnimLeft;
+        public static Animation walk;
+        private static Animation idle;
 
-        private static Texture2D walkRightSprite;
-        private static Texture2D walkLeftSprite;
-        private static Texture2D idleSprite;
-        private static Texture2D idleLeftSprite;
+        public static Animation currentAnimation;
+
+        private static Dictionary<string, Texture2D> animationSprites;
+        private static Dictionary<Texture2D, Animation> animations;
 
         public static Point currentFrameWalk = new Point(0, 0);
         private static Point spriteSizeWalk = new Point(6, 0);
@@ -57,61 +55,66 @@ namespace PixelAdventure.ObjectsScripts
             jumpForce = 50;
         }
 
-        public static void InicializeSprites(Texture2D right, Texture2D left, Texture2D idle)
+        public static void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite, Texture2D idleRightSprite, Texture2D idleLeftSprite)
         {
-            walkLeftSprite = right;
-            walkRightSprite = left;
-            idleSprite = idle;
-            walkRight = new Animation(walkRightSprite, 32, 32, currentFrameWalk, spriteSizeWalk);
-            walkLeft = new Animation(walkLeftSprite, 32, 32, currentFrameWalk, spriteSizeWalk);
-            idleAnim = new Animation(idleSprite, 32, 32, currentFrameIdle, spriteSizeIdle);
-            idleAnimLeft = new Animation(idleLeftSprite, 32, 32, currentFrameIdle, spriteSizeIdle);
+            walk = new Animation(walkRightSprite, 32, 32, currentFrameWalk, spriteSizeWalk);
+            idle = new Animation(idleRightSprite, 32, 32, currentFrameIdle, spriteSizeIdle);
+
+            animationSprites = new Dictionary<string, Texture2D>()
+            {
+                { "walkLeft", walkLeftSprite},
+                { "walkRight", walkRightSprite},
+                { "idleLeft", idleLeftSprite },
+                { "idleRight", idleRightSprite }
+            };
+
+            animations = new Dictionary<Texture2D, Animation>()
+            {
+                { walkLeftSprite, walk },
+                { walkRightSprite, walk },
+                { idleLeftSprite, idle },
+                { idleRightSprite, idle },
+            };
+            currentAnimation = new Animation(walkRightSprite, 32, 32, currentFrameWalk, spriteSizeWalk);
         }
-        public static Animation currentAnimation = new Animation(walkRightSprite, 32, 32, currentFrameWalk, spriteSizeWalk);
+
         public static bool GoLeft = false;
-        public static void Move(Point currentFrame, GameTime gameTime)
+        public static void Move(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 GoLeft = false;
-                Vector.X += speed;
                 IsMove = true;
-                currentAnimation = walkRight;
+                Vector.X += speed;
+                currentAnimation = walk;
                 currentAnimation.StartAnimation(gameTime);
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 GoLeft = true;
-                Vector.X -= speed;
                 IsMove = true;
-                currentAnimation = walkLeft;
+                Vector.X -= speed;
+                currentAnimation = walk;
                 currentAnimation.StartAnimation(gameTime);
             }
             else if (!Keyboard.GetState().IsKeyDown(Keys.D) && !GoLeft)
             {
                 GoLeft = false;
                 IsMove = false;
-                currentAnimation = idleAnim;
+                currentAnimation = idle;
                 currentAnimation.StartAnimation(gameTime);
             }
             else if (!Keyboard.GetState().IsKeyDown(Keys.A) && GoLeft)
             {
                 GoLeft = true;
                 IsMove = false;
-                currentAnimation = idleAnimLeft;
+                currentAnimation = idle;
                 currentAnimation.StartAnimation(gameTime);
             }
             if (Vector.X <= -11)
                 Vector.X = -11;
             if (Vector.X >= Game1.windowWidth - Size.X)
                 Vector.X = Game1.windowWidth - Size.X;
-        }
-
-        public static bool IsNotJump()
-        {
-            if (Keyboard.GetState().IsKeyUp(Keys.W))
-                return true;
-            return false;
         }
 
         public static void CollideWithPlatforms(Platform[] platforms, float gravity)
@@ -157,13 +160,7 @@ namespace PixelAdventure.ObjectsScripts
                 }
             }
         }
-        private static Keys previousKey = Keys.W;
-        //private static bool KeyIsPressed()
-        //{
-        //    WHIKeyboard.GetState().IsKeyUp(Keys.W))
-        //        return false;
-        //    return true;
-        //}
+
         static int countJump = 0;
         public static void Jump()
         {
@@ -171,7 +168,6 @@ namespace PixelAdventure.ObjectsScripts
             {
                 countJump++;
                 Vector.Y -= jumpForce;
-                previousKey = Keys.W;
             }
             else if (countJump > 0)
             {
@@ -185,30 +181,28 @@ namespace PixelAdventure.ObjectsScripts
         public static void StartAgain()
         {
             Vector.X = 0;
+            GoLeft = false;
         }
 
-        public static void DrawPlayerAnimation(SpriteBatch _spriteBatch, Dictionary<string, Texture2D> sprites, Dictionary<Texture2D, Animation> animations)
+        public static void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture, Animation animation)
+        {
+            _spriteBatch.Draw(texture,
+                    new Rectangle((int)Vector.X, (int)Vector.Y - 10, Size.X + 10, Size.Y + 10),
+                    currentAnimation.CreateRectangle(animation.frameWidth),
+                    Color.White);
+        }
+
+        public static void DrawPlayerAnimation(SpriteBatch _spriteBatch)
         {
             if (!Player.GoLeft && Player.IsMove)
-                _spriteBatch.Draw(sprites["playerWalkRight"],
-                    new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10),
-                    Player.currentAnimation.CreateRectangle(animations[sprites["playerWalkRight"]].frameWidth),
-                    Color.White);
+                DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]]);
             else if (Player.GoLeft && Player.IsMove)
-                _spriteBatch.Draw(sprites["playerWalkLeft"],
-                    new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10),
-                    Player.currentAnimation.CreateRectangle(animations[sprites["playerWalkLeft"]].frameWidth),
-                    Color.White);
+                DrawCurrentAnimation(_spriteBatch, animationSprites["walkLeft"], animations[animationSprites["walkLeft"]]);
             else if (!Player.IsMove && !Player.GoLeft)
-                _spriteBatch.Draw(sprites["playerIdleRight"],
-                    new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10),
-                    Player.currentAnimation.CreateRectangle(animations[sprites["playerIdleRight"]].frameWidth),
-                    Color.White);
+                DrawCurrentAnimation(_spriteBatch, animationSprites["idleRight"], animations[animationSprites["idleRight"]]);
             else if (!Player.IsMove && Player.GoLeft)
-                _spriteBatch.Draw(sprites["playerIdleLeft"],
-                    new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10),
-                    Player.currentAnimation.CreateRectangle(animations[sprites["playerIdleLeft"]].frameWidth),
-                    Color.White);
+                DrawCurrentAnimation(_spriteBatch, animationSprites["idleLeft"], animations[animationSprites["idleLeft"]]);
+
         }
     }
 }
