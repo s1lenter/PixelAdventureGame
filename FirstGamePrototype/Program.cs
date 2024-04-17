@@ -1,3 +1,3 @@
 ﻿
-using var game = new FirstGamePrototype.Game1();
+using var game = new PixelAdventure.Game1();
 game.Run();

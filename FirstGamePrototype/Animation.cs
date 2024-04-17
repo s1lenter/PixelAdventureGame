@@ -1,4 +1,4 @@
-﻿using FirstGamePrototype.ObjectsScripts;
+﻿using PixelAdventure.ObjectsScripts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstGamePrototype
+namespace PixelAdventure
 {
     internal class Animation
     {

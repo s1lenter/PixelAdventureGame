@@ -11,7 +11,7 @@ using System.Threading;
 using System.Reflection.Metadata.Ecma335;
 using System.Net.Mime;
 
-namespace FirstGamePrototype.ObjectsScripts
+namespace PixelAdventure.ObjectsScripts
 {
     internal static class Player
     {

@@ -1,4 +1,4 @@
-﻿using FirstGamePrototype.ObjectsScripts;
+﻿using PixelAdventure.ObjectsScripts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
 
-namespace FirstGamePrototype
+namespace PixelAdventure
 {
     public class Game1 : Game
     {
