@@ -11,14 +11,6 @@ using System.Threading.Tasks;
 
 namespace PixelAdventure.ObjectsScripts
 {
-    enum CollideState
-    {
-        Top,
-        Bottom,
-        Left,
-        Right,
-        Fall,
-    }
     internal class Platform
     {
         public Point SpawnPoint { get; private set; }

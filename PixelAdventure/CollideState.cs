@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace PixelAdventure
 {
-    enum GameState
+    enum CollideState
     {
-        //LevelCreatorTest,
-        Menu,
-        GamePlay,
-        GameOver,
-        Pause
+        Top,
+        Bottom,
+        Left,
+        Right,
+        Fall,
+        Kill,
+        Death,
     }
 }

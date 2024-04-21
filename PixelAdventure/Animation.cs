@@ -11,23 +11,21 @@ namespace PixelAdventure
 {
     internal class Animation
     {
-        private string name;
-        private IObject gameObject;
-        private Texture2D sprite;
-        public int frameHeight { get; set; }
-        public int frameWidth { get; set; }
+        //private string name;
+        //private IObject gameObject;
+        public int FrameHeight { get; set; }
+        public int FrameWidth { get; set; }
         public Point currentFrame;
         private Point spriteSize;
         private int currentTime;
         private int period;
 
         
-        public Animation(Texture2D sprite, int frameHeight, int frameWidth, Point currentFrame, Point spriteSize, IObject gameObject = null)
+        public Animation(int frameHeight, int frameWidth, Point currentFrame, Point spriteSize, IObject gameObject = null)
         {
-            this.gameObject = gameObject;
-            this.sprite = sprite;
-            this.frameHeight = frameHeight;
-            this.frameWidth = frameWidth;
+            //this.gameObject = gameObject;
+            FrameHeight = frameHeight;
+            FrameWidth = frameWidth;
             this.currentFrame = currentFrame;
             this.spriteSize = spriteSize;
             currentTime = 0;
@@ -53,7 +51,7 @@ namespace PixelAdventure
 
         public Rectangle CreateRectangle(int frameWidth)
         {
-            return new Rectangle(currentFrame.X * frameWidth, currentFrame.Y * frameHeight, frameWidth, frameHeight);
+            return new Rectangle(currentFrame.X * frameWidth, currentFrame.Y * FrameHeight, frameWidth, FrameHeight);
         }
     }
 }

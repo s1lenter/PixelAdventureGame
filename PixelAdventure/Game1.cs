@@ -57,9 +57,9 @@ namespace PixelAdventure
         MovingPlatform movingPlatform;
         Texture2D movingPlatformTexture;
 
-        private Dictionary<string, Texture2D> animationSprites;
-
-        private Dictionary<Texture2D, Animation> animations;
+        Enemy enemy;
+        Texture2D enemyTexture;
+        List<Enemy> enemies;
 
         public Game1()
         {
@@ -98,6 +98,10 @@ namespace PixelAdventure
             movingPlatform = new MovingPlatform(movingPlatformSize, new Point(windowWidth / 2 + 100 + platformSize.X, windowHeight - floorSize.Y - bottomPlatform.Size.Y - bottomPlatform1.Size.Y - 10),
                 windowWidth / 2 + 100 + platformSize.X, windowWidth / 2 + 100 + platformSize.X + 70);
 
+            enemy = new Enemy(Player.Size, new Point(100, windowHeight - 130), 50, 150);
+
+            enemies = new List<Enemy> { enemy };
+
             platforms = new Platform[] { bottomPlatform1, bottomPlatform, floorPlatform, finalPlatform,movingPlatform };
 
             trap = new Trap(new Point(100, 10), new Point(windowWidth/2 + 200, windowHeight - floorSize.Y - Player.Size.Y + 1 + 20));
@@ -115,6 +119,8 @@ namespace PixelAdventure
             cubeTexture = Content.Load<Texture2D>("tilemap");
 
             movingPlatformTexture = Content.Load<Texture2D>("blackFloor");
+
+            enemyTexture = Content.Load<Texture2D>("Owlet_Monster");
 
             trapTexture = Content.Load<Texture2D>("trap");
 
@@ -135,6 +141,9 @@ namespace PixelAdventure
         {
             switch (state)
             {
+                //case GameState.LevelCreatorTest:
+                //    UpdateLevelCreatorTest(gameTime); 
+                //    break;
                 case GameState.Menu:
                     UpdateMenu(gameTime);
                     break;
@@ -149,6 +158,12 @@ namespace PixelAdventure
             base.Update(gameTime);
         }
 
+        private void UpdateLevelCreatorTest(GameTime gameTime)
+        {
+            
+        }
+
+        #region
         private void UpdateMenu(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
@@ -170,13 +185,18 @@ namespace PixelAdventure
 
             movingPlatform.Move();
 
+            enemy.Move();
+
+            //if (enemy.Collide(Player.Vector, Player.Size) == CollideState.Kill)
+            //{
+            //    Player.Vector.Y -= 10;
+            //}
+
+            Player.CollideWithEnemies(enemies, state);
+
             Player.Move(gameTime);
 
-            foreach (var platform in platforms)
-            {
-                if (platform.Collide(Player.Vector, Player.Size) != CollideState.Fall)
-                    Player.CollideWithPlatforms(platforms, gravity);
-            }
+            Player.CollideWithPlatforms(platforms, gravity);
         }
 
         private void UpdateGameOver(GameTime gameTime)
@@ -184,12 +204,16 @@ namespace PixelAdventure
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 state = GameState.GamePlay;
         }
+        #endregion
 
         protected override void Draw(GameTime gameTime)
         {
 
             switch (state)
             {
+                //case GameState.LevelCreatorTest:
+                //    DrawLevelCreatorTest(gameTime);
+                //    break;
                 case GameState.Menu:
                     DrawMenu(gameTime);
                     break;
@@ -203,6 +227,14 @@ namespace PixelAdventure
             base.Draw(gameTime);
         }
 
+        private void DrawLevelCreatorTest(GameTime gameTime)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+            _spriteBatch.End();
+        }
+
+        #region
         private void DrawMenu(GameTime gameTime)
         {
             _spriteBatch.Begin();
@@ -231,11 +263,15 @@ namespace PixelAdventure
             for (int i = 0; i < 10; i++)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
 
+            foreach(Enemy enemy in enemies)
+                enemy.DrawCurrentAnimation(_spriteBatch, enemyTexture);
 
             for (int i = 0; i < 3; i++)
                 _spriteBatch.Draw(cubeTexture, new Rectangle(bottomPlatform.SpawnPoint.X + 33 * i, bottomPlatform.SpawnPoint.Y, 30, 30), new Rectangle(0, 0, 18, 18), Color.White);
 
             _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
+
+            //_spriteBatch.Draw(enemyTexture, new Rectangle((int)enemy.Vector.X, enemy.SpawnPoint.Y, enemy.Size.X, enemy.Size.Y), Color.White);
 
             _spriteBatch.End();
         }
@@ -249,4 +285,5 @@ namespace PixelAdventure
             _spriteBatch.End();
         }
     }
+    #endregion
 }

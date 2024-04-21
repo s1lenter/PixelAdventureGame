@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,69 +8,55 @@ using System.Threading.Tasks;
 
 namespace PixelAdventure.ObjectsScripts
 {
-    internal class MovingPlatform : Platform
+    internal class Enemy : MovingPlatform
     {
-        public Vector2 Vector;
-        protected float speed;
-
-        protected int leftBound;
-        protected int rightBound;
-        public MovingPlatform(Point platformSize, Point spawnPoint, int leftBound, int rightBound) : base(platformSize, spawnPoint)
+        public bool IsLife { get; private set; }
+        public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound) : base(enemySize, spawnPoint, leftBound, rightBound)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
             speed = 0.6f;
             this.leftBound = leftBound;
             this.rightBound = rightBound;
-        }
-
-        public void Move()
-        {
-            Vector.X += speed;
-
-            if (Vector.X <= leftBound)
-            {
-                speed *= -1;
-                Vector.X = leftBound;
-            }
-            if (Vector.X >= rightBound)
-            {
-                speed *= -1;
-                Vector.X = rightBound;
-            }
+            IsLife = true;
         }
 
         public override CollideState Collide(Vector2 playerVector, Point playerSize)
         {
-            var topRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, Size.Y / 2);
+            var topRectangle = new Rectangle((int)Vector.X + 6, SpawnPoint.Y + 4, Size.X - 11, 1);
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
 
             if (playerRectangle.Intersects(topRectangle))
             {
-                Player.Vector.X += speed;
-                return CollideState.Top;
+                IsLife = false;
+                return CollideState.Kill;
             }
-
             return CollideState.Fall;
         }
 
         public override CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var leftRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 3, 1, Size.Y);
+            var leftRectangle = new Rectangle((int)Vector.X + 6, SpawnPoint.Y + 6, 1, Size.Y);
 
             if (playerRectangle.Intersects(leftRectangle))
-                return CollideState.Left;
+                return CollideState.Death;
             return CollideState.Fall;
         }
 
         public override CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var rightRectangle = new Rectangle((int)Vector.X + Size.X, SpawnPoint.Y + 3, 1, Size.Y);
+            var rightRectangle = new Rectangle((int)Vector.X + Size.X - 6, SpawnPoint.Y + 6, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))
-                return CollideState.Right;
+                return CollideState.Death;
             return CollideState.Fall;
+        }
+
+        public void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture/*, Animation animation*/)
+        {
+            if (IsLife)
+                _spriteBatch.Draw(texture, new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, Size.Y), Color.White);
         }
     }
 }
