@@ -150,6 +150,9 @@ namespace PixelAdventure
                 case GameState.GamePlay:
                     UpdateGamePlay(gameTime);
                     break;
+                case GameState.Pause:
+                    UpdatePause(gameTime);
+                    break;
                 case GameState.GameOver:
                     UpdateGameOver(gameTime);
                     break;
@@ -158,10 +161,18 @@ namespace PixelAdventure
             base.Update(gameTime);
         }
 
-        private void UpdateLevelCreatorTest(GameTime gameTime)
+        private void UpdatePause(GameTime gameTime)
         {
-            
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                state = GameState.Menu;
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                state = GameState.GamePlay;
         }
+
+        //private void UpdateLevelCreatorTest(GameTime gameTime)
+        //{
+
+        //}
 
         #region
         private void UpdateMenu(GameTime gameTime)
@@ -172,8 +183,10 @@ namespace PixelAdventure
 
         private void UpdateGamePlay(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                state = GameState.Pause ;
+            state = Player.CollideWithEnemies(enemies);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+                state = GameState.Pause;
 
             if (trap.CollideWithTrap(Player.Vector, Player.Size))
             {
@@ -186,13 +199,6 @@ namespace PixelAdventure
             movingPlatform.Move();
 
             enemy.Move();
-
-            //if (enemy.Collide(Player.Vector, Player.Size) == CollideState.Kill)
-            //{
-            //    Player.Vector.Y -= 10;
-            //}
-
-            state = Player.CollideWithEnemies(enemies);
 
             Player.Move(gameTime);
 
@@ -220,11 +226,24 @@ namespace PixelAdventure
                 case GameState.GamePlay:
                     DrawGamePlay(gameTime);
                     break;
+                case GameState.Pause:
+                    DrawPause(gameTime);
+                    break;
                 case GameState.GameOver:
                     DrawGameOver(gameTime);
                     break;
             }
             base.Draw(gameTime);
+        }
+
+        private void DrawPause(GameTime gameTime)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+            _spriteBatch.DrawString(highlight, "Pause", new Vector2(100, 50), Color.Black);
+            _spriteBatch.DrawString(text, "Press space ESC to quit in menu", new Vector2(100, windowHeight - 100), Color.Black);
+            _spriteBatch.DrawString(text, "Press space SPACE to continue", new Vector2(100, windowHeight - 70), Color.Black);
+            _spriteBatch.End();
         }
 
         private void DrawLevelCreatorTest(GameTime gameTime)
@@ -240,7 +259,7 @@ namespace PixelAdventure
             _spriteBatch.Begin();
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
             _spriteBatch.DrawString(highlight, "Pixel Adventure", new Vector2(100, 50), Color.Black);
-            _spriteBatch.DrawString(text, "Press space to start", new Vector2(100, windowHeight - 50), Color.Black);
+            _spriteBatch.DrawString(text, "Press SPACE to start", new Vector2(100, windowHeight - 50), Color.Black);
             _spriteBatch.End();
         }
 
