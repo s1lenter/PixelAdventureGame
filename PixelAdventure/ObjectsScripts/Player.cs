@@ -17,7 +17,7 @@ namespace PixelAdventure.ObjectsScripts
     internal static class Player
     {
         public static Point Size { get; private set; }
-        public static Point Spawn { get; private set; }
+        //public static Point Spawn { get; private set; }
 
         public static Point ColliderSize;
         public static Point ColliderSpawn;
@@ -50,7 +50,7 @@ namespace PixelAdventure.ObjectsScripts
             ColliderSpawn = new Point((int)Vector.X - 14, (int)Vector.Y - 7);
             ColliderSize = new Point(18,25);
             Vector = new Vector2(0, Game1.windowHeight - 100 - Size.Y);
-            Spawn = new Point((int)Vector.X, (int)Vector.Y);
+            //Spawn = new Point((int)Vector.X, (int)Vector.Y);
             speed = 3;
             jumpForce = 80;
         }
@@ -161,7 +161,7 @@ namespace PixelAdventure.ObjectsScripts
             }
         }
 
-        public static void CollideWithEnemies(List<Enemy> enemies, GameState state)
+        public static GameState CollideWithEnemies(List<Enemy> enemies)
         {
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -169,21 +169,36 @@ namespace PixelAdventure.ObjectsScripts
                     enemies[i].Collide(Vector, Size) == CollideState.Kill)
                 {
                     StartAgain();
+                    enemies[i].StartAgain();
+                    return GameState.GameOver;
                 }
 
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death &&
                     enemies[i].Collide(Vector, Size) == CollideState.Kill)
+                {
                     StartAgain();
+                    enemies[i].StartAgain();
+                    return GameState.GameOver;
+                }
                 else if (enemies[i].Collide(Vector, Size) == CollideState.Kill)
                 {
                     Vector.Y -= 50;
                     enemies.RemoveAt(i);
                 }
                 else if (enemies[i].IsFromTheLeft(Vector, Size) == CollideState.Death)
+                {
                     StartAgain();
+                    enemies[i].StartAgain();
+                    return GameState.GameOver;
+                }
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death)
+                {
                     StartAgain();
+                    enemies[i].StartAgain();
+                    return GameState.GameOver;
+                }
             }
+            return GameState.GamePlay;
         }
 
         static int countJump = 0;
@@ -227,7 +242,6 @@ namespace PixelAdventure.ObjectsScripts
                 DrawCurrentAnimation(_spriteBatch, animationSprites["idleRight"], animations[animationSprites["idleRight"]]);
             else if (!Player.IsMove && Player.GoLeft)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["idleLeft"], animations[animationSprites["idleLeft"]]);
-
         }
     }
 }

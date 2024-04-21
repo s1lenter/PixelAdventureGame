@@ -172,8 +172,8 @@ namespace PixelAdventure
 
         private void UpdateGamePlay(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                state = GameState.Pause ;
 
             if (trap.CollideWithTrap(Player.Vector, Player.Size))
             {
@@ -192,7 +192,7 @@ namespace PixelAdventure
             //    Player.Vector.Y -= 10;
             //}
 
-            Player.CollideWithEnemies(enemies, state);
+            state = Player.CollideWithEnemies(enemies);
 
             Player.Move(gameTime);
 
