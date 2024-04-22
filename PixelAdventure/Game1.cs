@@ -49,6 +49,13 @@ namespace PixelAdventure
         public Texture2D playerWalkLeft;
         public Texture2D playerIdle;
         public Texture2D playerIdleLeft;
+        public Texture2D playerJumpRight;
+        public Texture2D playerJumpLeft;
+
+        public Texture2D enemyWalkRight;
+        public Texture2D enemyWalkLeft;
+        public Texture2D enemyDeadRight;
+        public Texture2D enemyDeadLeft;
 
         #endregion
         SpriteFont highlight;
@@ -128,13 +135,21 @@ namespace PixelAdventure
             playerWalkLeft = Content.Load<Texture2D>("Dude_Monster_Walk_Left");
             playerIdle = Content.Load<Texture2D>("Dude_Monster_Idle_4");
             playerIdleLeft = Content.Load<Texture2D>("Dude_Monster_Idle_Left");
+            playerJumpRight = Content.Load<Texture2D>("Dude_Monster_Jump_8");
+            playerJumpLeft = Content.Load<Texture2D>("Dude_Monster_Jump_Left");
+
+            enemyWalkRight = Content.Load<Texture2D>("Owlet_Monster_Walk_6");
+            enemyWalkLeft = Content.Load<Texture2D>("Owlet_Monster_Walk_Left");
 
             highlight = Content.Load<SpriteFont>("myText1");
             text = Content.Load<SpriteFont>("File");
 
             skyBackground = Content.Load<Texture2D>("sky");
 
-            Player.InicializeSprites(playerWalkRight, playerWalkLeft, playerIdle, playerIdleLeft);
+            Player.InicializeSprites(playerWalkRight, playerWalkLeft, playerIdle, playerIdleLeft, playerJumpRight, playerJumpLeft);
+
+            foreach (var enemy in enemies)
+                enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
 
         protected override void Update(GameTime gameTime)
@@ -145,6 +160,7 @@ namespace PixelAdventure
                 //    UpdateLevelCreatorTest(gameTime); 
                 //    break;
                 case GameState.Menu:
+                    Initialize();
                     UpdateMenu(gameTime);
                     break;
                 case GameState.GamePlay:
@@ -197,13 +213,13 @@ namespace PixelAdventure
 
             Player.Vector.Y += gravity;
 
-            movingPlatform.Move();
+            movingPlatform.Move(gameTime);
 
-            enemy.Move();
+            enemy.Move(gameTime);
 
             Player.Move(gameTime);
 
-            Player.CollideWithPlatforms(platforms, gravity);
+            Player.CollideWithPlatforms(platforms, gravity, gameTime);
         }
 
         private void UpdateGameOver(GameTime gameTime)
@@ -284,7 +300,7 @@ namespace PixelAdventure
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
 
             foreach(Enemy enemy in enemies)
-                enemy.DrawCurrentAnimation(_spriteBatch, enemyTexture);
+                enemy.DrawEnemyAnimation(_spriteBatch);
 
             for (int i = 0; i < 3; i++)
                 _spriteBatch.Draw(cubeTexture, new Rectangle(bottomPlatform.SpawnPoint.X + 33 * i, bottomPlatform.SpawnPoint.Y, 30, 30), new Rectangle(0, 0, 18, 18), Color.White);

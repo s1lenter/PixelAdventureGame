@@ -11,6 +11,21 @@ namespace PixelAdventure.ObjectsScripts
     internal class Enemy : MovingPlatform
     {
         public bool IsLife { get; private set; }
+
+        private Animation walk;
+        private Animation dead;
+
+        private Animation currentAnimation;
+
+        private static Dictionary<string, Texture2D> animationSprites;
+        private static Dictionary<Texture2D, Animation> animations;
+
+        public static Point currentFrameWalk = new Point(0, 0);
+        private static Point spriteSizeWalk = new Point(6, 0);
+
+        public static Point currentFrameDead = new Point(0, 0);
+        private static Point spriteSizeDead = new Point(8, 0);
+
         public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound) : base(enemySize, spawnPoint, leftBound, rightBound)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
@@ -18,6 +33,50 @@ namespace PixelAdventure.ObjectsScripts
             this.leftBound = leftBound;
             this.rightBound = rightBound;
             IsLife = true;
+        }
+
+        public void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite/*,
+            Texture2D deadRightSprite, Texture2D deadLeftSprite*/)
+        {
+            walk = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
+            animationSprites = new Dictionary<string, Texture2D>()
+            {
+                { "walkLeft", walkLeftSprite },
+                { "walkRight", walkRightSprite },
+                //{ "deadLeft", deadLeftSprite },
+                //{ "deadRight", deadRightSprite },
+            };
+
+            animations = new Dictionary<Texture2D, Animation>()
+            {
+                { walkLeftSprite, walk },
+                { walkRightSprite, walk },
+                //{ deadLeftSprite, dead },
+                //{ deadRightSprite, dead },
+            };
+
+            currentAnimation = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
+        }
+
+        public bool GoLeft = false;
+
+        public override void Move(GameTime gameTime)
+        {
+            Vector.X += speed;
+            currentAnimation = walk;
+            currentAnimation.StartAnimation(gameTime);
+            if (Vector.X <= leftBound)
+            {
+                speed *= -1;
+                GoLeft = false;
+                Vector.X = leftBound;
+            }
+            if (Vector.X >= rightBound)
+            {
+                speed *= -1;
+                GoLeft = true;
+                Vector.X = rightBound;
+            }
         }
 
         public override CollideState Collide(Vector2 playerVector, Point playerSize)
@@ -36,7 +95,7 @@ namespace PixelAdventure.ObjectsScripts
         public override CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var leftRectangle = new Rectangle((int)Vector.X + 6, SpawnPoint.Y + 6, 1, Size.Y);
+            var leftRectangle = new Rectangle((int)Vector.X + 7, SpawnPoint.Y + 6, 1, Size.Y);
 
             if (playerRectangle.Intersects(leftRectangle))
                 return CollideState.Death;
@@ -46,17 +105,29 @@ namespace PixelAdventure.ObjectsScripts
         public override CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var rightRectangle = new Rectangle((int)Vector.X + Size.X - 6, SpawnPoint.Y + 6, 1, Size.Y);
+            var rightRectangle = new Rectangle((int)Vector.X + Size.X, SpawnPoint.Y + 6, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))
                 return CollideState.Death;
             return CollideState.Fall;
         }
 
-        public void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture/*, Animation animation*/)
+        public void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture, Animation animation)
         {
-            if (IsLife)
-                _spriteBatch.Draw(texture, new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, Size.Y), Color.White);
+                //_spriteBatch.Draw(texture, new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, Size.Y), Color.White);
+                _spriteBatch.Draw(texture,
+                        new Rectangle((int)Vector.X, (int)Vector.Y - 10, Size.X + 10, Size.Y + 10),
+                        currentAnimation.CreateRectangle(animation.FrameWidth),
+                        Color.White);
+        }
+
+        public void DrawEnemyAnimation(SpriteBatch _spriteBatch)
+        {
+            if ()
+            if (!GoLeft)
+                DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]]);
+            else if (GoLeft)
+                DrawCurrentAnimation(_spriteBatch, animationSprites["walkLeft"], animations[animationSprites["walkLeft"]]);
         }
 
         public void StartAgain()

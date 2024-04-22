@@ -29,9 +29,11 @@ namespace PixelAdventure.ObjectsScripts
         private static int jumpForce;
 
         public static bool IsMove = false; 
+        public static bool IsJump = false;
 
         public static Animation walk;
         private static Animation idle;
+        private static Animation jump;
 
         public static Animation currentAnimation;
 
@@ -44,6 +46,9 @@ namespace PixelAdventure.ObjectsScripts
         public static Point currentFrameIdle = new Point(0, 0);
         private static Point spriteSizeIdle = new Point(4, 0);
 
+        public static Point currentFrameJump = new Point(0, 0);
+        private static Point spriteSizeJump = new Point(8, 0);
+
         static Player()
         {
             Size = new Point(30, 30);
@@ -55,17 +60,21 @@ namespace PixelAdventure.ObjectsScripts
             jumpForce = 80;
         }
 
-        public static void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite, Texture2D idleRightSprite, Texture2D idleLeftSprite)
+        public static void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite,
+            Texture2D idleRightSprite, Texture2D idleLeftSprite, Texture2D jumpRightSprite, Texture2D jumpLeftSprite)
         {
             walk = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
             idle = new Animation(32, 32, currentFrameIdle, spriteSizeIdle);
+            //jump = new Animation(32, 32, currentFrameJump, spriteSizeJump);
 
             animationSprites = new Dictionary<string, Texture2D>()
             {
-                { "walkLeft", walkLeftSprite},
-                { "walkRight", walkRightSprite},
+                { "walkLeft", walkLeftSprite },
+                { "walkRight", walkRightSprite },
                 { "idleLeft", idleLeftSprite },
-                { "idleRight", idleRightSprite }
+                { "idleRight", idleRightSprite },
+                //{ "jumpRight",  jumpRightSprite },
+                //{ "jumpLeft", jumpLeftSprite },
             };
 
             animations = new Dictionary<Texture2D, Animation>()
@@ -74,6 +83,8 @@ namespace PixelAdventure.ObjectsScripts
                 { walkRightSprite, walk },
                 { idleLeftSprite, idle },
                 { idleRightSprite, idle },
+                //{ jumpRightSprite, jump },
+                //{ jumpLeftSprite, jump },
             };
             currentAnimation = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
         }
@@ -117,7 +128,7 @@ namespace PixelAdventure.ObjectsScripts
                 Vector.X = Game1.windowWidth - Size.X;
         }
 
-        public static void CollideWithPlatforms(Platform[] platforms, float gravity)
+        public static void CollideWithPlatforms(Platform[] platforms, float gravity, GameTime gameTime)
         {
             foreach (Platform platform in platforms)
             {
@@ -128,7 +139,7 @@ namespace PixelAdventure.ObjectsScripts
                     {
                         Vector.X -= speed;
                         Vector.Y -= gravity;
-                        Jump();
+                        Jump(gameTime);
                     }
                     else
                     {
@@ -144,7 +155,7 @@ namespace PixelAdventure.ObjectsScripts
                     {
                         Vector.X += speed;
                         Vector.Y -= gravity;
-                        Jump();
+                        Jump(gameTime);
                     }
                     else
                     {
@@ -156,8 +167,32 @@ namespace PixelAdventure.ObjectsScripts
                 else if (platform.Collide(Vector, Size) == CollideState.Top)
                 {
                     Vector.Y = platform.SpawnPoint.Y - Size.Y;
-                    Jump();
+                    Jump(gameTime);
                 }
+            }
+        }
+
+        static int countJump = 0;
+        public static void Jump(GameTime gameTime)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && countJump == 0)
+            {
+                //currentAnimation = jump;
+                //currentAnimation.StartAnimation(gameTime);
+                countJump++;
+                Vector.Y -= jumpForce;
+                //IsJump = true;
+            }
+            else if (countJump > 0)
+            {
+                //IsJump = false;
+                jumpForce = 0;
+                countJump--;
+            }
+            if (Keyboard.GetState().IsKeyUp(Keys.W))
+            { 
+                jumpForce = 80;
+                //IsJump = false;
             }
         }
 
@@ -201,23 +236,6 @@ namespace PixelAdventure.ObjectsScripts
             return GameState.GamePlay;
         }
 
-        static int countJump = 0;
-        public static void Jump()
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.W) && countJump == 0)
-            {
-                countJump++;
-                Vector.Y -= jumpForce;
-            }
-            else if (countJump > 0)
-            {
-                jumpForce = 0;
-                countJump--;
-            }
-            if (Keyboard.GetState().IsKeyUp(Keys.W))
-                jumpForce = 80;
-        }
-
         public static void StartAgain()
         {
             Vector.X = 0;
@@ -234,14 +252,16 @@ namespace PixelAdventure.ObjectsScripts
 
         public static void DrawPlayerAnimation(SpriteBatch _spriteBatch)
         {
-            if (!Player.GoLeft && Player.IsMove)
+            if (!GoLeft && IsMove && !IsJump)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]]);
-            else if (Player.GoLeft && Player.IsMove)
+            else if (GoLeft && IsMove && !IsJump)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkLeft"], animations[animationSprites["walkLeft"]]);
-            else if (!Player.IsMove && !Player.GoLeft)
+            else if (!IsMove && !GoLeft && !IsJump)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["idleRight"], animations[animationSprites["idleRight"]]);
-            else if (!Player.IsMove && Player.GoLeft)
+            else if (!IsMove && GoLeft && !IsJump)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["idleLeft"], animations[animationSprites["idleLeft"]]);
+            //else if (IsJump)
+            //    DrawCurrentAnimation(_spriteBatch, animationSprites["jumpRight"], animations[animationSprites["jumpRight"]]);
         }
     }
 }

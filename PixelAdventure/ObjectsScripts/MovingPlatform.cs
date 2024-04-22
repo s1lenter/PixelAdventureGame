@@ -23,7 +23,7 @@ namespace PixelAdventure.ObjectsScripts
             this.rightBound = rightBound;
         }
 
-        public void Move()
+        public virtual void Move(GameTime gameTime)
         {
             Vector.X += speed;
 
