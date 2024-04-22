@@ -154,6 +154,7 @@ namespace PixelAdventure
                     UpdatePause(gameTime);
                     break;
                 case GameState.GameOver:
+                    Initialize();
                     UpdateGameOver(gameTime);
                     break;
             }

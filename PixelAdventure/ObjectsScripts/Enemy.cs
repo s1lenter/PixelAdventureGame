@@ -14,7 +14,7 @@ namespace PixelAdventure.ObjectsScripts
         public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound) : base(enemySize, spawnPoint, leftBound, rightBound)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
-            speed = 0.6f;
+            speed = 2.2f;
             this.leftBound = leftBound;
             this.rightBound = rightBound;
             IsLife = true;

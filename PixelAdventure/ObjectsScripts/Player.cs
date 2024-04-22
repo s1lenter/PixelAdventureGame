@@ -169,7 +169,7 @@ namespace PixelAdventure.ObjectsScripts
                     enemies[i].Collide(Vector, Size) == CollideState.Kill)
                 {
                     StartAgain();
-                    enemies[i].StartAgain();
+                    //enemies[i].StartAgain();
                     return GameState.GameOver;
                 }
 
@@ -177,7 +177,7 @@ namespace PixelAdventure.ObjectsScripts
                     enemies[i].Collide(Vector, Size) == CollideState.Kill)
                 {
                     StartAgain();
-                    enemies[i].StartAgain();
+                    //enemies[i].StartAgain();
                     return GameState.GameOver;
                 }
                 else if (enemies[i].Collide(Vector, Size) == CollideState.Kill)
@@ -188,13 +188,13 @@ namespace PixelAdventure.ObjectsScripts
                 else if (enemies[i].IsFromTheLeft(Vector, Size) == CollideState.Death)
                 {
                     StartAgain();
-                    enemies[i].StartAgain();
+                    //enemies[i].StartAgain();
                     return GameState.GameOver;
                 }
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death)
                 {
                     StartAgain();
-                    enemies[i].StartAgain();
+                    //enemies[i].StartAgain();
                     return GameState.GameOver;
                 }
             }
