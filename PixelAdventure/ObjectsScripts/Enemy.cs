@@ -13,7 +13,6 @@ namespace PixelAdventure.ObjectsScripts
         public bool IsLife { get; private set; }
 
         private Animation walk;
-        private Animation dead;
 
         private Animation currentAnimation;
 
@@ -22,9 +21,6 @@ namespace PixelAdventure.ObjectsScripts
 
         public static Point currentFrameWalk = new Point(0, 0);
         private static Point spriteSizeWalk = new Point(6, 0);
-
-        public static Point currentFrameDead = new Point(0, 0);
-        private static Point spriteSizeDead = new Point(8, 0);
 
         public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound) : base(enemySize, spawnPoint, leftBound, rightBound)
         {
@@ -35,24 +31,19 @@ namespace PixelAdventure.ObjectsScripts
             IsLife = true;
         }
 
-        public void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite/*,
-            Texture2D deadRightSprite, Texture2D deadLeftSprite*/)
+        public void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite)
         {
             walk = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
             animationSprites = new Dictionary<string, Texture2D>()
             {
                 { "walkLeft", walkLeftSprite },
                 { "walkRight", walkRightSprite },
-                //{ "deadLeft", deadLeftSprite },
-                //{ "deadRight", deadRightSprite },
             };
 
             animations = new Dictionary<Texture2D, Animation>()
             {
                 { walkLeftSprite, walk },
                 { walkRightSprite, walk },
-                //{ deadLeftSprite, dead },
-                //{ deadRightSprite, dead },
             };
 
             currentAnimation = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
@@ -81,7 +72,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public override CollideState Collide(Vector2 playerVector, Point playerSize)
         {
-            var topRectangle = new Rectangle((int)Vector.X + 10, SpawnPoint.Y + 5, Size.X - 20, 1);
+            var topRectangle = new Rectangle((int)Vector.X + 10, SpawnPoint.Y + 4, Size.X - 20, 1);
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
 
             if (playerRectangle.Intersects(topRectangle))
@@ -114,8 +105,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture, Animation animation)
         {
-                //_spriteBatch.Draw(texture, new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, Size.Y), Color.White);
-                _spriteBatch.Draw(texture,
+            _spriteBatch.Draw(texture,
                         new Rectangle((int)Vector.X, (int)Vector.Y - 10, Size.X + 10, Size.Y + 10),
                         currentAnimation.CreateRectangle(animation.FrameWidth),
                         Color.White);
@@ -123,7 +113,6 @@ namespace PixelAdventure.ObjectsScripts
 
         public void DrawEnemyAnimation(SpriteBatch _spriteBatch)
         {
-            if ()
             if (!GoLeft)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]]);
             else if (GoLeft)
@@ -133,7 +122,6 @@ namespace PixelAdventure.ObjectsScripts
         public void StartAgain()
         {
             Vector.X = 0;
-            //GoLeft = false;
         }
     }
 }

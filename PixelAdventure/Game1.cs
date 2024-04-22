@@ -57,6 +57,8 @@ namespace PixelAdventure
         public Texture2D enemyDeadRight;
         public Texture2D enemyDeadLeft;
 
+        public Texture2D coin;
+
         #endregion
         SpriteFont highlight;
         SpriteFont text;
@@ -141,6 +143,8 @@ namespace PixelAdventure
             enemyWalkRight = Content.Load<Texture2D>("Owlet_Monster_Walk_6");
             enemyWalkLeft = Content.Load<Texture2D>("Owlet_Monster_Walk_Left");
 
+            coin = Content.Load<Texture2D>("Coin");
+
             highlight = Content.Load<SpriteFont>("myText1");
             text = Content.Load<SpriteFont>("File");
 
@@ -160,6 +164,7 @@ namespace PixelAdventure
                 //    UpdateLevelCreatorTest(gameTime); 
                 //    break;
                 case GameState.Menu:
+                    Player.StartAgain();
                     Initialize();
                     UpdateMenu(gameTime);
                     break;
@@ -295,6 +300,8 @@ namespace PixelAdventure
             _spriteBatch.Draw(platform, new Rectangle(finalPlatform.SpawnPoint, finalPlatform.Size), Color.White);
 
             _spriteBatch.Draw(platform1, new Rectangle(bottomPlatform1.SpawnPoint, bottomPlatform1.Size), new Rectangle(0, 0, 18, 18), Color.White);
+
+            _spriteBatch.Draw(coin, new Rectangle(100, 100, 20, 20), Color.White);  
 
             for (int i = 0; i < 10; i++)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);

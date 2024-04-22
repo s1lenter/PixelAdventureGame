@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace PixelAdventure.ObjectsScripts
 {
-    internal class Platform
+    internal class Platform : IObject
     {
-        public Point SpawnPoint { get; private set; }
-        public Point Size { get; private set; }
+        public Point SpawnPoint { get; set; }
+        public Point Size { get; set; }
 
         public Platform(Point platformSize, Point spawnPoint)
         {
