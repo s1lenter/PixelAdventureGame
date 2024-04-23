@@ -77,7 +77,6 @@ namespace PixelAdventure.ObjectsScripts
 
             if (playerRectangle.Intersects(topRectangle))
             {
-                IsLife = false;
                 return CollideState.Kill;
             }
             return CollideState.Fall;

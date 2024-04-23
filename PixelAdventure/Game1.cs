@@ -34,6 +34,7 @@ namespace PixelAdventure
         private Point cubeSize;
 
         private float gravity;
+        private float fallGravity;
 
         private Platform[] platforms;
 
@@ -57,9 +58,9 @@ namespace PixelAdventure
         public Texture2D enemyDeadRight;
         public Texture2D enemyDeadLeft;
 
-        public Texture2D coin;
+        public Texture2D coinTexture;
 
-        #endregion
+        
         SpriteFont highlight;
         SpriteFont text;
 
@@ -69,6 +70,10 @@ namespace PixelAdventure
         Enemy enemy;
         Texture2D enemyTexture;
         List<Enemy> enemies;
+        #endregion
+
+        private Coin coin;
+        private List<Coin> coinList;
 
         public Game1()
         {
@@ -95,6 +100,7 @@ namespace PixelAdventure
             trapSize = new Point(10, 10);
 
             gravity = 3.75f;
+            fallGravity = gravity;
 
             floorPlatform = new Platform(floorSize, new Point(0, windowHeight - floorSize.Y));
 
@@ -114,6 +120,9 @@ namespace PixelAdventure
             platforms = new Platform[] { bottomPlatform1, bottomPlatform, floorPlatform, finalPlatform,movingPlatform };
 
             trap = new Trap(new Point(100, 10), new Point(windowWidth/2 + 200, windowHeight - floorSize.Y - Player.Size.Y + 1 + 20));
+
+            coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));
+            coinList = new List<Coin>() { coin };
 
             base.Initialize();
         }
@@ -143,7 +152,7 @@ namespace PixelAdventure
             enemyWalkRight = Content.Load<Texture2D>("Owlet_Monster_Walk_6");
             enemyWalkLeft = Content.Load<Texture2D>("Owlet_Monster_Walk_Left");
 
-            coin = Content.Load<Texture2D>("Coin");
+            coinTexture = Content.Load<Texture2D>("Coin");
 
             highlight = Content.Load<SpriteFont>("myText1");
             text = Content.Load<SpriteFont>("File");
@@ -205,6 +214,13 @@ namespace PixelAdventure
 
         private void UpdateGamePlay(GameTime gameTime)
         {
+            //if (Player.IsFall)
+            //    gravity += 0.2f;
+            //else if (!Player.IsFall)
+            //    gravity = 3.75f;
+
+            Player.Vector.Y += gravity;
+
             state = Player.CollideWithEnemies(enemies);
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
@@ -216,8 +232,6 @@ namespace PixelAdventure
                 Player.StartAgain();
             }
 
-            Player.Vector.Y += gravity;
-
             movingPlatform.Move(gameTime);
 
             enemy.Move(gameTime);
@@ -225,6 +239,8 @@ namespace PixelAdventure
             Player.Move(gameTime);
 
             Player.CollideWithPlatforms(platforms, gravity, gameTime);
+
+            Player.CollideWithCoins(coinList);
         }
 
         private void UpdateGameOver(GameTime gameTime)
@@ -290,7 +306,9 @@ namespace PixelAdventure
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
+            
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+            _spriteBatch.DrawString(highlight, Player.counter.ToString(), new Vector2(100, 50), Color.Black);
             _spriteBatch.Draw(floor, new Rectangle(floorPlatform.SpawnPoint, floorPlatform.Size), Color.White);
 
             Player.DrawPlayerAnimation(_spriteBatch);
@@ -301,13 +319,16 @@ namespace PixelAdventure
 
             _spriteBatch.Draw(platform1, new Rectangle(bottomPlatform1.SpawnPoint, bottomPlatform1.Size), new Rectangle(0, 0, 18, 18), Color.White);
 
-            _spriteBatch.Draw(coin, new Rectangle(100, 100, 20, 20), Color.White);  
+            //_spriteBatch.Draw(coinTexture, new Rectangle(coin.SpawnPoint, coin.Size), Color.White);  
 
             for (int i = 0; i < 10; i++)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
 
             foreach(Enemy enemy in enemies)
                 enemy.DrawEnemyAnimation(_spriteBatch);
+
+            foreach (Coin coin in coinList)
+                coin.DrawCoin(_spriteBatch, coinTexture);
 
             for (int i = 0; i < 3; i++)
                 _spriteBatch.Draw(cubeTexture, new Rectangle(bottomPlatform.SpawnPoint.X + 33 * i, bottomPlatform.SpawnPoint.Y, 30, 30), new Rectangle(0, 0, 18, 18), Color.White);

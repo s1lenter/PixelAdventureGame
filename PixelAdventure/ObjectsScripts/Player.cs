@@ -11,6 +11,8 @@ using System.Threading;
 using System.Reflection.Metadata.Ecma335;
 using System.Net.Mime;
 using System.Reflection.Metadata;
+using System.Diagnostics.Metrics;
+using System.Reflection;
 
 namespace PixelAdventure.ObjectsScripts
 {
@@ -30,6 +32,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public static bool IsMove = false; 
         public static bool IsJump = false;
+        public static bool IsFall = false;
 
         public static Animation walk;
         private static Animation idle;
@@ -49,15 +52,18 @@ namespace PixelAdventure.ObjectsScripts
         public static Point currentFrameJump = new Point(0, 0);
         private static Point spriteSizeJump = new Point(8, 0);
 
+        public static int counter;
+
         static Player()
         {
             Size = new Point(30, 30);
             ColliderSpawn = new Point((int)Vector.X - 14, (int)Vector.Y - 7);
             ColliderSize = new Point(18,25);
-            Vector = new Vector2(0, Game1.windowHeight - 100 - Size.Y);
+            Vector = new Vector2(0, /*Game1.windowHeight - 100 - Size.Y*/ 100);
             //Spawn = new Point((int)Vector.X, (int)Vector.Y);
             speed = 3;
             jumpForce = 80;
+            counter = 0;
         }
 
         public static void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite,
@@ -135,6 +141,7 @@ namespace PixelAdventure.ObjectsScripts
                 if (platform.IsFromTheLeft(Vector, Size) == CollideState.Left &&
                     platform.Collide(Vector, Size) == CollideState.Top)
                 {
+                    //IsFall = false;
                     if (!Keyboard.GetState().IsKeyDown(Keys.D))
                     {
                         Vector.X -= speed;
@@ -151,6 +158,7 @@ namespace PixelAdventure.ObjectsScripts
                 if (platform.IsFromTheRight(Vector, Size) == CollideState.Right &&
                     platform.Collide(Vector, Size) == CollideState.Top)
                 {
+                    //IsFall = false;
                     if (!Keyboard.GetState().IsKeyDown(Keys.A))
                     {
                         Vector.X += speed;
@@ -166,9 +174,12 @@ namespace PixelAdventure.ObjectsScripts
 
                 else if (platform.Collide(Vector, Size) == CollideState.Top)
                 {
+                    //IsFall = false;
                     Vector.Y = platform.SpawnPoint.Y - Size.Y;
                     Jump(gameTime);
                 }
+                //else
+                //    IsFall = true;
             }
         }
 
@@ -236,8 +247,21 @@ namespace PixelAdventure.ObjectsScripts
             return GameState.GamePlay;
         }
 
+        public static void CollideWithCoins(List<Coin> coins)
+        {
+            for (int i = 0; i < coins.Count; i++)
+            {
+                if (coins[i].Collide(Vector, Size))
+                {
+                    coins.RemoveAt(i);
+                    counter++;
+                }
+            }
+        }
+
         public static void StartAgain()
         {
+            counter = 0;
             Vector.X = 0;
             GoLeft = false;
         }
