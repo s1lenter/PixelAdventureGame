@@ -276,13 +276,13 @@ namespace PixelAdventure.ObjectsScripts
 
         public static void DrawPlayerAnimation(SpriteBatch _spriteBatch)
         {
-            if (!GoLeft && IsMove && !IsJump)
+            if (!GoLeft && IsMove)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]]);
-            else if (GoLeft && IsMove && !IsJump)
+            else if (GoLeft && IsMove)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkLeft"], animations[animationSprites["walkLeft"]]);
-            else if (!IsMove && !GoLeft && !IsJump)
+            else if (!IsMove && !GoLeft)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["idleRight"], animations[animationSprites["idleRight"]]);
-            else if (!IsMove && GoLeft && !IsJump)
+            else if (!IsMove && GoLeft)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["idleLeft"], animations[animationSprites["idleLeft"]]);
             //else if (IsJump)
             //    DrawCurrentAnimation(_spriteBatch, animationSprites["jumpRight"], animations[animationSprites["jumpRight"]]);

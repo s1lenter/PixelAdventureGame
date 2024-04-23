@@ -60,7 +60,6 @@ namespace PixelAdventure
 
         public Texture2D coinTexture;
 
-        
         SpriteFont highlight;
         SpriteFont text;
 
@@ -122,7 +121,13 @@ namespace PixelAdventure
             trap = new Trap(new Point(100, 10), new Point(windowWidth/2 + 200, windowHeight - floorSize.Y - Player.Size.Y + 1 + 20));
 
             coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));
-            coinList = new List<Coin>() { coin };
+            coinList = new List<Coin>() 
+            { 
+                coin, 
+                new (new Point(20,20), new Point(250, windowHeight - floorSize.Y - 20)),
+                new (new Point(20,20), new Point(720, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
+                new (new Point(20,20), new Point(770, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
+            };
 
             base.Initialize();
         }
@@ -308,7 +313,7 @@ namespace PixelAdventure
             _spriteBatch.Begin();
             
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(highlight, Player.counter.ToString(), new Vector2(100, 50), Color.Black);
+            _spriteBatch.DrawString(text, "Score: " + Player.counter.ToString(), new Vector2(0, 0), Color.Black);
             _spriteBatch.Draw(floor, new Rectangle(floorPlatform.SpawnPoint, floorPlatform.Size), Color.White);
 
             Player.DrawPlayerAnimation(_spriteBatch);
@@ -318,8 +323,6 @@ namespace PixelAdventure
             _spriteBatch.Draw(platform, new Rectangle(finalPlatform.SpawnPoint, finalPlatform.Size), Color.White);
 
             _spriteBatch.Draw(platform1, new Rectangle(bottomPlatform1.SpawnPoint, bottomPlatform1.Size), new Rectangle(0, 0, 18, 18), Color.White);
-
-            //_spriteBatch.Draw(coinTexture, new Rectangle(coin.SpawnPoint, coin.Size), Color.White);  
 
             for (int i = 0; i < 10; i++)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
@@ -334,8 +337,6 @@ namespace PixelAdventure
                 _spriteBatch.Draw(cubeTexture, new Rectangle(bottomPlatform.SpawnPoint.X + 33 * i, bottomPlatform.SpawnPoint.Y, 30, 30), new Rectangle(0, 0, 18, 18), Color.White);
 
             _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
-
-            //_spriteBatch.Draw(enemyTexture, new Rectangle((int)enemy.Vector.X, enemy.SpawnPoint.Y, enemy.Size.X, enemy.Size.Y), Color.White);
 
             _spriteBatch.End();
         }
