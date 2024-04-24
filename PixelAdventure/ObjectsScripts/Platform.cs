@@ -22,7 +22,7 @@ namespace PixelAdventure.ObjectsScripts
             SpawnPoint = spawnPoint;
         }
 
-        public virtual CollideState Collide(Vector2 playerVector, Point playerSize)
+        public virtual CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
         {
             var topRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y, Size.X, Size.Y / 2);
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 15, playerSize.Y);

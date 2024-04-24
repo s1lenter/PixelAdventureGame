@@ -16,57 +16,57 @@ using System.Reflection;
 
 namespace PixelAdventure.ObjectsScripts
 {
-    internal static class Player
+    internal class Player
     {
-        public static Point Size { get; private set; }
+        public Point Size { get; private set; }
         //public static Point Spawn { get; private set; }
 
-        public static Point ColliderSize;
-        public static Point ColliderSpawn;
+        public Point ColliderSize;
+        public Point ColliderSpawn;
 
-        public static Vector2 Vector;
+        public Vector2 Vector;
 
-        private static int speed;
+        private int speed;
 
-        private static int jumpForce;
+        private int jumpForce;
 
-        public static bool IsMove = false; 
-        public static bool IsJump = false;
-        public static bool IsFall = false;
+        public bool IsMove = false; 
+        public bool IsJump = false;
+        public bool IsFall = false;
 
-        public static Animation walk;
-        private static Animation idle;
-        private static Animation jump;
+        public Animation walk;
+        private Animation idle;
+        private Animation jump;
 
-        public static Animation currentAnimation;
+        public Animation currentAnimation;
 
-        private static Dictionary<string, Texture2D> animationSprites;
-        private static Dictionary<Texture2D, Animation> animations;
+        private Dictionary<string, Texture2D> animationSprites;
+        private Dictionary<Texture2D, Animation> animations;
 
-        public static Point currentFrameWalk = new Point(0, 0);
-        private static Point spriteSizeWalk = new Point(6, 0);
+        public Point currentFrameWalk = new Point(0, 0);
+        private Point spriteSizeWalk = new Point(6, 0);
 
-        public static Point currentFrameIdle = new Point(0, 0);
-        private static Point spriteSizeIdle = new Point(4, 0);
+        public Point currentFrameIdle = new Point(0, 0);
+        private Point spriteSizeIdle = new Point(4, 0);
 
-        public static Point currentFrameJump = new Point(0, 0);
-        private static Point spriteSizeJump = new Point(8, 0);
+        public Point currentFrameJump = new Point(0, 0);
+        private Point spriteSizeJump = new Point(8, 0);
 
-        public static int counter;
+        public int counter;
 
-        static Player()
+        public Player()
         {
             Size = new Point(30, 30);
             ColliderSpawn = new Point((int)Vector.X - 14, (int)Vector.Y - 7);
             ColliderSize = new Point(18,25);
-            Vector = new Vector2(0, /*Game1.windowHeight - 100 - Size.Y*/ 100);
+            Vector = new Vector2(0, Game1.windowHeight - 100 - Size.Y);
             //Spawn = new Point((int)Vector.X, (int)Vector.Y);
             speed = 3;
             jumpForce = 80;
             counter = 0;
         }
 
-        public static void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite,
+        public void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite,
             Texture2D idleRightSprite, Texture2D idleLeftSprite, Texture2D jumpRightSprite, Texture2D jumpLeftSprite)
         {
             walk = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
@@ -95,8 +95,8 @@ namespace PixelAdventure.ObjectsScripts
             currentAnimation = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
         }
 
-        public static bool GoLeft = false;
-        public static void Move(GameTime gameTime)
+        public bool GoLeft = false;
+        public void Move(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
@@ -134,12 +134,12 @@ namespace PixelAdventure.ObjectsScripts
                 Vector.X = Game1.windowWidth - Size.X;
         }
 
-        public static void CollideWithPlatforms(Platform[] platforms, float gravity, GameTime gameTime)
+        public void CollideWithPlatforms(Platform[] platforms, float gravity, GameTime gameTime)
         {
             foreach (Platform platform in platforms)
             {
                 if (platform.IsFromTheLeft(Vector, Size) == CollideState.Left &&
-                    platform.Collide(Vector, Size) == CollideState.Top)
+                    platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
                     //IsFall = false;
                     if (!Keyboard.GetState().IsKeyDown(Keys.D))
@@ -156,7 +156,7 @@ namespace PixelAdventure.ObjectsScripts
                 }
 
                 if (platform.IsFromTheRight(Vector, Size) == CollideState.Right &&
-                    platform.Collide(Vector, Size) == CollideState.Top)
+                    platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
                     //IsFall = false;
                     if (!Keyboard.GetState().IsKeyDown(Keys.A))
@@ -172,7 +172,7 @@ namespace PixelAdventure.ObjectsScripts
                     }
                 }
 
-                else if (platform.Collide(Vector, Size) == CollideState.Top)
+                else if (platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
                     //IsFall = false;
                     Vector.Y = platform.SpawnPoint.Y - Size.Y;
@@ -184,7 +184,7 @@ namespace PixelAdventure.ObjectsScripts
         }
 
         static int countJump = 0;
-        public static void Jump(GameTime gameTime)
+        public void Jump(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.W) && countJump == 0)
             {
@@ -207,12 +207,12 @@ namespace PixelAdventure.ObjectsScripts
             }
         }
 
-        public static GameState CollideWithEnemies(List<Enemy> enemies)
+        public GameState CollideWithEnemies(List<Enemy> enemies)
         {
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (enemies[i].IsFromTheLeft(Vector, Size) == CollideState.Death &&
-                    enemies[i].Collide(Vector, Size) == CollideState.Kill)
+                    enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
                 {
                     StartAgain();
                     //enemies[i].StartAgain();
@@ -220,13 +220,13 @@ namespace PixelAdventure.ObjectsScripts
                 }
 
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death &&
-                    enemies[i].Collide(Vector, Size) == CollideState.Kill)
+                    enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
                 {
                     StartAgain();
                     //enemies[i].StartAgain();
                     return GameState.GameOver;
                 }
-                else if (enemies[i].Collide(Vector, Size) == CollideState.Kill)
+                else if (enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
                 {
                     Vector.Y -= 50;
                     enemies.RemoveAt(i);
@@ -247,7 +247,7 @@ namespace PixelAdventure.ObjectsScripts
             return GameState.GamePlay;
         }
 
-        public static void CollideWithCoins(List<Coin> coins)
+        public void CollideWithCoins(List<Coin> coins)
         {
             for (int i = 0; i < coins.Count; i++)
             {
@@ -259,14 +259,14 @@ namespace PixelAdventure.ObjectsScripts
             }
         }
 
-        public static void StartAgain()
+        public void StartAgain()
         {
             counter = 0;
             Vector.X = 0;
             GoLeft = false;
         }
 
-        public static void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture, Animation animation)
+        public void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture, Animation animation)
         {
             _spriteBatch.Draw(texture,
                     new Rectangle((int)Vector.X, (int)Vector.Y - 10, Size.X + 10, Size.Y + 10),
@@ -274,7 +274,7 @@ namespace PixelAdventure.ObjectsScripts
                     Color.White);
         }
 
-        public static void DrawPlayerAnimation(SpriteBatch _spriteBatch)
+        public void DrawPlayerAnimation(SpriteBatch _spriteBatch)
         {
             if (!GoLeft && IsMove)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]]);
