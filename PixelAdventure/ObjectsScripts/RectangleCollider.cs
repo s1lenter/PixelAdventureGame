@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.ObjectsScripts
 {
     internal class RectangleCollider
     {
@@ -16,7 +16,7 @@ namespace PixelAdventure
             Boundary = new Rectangle(x, y, width, height);
         }
 
-        public static bool IsCollided (RectangleCollider r1, RectangleCollider r2)
+        public static bool IsCollided(RectangleCollider r1, RectangleCollider r2)
         {
             return r1.Boundary.Intersects(r2.Boundary);
         }
