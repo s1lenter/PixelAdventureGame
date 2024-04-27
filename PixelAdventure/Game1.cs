@@ -78,6 +78,8 @@ namespace PixelAdventure
 
         private PlayerController playerController;
 
+        private GamePlay gamePlay;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -111,8 +113,8 @@ namespace PixelAdventure
 
             finalPlatform = new Platform(platformSize, new Point(windowWidth / 2 + 300, windowHeight - floorSize.Y - 60));
 
-            movingPlatform = new MovingPlatform(movingPlatformSize, new Point(windowWidth / 2 + 100 + platformSize.X, windowHeight - floorSize.Y - bottomPlatform.Size.Y - bottomPlatform1.Size.Y - 10),
-                windowWidth / 2 + 100 + platformSize.X, windowWidth / 2 + 100 + platformSize.X + 70);
+            movingPlatform = new MovingPlatform(movingPlatformSize, new Point(windowWidth / 2 + 100 + platformSize.X, windowHeight - floorSize.Y -70),
+                windowWidth / 2 + 200, windowWidth / 2 + 270);
 
             enemy = new Enemy(new Point(30, 30), new Point(100, windowHeight - 130), 50, 150);
 
@@ -134,6 +136,8 @@ namespace PixelAdventure
             playerController = new PlayerController(_spriteBatch);
 
             mapCreator = new MapCreator(windowWidth, windowHeight);
+
+            gamePlay = new GamePlay(windowWidth, windowHeight);
 
             base.Initialize();
         }
@@ -223,7 +227,7 @@ namespace PixelAdventure
 
         private void UpdateGamePlay(GameTime gameTime)
         {
-            playerController.Update(gameTime, platforms, coinList, enemies, gravity);
+            playerController.Update(gameTime, gamePlay.platforms, coinList, enemies, gravity);
 
             state = playerController.player.CollideWithEnemies(enemies);
 

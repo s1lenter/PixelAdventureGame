@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace PixelAdventure
 {
-    enum GameState
+    internal class Level1
     {
-        //LevelCreatorTest,
-        Menu,
-        Level1,
-        GamePlay,
-        Pause,
-        GameOver,
+
     }
 }

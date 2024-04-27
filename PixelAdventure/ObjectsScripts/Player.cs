@@ -92,7 +92,6 @@ namespace PixelAdventure.ObjectsScripts
                 if (platform.IsFromTheLeft(Vector, Size) == CollideState.Left &&
                     platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
-                    //IsFall = false;
                     if (!Keyboard.GetState().IsKeyDown(Keys.D))
                     {
                         Vector.X -= speed;
@@ -109,7 +108,6 @@ namespace PixelAdventure.ObjectsScripts
                 if (platform.IsFromTheRight(Vector, Size) == CollideState.Right &&
                     platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
-                    //IsFall = false;
                     if (!Keyboard.GetState().IsKeyDown(Keys.A))
                     {
                         Vector.X += speed;
@@ -125,12 +123,9 @@ namespace PixelAdventure.ObjectsScripts
 
                 else if (platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
-                    //IsFall = false;
                     Vector.Y = platform.SpawnPoint.Y - Size.Y;
                     Jump(gameTime);
                 }
-                //else
-                //    IsFall = true;
             }
         }
 
@@ -193,12 +188,5 @@ namespace PixelAdventure.ObjectsScripts
                 }
             }
         }
-
-        //public void StartAgain() //MODEL
-        //{
-        //    counter = 0;
-        //    Vector.X = 0;
-        //    GoLeft = false;
-        //}
     }
 }

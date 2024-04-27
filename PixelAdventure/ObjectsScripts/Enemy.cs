@@ -72,7 +72,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public override CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
         {
-            var topRectangle = new Rectangle((int)Vector.X + 10, SpawnPoint.Y + 4, Size.X - 20, 1);
+            var topRectangle = new Rectangle((int)Vector.X + 12, SpawnPoint.Y + 3, Size.X-15, 1);
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
 
             if (playerRectangle.Intersects(topRectangle))
