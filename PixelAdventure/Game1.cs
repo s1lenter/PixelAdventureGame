@@ -16,13 +16,11 @@ namespace PixelAdventure
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        //private Player player;
-
         public static int windowHeight;
         public static int windowWidth;
 
         private Texture2D floor;
-        private Texture2D playerTexture;
+        //private Texture2D playerTexture;
         private Texture2D platform;
         private Texture2D platform1;
         private Texture2D trapTexture;
@@ -71,6 +69,8 @@ namespace PixelAdventure
         Enemy enemy;
         Texture2D enemyTexture;
         List<Enemy> enemies;
+
+        MapCreator mapCreator;
         #endregion
 
         private Coin coin;
@@ -87,6 +87,11 @@ namespace PixelAdventure
         
         protected override void Initialize()
         {
+            _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferWidth = 900;
+            _graphics.PreferredBackBufferHeight = 480;
+            _graphics.ApplyChanges();
+
             windowHeight = Window.ClientBounds.Height; //480
             windowWidth = Window.ClientBounds.Width; //800
 
@@ -128,6 +133,8 @@ namespace PixelAdventure
 
             playerController = new PlayerController(_spriteBatch);
 
+            mapCreator = new MapCreator(windowWidth, windowHeight);
+
             base.Initialize();
         }
 
@@ -135,7 +142,6 @@ namespace PixelAdventure
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             floor = Content.Load<Texture2D>("blackFloor");
-            playerTexture = Content.Load<Texture2D>("Player");
             platform = Content.Load<Texture2D>("blackFloor");
             platform1 = Content.Load<Texture2D>("blackFloor");
             cubeTexture = Content.Load<Texture2D>("tilemap");
@@ -174,7 +180,7 @@ namespace PixelAdventure
             switch (state)
             {
                 //case GameState.LevelCreatorTest:
-                //    UpdateLevelCreatorTest(gameTime); 
+                //    UpdateLevelCreatorTest(gameTime);
                 //    break;
                 case GameState.Menu:
                     Initialize();
@@ -203,10 +209,10 @@ namespace PixelAdventure
                 state = GameState.GamePlay;
         }
 
-        //private void UpdateLevelCreatorTest(GameTime gameTime)
-        //{
+        private void UpdateLevelCreatorTest(GameTime gameTime)
+        {
 
-        //}
+        }
 
         #region
         private void UpdateMenu(GameTime gameTime)
@@ -273,12 +279,13 @@ namespace PixelAdventure
             _spriteBatch.End();
         }
 
-        private void DrawLevelCreatorTest(GameTime gameTime)
-        {
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.End();
-        }
+        //private void DrawLevelCreatorTest(GameTime gameTime)
+        //{
+        //    _spriteBatch.Begin();
+        //    _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+        //    mapCreator.DrawTexture(_spriteBatch, cubeTexture);
+        //    _spriteBatch.End();
+        //}
 
         #region
         private void DrawMenu(GameTime gameTime)
@@ -298,19 +305,16 @@ namespace PixelAdventure
             
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
             _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
-            _spriteBatch.Draw(floor, new Rectangle(floorPlatform.SpawnPoint, floorPlatform.Size), Color.White);
-
-            //player.DrawPlayerAnimation(_spriteBatch);
-
+            mapCreator.DrawTexture(_spriteBatch, cubeTexture, floorPlatform.Size, floorPlatform.SpawnPoint);
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
 
-            _spriteBatch.Draw(platform, new Rectangle(bottomPlatform.SpawnPoint, bottomPlatform.Size), Color.White);
+            mapCreator.DrawTexture(_spriteBatch, cubeTexture, bottomPlatform.Size, bottomPlatform.SpawnPoint);
 
-            _spriteBatch.Draw(platform, new Rectangle(finalPlatform.SpawnPoint, finalPlatform.Size), Color.White);
+            mapCreator.DrawTexture(_spriteBatch, cubeTexture, finalPlatform.Size, finalPlatform.SpawnPoint);
 
-            _spriteBatch.Draw(platform1, new Rectangle(bottomPlatform1.SpawnPoint, bottomPlatform1.Size), new Rectangle(0, 0, 18, 18), Color.White);
+            mapCreator.DrawTexture(_spriteBatch, cubeTexture, bottomPlatform1.Size, bottomPlatform1.SpawnPoint);
 
             for (int i = 0; i < 10; i++)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
@@ -320,9 +324,6 @@ namespace PixelAdventure
 
             foreach (Coin coin in coinList)
                 coin.DrawCoin(_spriteBatch, coinTexture);
-
-            for (int i = 0; i < 3; i++)
-                _spriteBatch.Draw(cubeTexture, new Rectangle(bottomPlatform.SpawnPoint.X + 33 * i, bottomPlatform.SpawnPoint.Y, 30, 30), new Rectangle(0, 0, 18, 18), Color.White);
 
             _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
 
