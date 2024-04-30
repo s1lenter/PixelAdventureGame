@@ -41,7 +41,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public override CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
         {
-            var topRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, Size.Y / 2);
+            var topRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 1, Size.X, Size.Y / 2);
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
 
             if (playerRectangle.Intersects(topRectangle))
@@ -56,7 +56,7 @@ namespace PixelAdventure.ObjectsScripts
         public override CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var leftRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 3, 1, Size.Y);
+            var leftRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 4, 1, Size.Y);
 
             if (playerRectangle.Intersects(leftRectangle))
                 return CollideState.Left;
@@ -66,7 +66,7 @@ namespace PixelAdventure.ObjectsScripts
         public override CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var rightRectangle = new Rectangle((int)Vector.X + Size.X - 1, SpawnPoint.Y + 3, 1, Size.Y);
+            var rightRectangle = new Rectangle((int)Vector.X + Size.X - 1, SpawnPoint.Y + 4, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))
                 return CollideState.Right;

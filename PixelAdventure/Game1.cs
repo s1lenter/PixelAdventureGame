@@ -268,6 +268,10 @@ namespace PixelAdventure
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 state = GameState.Pause;
 
+
+            foreach (var movingPlatform in level1.movingPlatforms)
+                movingPlatform.Move(gameTime);
+
             if (level1.finish.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
             {
                 state = GameState.GamePlay;
@@ -372,6 +376,9 @@ namespace PixelAdventure
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
 
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.finish.SpawnPoint.X - 1, level1.finish.SpawnPoint.Y + 5), new Point(50,50)), Color.White);
+
+            foreach (var movingPlatform in level1.movingPlatforms)
+                _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
