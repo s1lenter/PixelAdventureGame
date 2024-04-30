@@ -66,7 +66,7 @@ namespace PixelAdventure.ObjectsScripts
         public override CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var rightRectangle = new Rectangle((int)Vector.X + Size.X, SpawnPoint.Y + 3, 1, Size.Y);
+            var rightRectangle = new Rectangle((int)Vector.X + Size.X - 1, SpawnPoint.Y + 3, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))
                 return CollideState.Right;

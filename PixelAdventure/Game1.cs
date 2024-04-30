@@ -36,7 +36,8 @@ namespace PixelAdventure
         private float gravity;
         private float fallGravity;
 
-        private Platform[] platforms;
+        //private Platform[] platforms;
+        //private MovingPlatform[] movingPlatforms;
 
         private Platform bottomPlatform;
         private Platform bottomPlatform1;
@@ -44,7 +45,7 @@ namespace PixelAdventure
         private Platform finalPlatform;
         private Platform cube;
 
-        private Trap trap;
+        //private Trap trap;
 
         public Texture2D playerWalkRight;
         public Texture2D playerWalkLeft;
@@ -66,19 +67,21 @@ namespace PixelAdventure
         MovingPlatform movingPlatform;
         Texture2D movingPlatformTexture;
 
-        Enemy enemy;
+        //Enemy enemy;
         Texture2D enemyTexture;
-        List<Enemy> enemies;
+        //List<Enemy> enemies;
 
         MapCreator mapCreator;
         #endregion
 
-        private Coin coin;
-        private List<Coin> coinList;
+        //private Coin coin;
+        //private List<Coin> coinList;
 
         private PlayerController playerController;
 
         private GamePlay gamePlay;
+
+        private Level1 level1;
 
         public Game1()
         {
@@ -90,8 +93,8 @@ namespace PixelAdventure
         protected override void Initialize()
         {
             _graphics.IsFullScreen = false;
-            _graphics.PreferredBackBufferWidth = 900;
-            _graphics.PreferredBackBufferHeight = 480;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
 
             windowHeight = Window.ClientBounds.Height; //480
@@ -102,7 +105,7 @@ namespace PixelAdventure
             movingPlatformSize = new Point(30, 5);
             trapSize = new Point(10, 10);
 
-            gravity = 3.75f;
+            gravity = 4.5f;
             fallGravity = gravity;
 
             floorPlatform = new Platform(floorSize, new Point(0, windowHeight - floorSize.Y));
@@ -116,28 +119,47 @@ namespace PixelAdventure
             movingPlatform = new MovingPlatform(movingPlatformSize, new Point(windowWidth / 2 + 100 + platformSize.X, windowHeight - floorSize.Y -70),
                 windowWidth / 2 + 200, windowWidth / 2 + 270);
 
-            enemy = new Enemy(new Point(30, 30), new Point(100, windowHeight - 130), 50, 150);
+            //enemy = new Enemy(new Point(30, 30), new Point(100, windowHeight - 130), 50, 150);
 
-            enemies = new List<Enemy> { enemy };
+            //enemies = new List<Enemy> { enemy };
 
-            platforms = new Platform[] { bottomPlatform1, bottomPlatform, floorPlatform, finalPlatform,movingPlatform };
+            //platforms = new Platform[] { bottomPlatform1, bottomPlatform, floorPlatform, finalPlatform,movingPlatform };
 
-            trap = new Trap(new Point(100, 10), new Point(windowWidth/2 + 200, windowHeight - floorSize.Y - 9));
+            //platforms = new Platform[]
+            //{
+            //    bottomPlatform1,
+            //    //new (new Point(100, 30), new Point(windowWidth / 2 + 100, windowHeight - 160)),
+            //    new (new Point(100, 30), new Point(windowWidth / 2, windowHeight - 130)),
+            //    new (new Point(windowWidth, 100), new Point(0, windowHeight - 100)),
+            //    new (new Point(100, 30), new Point(windowWidth / 2 + 300, windowHeight - 160)),
+            //    new MovingPlatform(new Point(30, 5), new Point(windowWidth / 2 + 200, windowHeight - 170),
+            //        windowWidth / 2 + 200, windowWidth / 2 + 270),
+            //};
 
-            coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));
-            coinList = new List<Coin>() 
-            { 
-                coin, 
-                new (new Point(20,20), new Point(250, windowHeight - floorSize.Y - 20)),
-                new (new Point(20,20), new Point(720, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
-                new (new Point(20,20), new Point(770, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
-            };
+            //movingPlatforms = new MovingPlatform[]
+            //{
+            //    new (new Point(30, 5), new Point(windowWidth / 2 + 200, windowHeight - 170),
+            //        windowWidth / 2 + 200, windowWidth / 2 + 270),
+            //};
+
+            //trap = new Trap(new Point(100, 10), new Point(windowWidth/2 + 200, windowHeight - floorSize.Y - 9));
+
+            //coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));
+            //coinList = new List<Coin>() 
+            //{ 
+            //    coin, 
+            //    new (new Point(20,20), new Point(250, windowHeight - floorSize.Y - 20)),
+            //    new (new Point(20,20), new Point(720, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
+            //    new (new Point(20,20), new Point(770, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
+            //};
 
             playerController = new PlayerController(_spriteBatch);
 
-            mapCreator = new MapCreator(windowWidth, windowHeight);
+            mapCreator = new MapCreator();
 
-            gamePlay = new GamePlay(windowWidth, windowHeight);
+            gamePlay = new GamePlay(windowWidth, windowHeight, _spriteBatch);
+
+            level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
 
             base.Initialize();
         }
@@ -175,24 +197,24 @@ namespace PixelAdventure
 
             playerController.Viewer.InicializeSprites(playerWalkRight, playerWalkLeft, playerIdle, playerIdleLeft, playerJumpRight, playerJumpLeft);
 
-            foreach (var enemy in enemies)
-                enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
+            //foreach (var enemy in enemies)
+            //    enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
 
         protected override void Update(GameTime gameTime)
         {
             switch (state)
             {
-                //case GameState.LevelCreatorTest:
-                //    UpdateLevelCreatorTest(gameTime);
-                //    break;
                 case GameState.Menu:
                     Initialize();
                     UpdateMenu(gameTime);
                     break;
-                case GameState.GamePlay:
-                    UpdateGamePlay(gameTime);
+                case GameState.Level1:
+                    UpdateLevel1(gameTime);
                     break;
+                //case GameState.GamePlay:
+                //    UpdateGamePlay(gameTime);
+                //    break;
                 case GameState.Pause:
                     UpdatePause(gameTime);
                     break;
@@ -213,39 +235,44 @@ namespace PixelAdventure
                 state = GameState.GamePlay;
         }
 
-        private void UpdateLevelCreatorTest(GameTime gameTime)
+        private void UpdateLevel1(GameTime gameTime)
         {
+            playerController.Update(gameTime, level1.platforms, level1.coins, /*enemies*/ gravity);
 
+            foreach (Trap trap in level1.traps)
+                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
+                    state = GameState.GameOver;
         }
 
         #region
         private void UpdateMenu(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                state = GameState.GamePlay;
+                state = GameState.Level1;
         }
 
-        private void UpdateGamePlay(GameTime gameTime)
-        {
-            playerController.Update(gameTime, gamePlay.platforms, coinList, enemies, gravity);
+        //private void UpdateGamePlay(GameTime gameTime)
+        //{
+        //    playerController.Update(gameTime, gamePlay.platforms, gamePlay.coins, /*enemies*/ gravity);
 
-            state = playerController.player.CollideWithEnemies(enemies);
+        //    //state = playerController.player.CollideWithEnemies(enemies);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
-                state = GameState.Pause;
+        //    if (Keyboard.GetState().IsKeyDown(Keys.P))
+        //        state = GameState.Pause;
 
-            if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
-                state = GameState.GameOver;
+        //    if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
+        //        state = GameState.GameOver;
 
-            movingPlatform.Move(gameTime);
+        //    foreach (var movingPlatform in  gamePlay.movingPlatforms)
+        //        movingPlatform.Move(gameTime);
 
-            enemy.Move(gameTime);
-        }
+        //    //enemy.Move(gameTime);
+        //}
 
         private void UpdateGameOver(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                state = GameState.GamePlay;
+                state = GameState.Level1;
         }
         #endregion
 
@@ -254,15 +281,15 @@ namespace PixelAdventure
 
             switch (state)
             {
-                //case GameState.LevelCreatorTest:
-                //    DrawLevelCreatorTest(gameTime);
-                //    break;
                 case GameState.Menu:
                     DrawMenu(gameTime);
                     break;
-                case GameState.GamePlay:
-                    DrawGamePlay(gameTime);
+                case GameState.Level1:
+                    DrawLevel1(gameTime);
                     break;
+                //case GameState.GamePlay:
+                //    DrawGamePlay(gameTime);
+                //    break;
                 case GameState.Pause:
                     DrawPause(gameTime);
                     break;
@@ -283,13 +310,26 @@ namespace PixelAdventure
             _spriteBatch.End();
         }
 
-        //private void DrawLevelCreatorTest(GameTime gameTime)
-        //{
-        //    _spriteBatch.Begin();
-        //    _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-        //    mapCreator.DrawTexture(_spriteBatch, cubeTexture);
-        //    _spriteBatch.End();
-        //}
+        private void DrawLevel1(GameTime gameTime)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+            _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
+
+            foreach (Coin coin in level1.coins)
+                coin.DrawCoin(_spriteBatch, coinTexture);
+
+            foreach (var platform in level1.platforms)
+                if (platform.GetType() != typeof(MovingPlatform))
+                    mapCreator.DrawTexture(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
+
+            foreach (var trap in level1.traps)
+                _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
+
+            playerController.AnimationController(gameTime);
+            playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+            _spriteBatch.End();
+        }
 
         #region
         private void DrawMenu(GameTime gameTime)
@@ -301,38 +341,37 @@ namespace PixelAdventure
             _spriteBatch.End();
         }
 
-        private void DrawGamePlay(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+        //private void DrawGamePlay(GameTime gameTime)
+        //{
+        //    GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
+        //    _spriteBatch.Begin();
             
-            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
-            mapCreator.DrawTexture(_spriteBatch, cubeTexture, floorPlatform.Size, floorPlatform.SpawnPoint);
+        //    _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+        //    _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
-            playerController.AnimationController(gameTime);
-            playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+        //    playerController.AnimationController(gameTime);
+        //    playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
 
-            mapCreator.DrawTexture(_spriteBatch, cubeTexture, bottomPlatform.Size, bottomPlatform.SpawnPoint);
+        //    foreach (var platform in gamePlay.platforms)
+        //        if (platform.GetType() != typeof(MovingPlatform))
+        //            mapCreator.DrawTexture(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
 
-            mapCreator.DrawTexture(_spriteBatch, cubeTexture, finalPlatform.Size, finalPlatform.SpawnPoint);
 
-            mapCreator.DrawTexture(_spriteBatch, cubeTexture, bottomPlatform1.Size, bottomPlatform1.SpawnPoint);
+        //    for (int i = 0; i < 10; i++)
+        //        _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
 
-            for (int i = 0; i < 10; i++)
-                _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
+        //    //foreach(Enemy enemy in enemies)
+        //    //    enemy.DrawEnemyAnimation(_spriteBatch);
 
-            foreach(Enemy enemy in enemies)
-                enemy.DrawEnemyAnimation(_spriteBatch);
+        //    foreach (Coin coin in gamePlay.coins)
+        //        coin.DrawCoin(_spriteBatch, coinTexture);
 
-            foreach (Coin coin in coinList)
-                coin.DrawCoin(_spriteBatch, coinTexture);
+        //    foreach (var movingPlatform in  gamePlay.movingPlatforms)
+        //        _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
 
-            _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
-
-            _spriteBatch.End();
-        }
+        //    _spriteBatch.End();
+        //}
 
         private void DrawGameOver(GameTime gameTime)
         {

@@ -24,7 +24,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public virtual CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
         {
-            var topRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y, Size.X, Size.Y / 2);
+            var topRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y, Size.X, Size.Y);
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 15, playerSize.Y);
 
             if (playerRectangle.Intersects(topRectangle))
@@ -35,7 +35,7 @@ namespace PixelAdventure.ObjectsScripts
         public virtual CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 15, playerSize.Y);
-            var leftRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y + 3, 1, Size.Y);
+            var leftRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y + 5, 1, Size.Y);
 
             if (playerRectangle.Intersects(leftRectangle))
                 return CollideState.Left;
@@ -45,7 +45,7 @@ namespace PixelAdventure.ObjectsScripts
         public virtual CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 15, playerSize.Y);
-            var rightRectangle = new Rectangle(SpawnPoint.X + Size.X, SpawnPoint.Y + 3, 1, Size.Y);
+            var rightRectangle = new Rectangle(SpawnPoint.X + Size.X, SpawnPoint.Y + 5, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))
                 return CollideState.Right;

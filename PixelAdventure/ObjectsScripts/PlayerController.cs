@@ -16,12 +16,12 @@ namespace PixelAdventure.ObjectsScripts
         private Rectangle rect;
         public PlayerController(SpriteBatch _spriteBatch)
         {
-            player = new Player();
+            player = new Player(10, 800);
             rect = new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10);
             Viewer = new PlayerViewer(rect);
         }
 
-        public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, List<Enemy> enemies, float gravity) 
+        public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, /*List<Enemy> enemies,*/ float gravity) 
         {
             //if (player.IsFall)
             //{

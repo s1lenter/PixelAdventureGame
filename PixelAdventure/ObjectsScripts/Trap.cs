@@ -25,7 +25,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public bool CollideWithTrap(Vector2 playerVector, Point playerSize)
         {
-            Rectangle playerRectangle = new Rectangle(new Point((int)playerVector.X, (int)playerVector.Y), playerSize);
+            Rectangle playerRectangle = new Rectangle(new Point((int)playerVector.X, (int)playerVector.Y), new Point(playerSize.X-15, playerSize.Y));
 
             if (playerRectangle.Intersects(bottomCollRect) || playerRectangle.Intersects(topCollRect))
                 return true;

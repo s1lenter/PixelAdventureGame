@@ -26,7 +26,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public Vector2 Vector;
 
-        readonly int speed;
+        private int speed;
 
         private int jumpForce;
 
@@ -43,15 +43,15 @@ namespace PixelAdventure.ObjectsScripts
         public bool IsStay;
         public bool IsWalk;
 
-        public Player() //CTOR
+        public Player(int startX, int startY) //CTOR
         {
             Size = new Point(30, 30);
             ColliderSpawn = new Point((int)Vector.X - 14, (int)Vector.Y - 7);
             ColliderSize = new Point(18,25);
-            Vector = new Vector2(0, Game1.windowHeight - 100 - Size.Y);
+            Vector = new Vector2(startX, startY /*Game1.windowHeight - 100 - Size.Y*/);
             //Spawn = new Point((int)Vector.X, (int)Vector.Y);
             speed = 3;
-            jumpForce = 80;
+            jumpForce = 100;
             counter = 0;
         }
         
@@ -101,19 +101,24 @@ namespace PixelAdventure.ObjectsScripts
                     else
                     {
                         Vector.X -= speed;
-                        Vector.Y += gravity;
+                        //Vector.Y += gravity;
                     }
                 }
 
                 if (platform.IsFromTheRight(Vector, Size) == CollideState.Right &&
                     platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
-                    if (!Keyboard.GetState().IsKeyDown(Keys.A))
+                    if (!Keyboard.GetState().IsKeyDown(Keys.A) && platform.GetType() != typeof(MovingPlatform))
                     {
                         Vector.X += speed;
                         Vector.Y -= gravity;
                         Jump(gameTime);
                     }
+                    else if (Keyboard.GetState().IsKeyDown(Keys.A) && platform.GetType() == typeof(MovingPlatform))
+                    {
+                        Vector.Y += speed;
+                    }
+
                     else
                     {
                         Vector.X += speed;
@@ -126,7 +131,7 @@ namespace PixelAdventure.ObjectsScripts
                     Vector.Y = platform.SpawnPoint.Y - Size.Y;
                     Jump(gameTime);
                 }
-            }
+            } 
         }
 
         public void Jump(GameTime gameTime) //MODEL
@@ -135,6 +140,7 @@ namespace PixelAdventure.ObjectsScripts
             {
                 countJump++;
                 Vector.Y -= jumpForce;
+                speed = 4; 
                 //IsJump = true;
             }
             else if (countJump > 0)
@@ -142,10 +148,11 @@ namespace PixelAdventure.ObjectsScripts
                 //IsJump = false;
                 jumpForce = 0;
                 countJump--;
+                speed = 3;
             }
             if (Keyboard.GetState().IsKeyUp(Keys.W))
             { 
-                jumpForce = 80;
+                jumpForce = 120;
                 //IsJump = false;
             }
         }
@@ -174,7 +181,7 @@ namespace PixelAdventure.ObjectsScripts
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death)
                     return GameState.GameOver;
             }
-            return GameState.GamePlay;
+            return GameState.Level1;
         }
 
         public void CollideWithCoins(List<Coin> coins) //MODEL
