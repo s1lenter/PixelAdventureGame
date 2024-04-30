@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework.Media;
 
 namespace PixelAdventure
 {
@@ -84,6 +85,8 @@ namespace PixelAdventure
         private Level1 level1;
 
         private Texture2D finishTexture;
+
+        private Song song;
 
         public Game1()
         {
@@ -201,6 +204,12 @@ namespace PixelAdventure
 
             finishTexture = Content.Load<Texture2D>("finish");
 
+            song = Content.Load<Song>("81cebf7e45fdef7");
+
+            MediaPlayer.Play(song);
+            // повторять после завершения
+            MediaPlayer.IsRepeating = true;
+
             foreach (var enemy in enemies)
                 enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
@@ -210,8 +219,8 @@ namespace PixelAdventure
             switch (state)
             {
                 case GameState.Menu:
-                    Initialize();
                     UpdateMenu(gameTime);
+                    //Initialize();
                     break;
                 case GameState.Level1:
                     UpdateLevel1(gameTime);
@@ -249,6 +258,7 @@ namespace PixelAdventure
 
         private void UpdateLevel1(GameTime gameTime)
         {
+            
             playerController.Update(gameTime, level1.platforms, level1.coins, /*enemies*/ gravity);
 
             foreach (Trap trap in level1.traps)
@@ -270,7 +280,10 @@ namespace PixelAdventure
         private void UpdateMenu(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
                 state = GameState.Level1;
+                Initialize();
+            }
         }
 
         private void UpdateGamePlay(GameTime gameTime)
@@ -294,7 +307,11 @@ namespace PixelAdventure
         private void UpdateGameOver(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
                 state = GameState.Level1;
+                Initialize();
+            }
+                
         }
         #endregion
 
