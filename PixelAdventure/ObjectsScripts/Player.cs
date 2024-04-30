@@ -181,7 +181,7 @@ namespace PixelAdventure.ObjectsScripts
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death)
                     return GameState.GameOver;
             }
-            return GameState.Level1;
+            return GameState.GamePlay;
         }
 
         public void CollideWithCoins(List<Coin> coins) //MODEL

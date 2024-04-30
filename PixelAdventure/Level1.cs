@@ -21,6 +21,8 @@ namespace PixelAdventure.ObjectsScripts
 
         public List<Trap> traps { get; private set; }
 
+        public Finish finish { get; private set; }
+
         public Level1(int windowWidth, int windowHeight, SpriteBatch spriteBatch)
         {
             this.windowWidth = windowWidth;
@@ -68,6 +70,8 @@ namespace PixelAdventure.ObjectsScripts
             };
 
             traps = new List<Trap>();
+
+            finish = new Finish(new Point(10, 50), new Point(1700, windowHeight - floorSize.Y - finalPlatformSize2.Y - 50));
 
             AddTraps(windowHeight - floorPlatform.Size.Y - 15);
         }

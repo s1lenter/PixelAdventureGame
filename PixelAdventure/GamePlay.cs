@@ -57,15 +57,15 @@ namespace PixelAdventure.ObjectsScripts
             {
 
             };
-            //var coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));
-            //coins = new List<Coin>
-            //{
-            //    coin,
-            //    //new (new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20)),
-            //    new (new Point(20,20), new Point(250, windowHeight - floorSize.Y - 20)),
-            //    new (new Point(20,20), new Point(720, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
-            //    new (new Point(20,20), new Point(770, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
-            //};
+            var coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));
+            coins = new List<Coin>
+            {
+                coin,
+                //new (new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20)),
+                new (new Point(20,20), new Point(250, windowHeight - floorSize.Y - 20)),
+                new (new Point(20,20), new Point(720, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
+                new (new Point(20,20), new Point(770, windowHeight - floorSize.Y - 20 - platformSize.Y * 2)),
+            };
         }
     }
 }

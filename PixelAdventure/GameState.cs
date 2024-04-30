@@ -13,6 +13,7 @@ namespace PixelAdventure
         Level1,
         GamePlay,
         Pause,
+        Win,
         GameOver,
     }
 }
