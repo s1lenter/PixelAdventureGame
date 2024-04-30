@@ -232,7 +232,7 @@ namespace PixelAdventure
                     UpdatePause(gameTime);
                     break;
                 case GameState.GameOver:
-                    Initialize();
+                    //Initialize();
                     UpdateGameOver(gameTime);
                     break;
                 case GameState.Win:
@@ -259,7 +259,7 @@ namespace PixelAdventure
         private void UpdateLevel1(GameTime gameTime)
         {
             
-            playerController.Update(gameTime, level1.platforms, level1.coins, /*enemies*/ gravity);
+            playerController.Update(gameTime, level1.platforms, level1.coins, gravity);
 
             foreach (Trap trap in level1.traps)
                 if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
@@ -270,9 +270,8 @@ namespace PixelAdventure
 
             if (level1.finish.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
             {
-                //level1.finish.Delete();
                 state = GameState.GamePlay;
-                //state = GameState.Win;
+                Initialize();
             }
         }
 
@@ -288,7 +287,7 @@ namespace PixelAdventure
 
         private void UpdateGamePlay(GameTime gameTime)
         {
-            playerController.Update(gameTime, gamePlay.platforms, gamePlay.coins, /*enemies*/ gravity);
+            playerController.Update(gameTime, gamePlay.platforms, gamePlay.coins, gravity);
 
             state = playerController.player.CollideWithEnemies(enemies);
 
