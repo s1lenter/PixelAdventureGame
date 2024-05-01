@@ -19,7 +19,6 @@ namespace PixelAdventure.ObjectsScripts
     internal class Player
     {
         public Point Size { get; private set; }
-        //public static Point Spawn { get; private set; }
 
         public Point ColliderSize;
         public Point ColliderSpawn;
@@ -47,9 +46,8 @@ namespace PixelAdventure.ObjectsScripts
         {
             Size = new Point(30, 30);
             ColliderSpawn = new Point((int)Vector.X - 14, (int)Vector.Y - 7);
-            ColliderSize = new Point(18,25);
-            Vector = new Vector2(startX, startY /*Game1.windowHeight - 100 - Size.Y*/);
-            //Spawn = new Point((int)Vector.X, (int)Vector.Y);
+            ColliderSize = new Point(18,30);
+            Vector = new Vector2(startX, startY);
             speed = 3;
             jumpForce = 100;
             counter = 0;
@@ -87,11 +85,22 @@ namespace PixelAdventure.ObjectsScripts
 
         public void CollideWithPlatforms(Platform[] platforms, float gravity, GameTime gameTime) //MODEL
         {
+            var playerRectangle = new Rectangle((int)Vector.X + 12, (int)Vector.Y, Size.X - 10, Size.Y);
             foreach (Platform platform in platforms)
             {
-                if (platform.IsFromTheLeft(Vector, Size) == CollideState.Left &&
-                    platform.Collide(Vector, Size, this) == CollideState.Top)
+                if (platform.Collide(playerRectangle, this) == CollideState.Left)
                 {
+                    Jump(gameTime);
+                }
+                else if (platform.Collide(playerRectangle, this) == CollideState.Right)
+                {
+                    Jump(gameTime);
+                }
+
+                if (platform.IsFromTheLeft(playerRectangle) == CollideState.Left &&
+                    platform.Collide(playerRectangle, this) == CollideState.Top)
+                {
+                    Jump(gameTime);
                     if (!Keyboard.GetState().IsKeyDown(Keys.D))
                     {
                         Vector.X -= speed;
@@ -101,12 +110,13 @@ namespace PixelAdventure.ObjectsScripts
                     else
                     {
                         Vector.X -= speed;
-                        //Vector.Y += gravity;
+                        Jump(gameTime);
                     }
+                        
                 }
 
-                if (platform.IsFromTheRight(Vector, Size) == CollideState.Right &&
-                    platform.Collide(Vector, Size, this) == CollideState.Top)
+                if (platform.IsFromTheRight(playerRectangle) == CollideState.Right &&
+                    platform.Collide(playerRectangle, this) == CollideState.Top)
                 {
                     if (!Keyboard.GetState().IsKeyDown(Keys.A) && platform.GetType() != typeof(MovingPlatform))
                     {
@@ -116,7 +126,7 @@ namespace PixelAdventure.ObjectsScripts
                     }
                     else if (Keyboard.GetState().IsKeyDown(Keys.A) && platform.GetType() == typeof(MovingPlatform))
                     {
-                        Vector.Y += speed;
+                        Vector.Y += speed; 
                     }
 
                     else
@@ -126,8 +136,9 @@ namespace PixelAdventure.ObjectsScripts
                     }
                 }
 
-                else if (platform.Collide(Vector, Size, this) == CollideState.Top)
+                else if (platform.Collide(playerRectangle, this) == CollideState.Top)
                 {
+                    IsJump = false;
                     Vector.Y = platform.SpawnPoint.Y - Size.Y;
                     Jump(gameTime);
                 }
@@ -136,49 +147,52 @@ namespace PixelAdventure.ObjectsScripts
 
         public void Jump(GameTime gameTime) //MODEL
         {
+            var startY = Vector.Y;
             if (Keyboard.GetState().IsKeyDown(Keys.W) && countJump == 0)
             {
                 countJump++;
                 Vector.Y -= jumpForce;
-                speed = 4; 
-                //IsJump = true;
+                speed = 4;
             }
-            else if (countJump > 0)
+            if (countJump > 0)
             {
-                //IsJump = false;
+                IsJump = true;
                 jumpForce = 0;
                 countJump--;
                 speed = 3;
             }
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && Vector.Y == startY)
+                IsJump = false;
             if (Keyboard.GetState().IsKeyUp(Keys.W))
-            { 
+            {
+                IsJump = false;
                 jumpForce = 120;
-                //IsJump = false;
             }
         }
 
         public GameState CollideWithEnemies(List<Enemy> enemies) //MODEL
         {
+            var playerRectangle = new Rectangle((int)Vector.X + 13, (int)Vector.Y, Size.X - 25, Size.Y);
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (enemies[i].IsFromTheLeft(Vector, Size) == CollideState.Death &&
-                    enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
+                if (enemies[i].IsFromTheLeft(playerRectangle) == CollideState.Death &&
+                    enemies[i].Collide(playerRectangle, this) == CollideState.Kill)
                     return GameState.GameOver;
 
-                else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death &&
-                    enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
+                else if (enemies[i].IsFromTheRight(playerRectangle) == CollideState.Death &&
+                    enemies[i].Collide(playerRectangle, this) == CollideState.Kill)
                     return GameState.GameOver;
 
-                else if (enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
+                else if (enemies[i].Collide(playerRectangle, this) == CollideState.Kill)
                 {
                     Vector.Y -= 50;
                     enemies.RemoveAt(i);
                 }
 
-                else if (enemies[i].IsFromTheLeft(Vector, Size) == CollideState.Death)
+                else if (enemies[i].IsFromTheLeft(playerRectangle) == CollideState.Death)
                     return GameState.GameOver;
 
-                else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death)
+                else if (enemies[i].IsFromTheRight(playerRectangle) == CollideState.Death)
                     return GameState.GameOver;
             }
             return GameState.GamePlay;

@@ -13,7 +13,7 @@ namespace PixelAdventure.ObjectsScripts
     {
         public Animation walk;
         public Animation idle;
-        private Animation jump;
+        public Animation jump;
 
         public Animation currentAnimation;
 
@@ -41,7 +41,7 @@ namespace PixelAdventure.ObjectsScripts
         {
             walk = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
             idle = new Animation(32, 32, currentFrameIdle, spriteSizeIdle);
-            //jump = new Animation(32, 32, currentFrameJump, spriteSizeJump);
+            jump = new Animation(32, 32, currentFrameJump, spriteSizeJump);
 
             animationSprites = new Dictionary<string, Texture2D>()
             {
@@ -49,8 +49,8 @@ namespace PixelAdventure.ObjectsScripts
                 { "walkRight", walkRightSprite },
                 { "idleLeft", idleLeftSprite },
                 { "idleRight", idleRightSprite },
-                //{ "jumpRight",  jumpRightSprite },
-                //{ "jumpLeft", jumpLeftSprite },
+                { "jumpRight",  jumpRightSprite },
+                { "jumpLeft", jumpLeftSprite },
             };
 
             animations = new Dictionary<Texture2D, Animation>()
@@ -59,8 +59,8 @@ namespace PixelAdventure.ObjectsScripts
                 { walkRightSprite, walk },
                 { idleLeftSprite, idle },
                 { idleRightSprite, idle },
-                //{ jumpRightSprite, jump },
-                //{ jumpLeftSprite, jump },
+                { jumpRightSprite, jump },
+                { jumpLeftSprite, jump },
             };
             currentAnimation = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
         }
@@ -77,17 +77,30 @@ namespace PixelAdventure.ObjectsScripts
         {
             DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]], rect);
         }
+
         public void DrawWalkLeft(SpriteBatch _spriteBatch, Rectangle rect)
         {
             DrawCurrentAnimation(_spriteBatch, animationSprites["walkLeft"], animations[animationSprites["walkLeft"]], rect);
         }
+
         public void DrawIdleRight(SpriteBatch _spriteBatch, Rectangle rect)
         {
             DrawCurrentAnimation(_spriteBatch, animationSprites["idleRight"], animations[animationSprites["idleRight"]], rect);
         }
+
         public void DrawIdleLeft(SpriteBatch _spriteBatch, Rectangle rect)
         {
             DrawCurrentAnimation(_spriteBatch, animationSprites["idleLeft"], animations[animationSprites["idleLeft"]], rect);
+        }
+
+        public void DrawJumpRight(SpriteBatch _spriteBatch, Rectangle rect)
+        {
+            DrawCurrentAnimation(_spriteBatch, animationSprites["jumpRight"], animations[animationSprites["jumpRight"]], rect);
+        }
+
+        public void DrawJumpLeft(SpriteBatch _spriteBatch, Rectangle rect)
+        {
+            DrawCurrentAnimation(_spriteBatch, animationSprites["jumpLeft"], animations[animationSprites["jumpLeft"]], rect);
         }
     }
 }

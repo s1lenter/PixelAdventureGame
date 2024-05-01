@@ -207,7 +207,6 @@ namespace PixelAdventure
             song = Content.Load<Song>("81cebf7e45fdef7");
 
             MediaPlayer.Play(song);
-            // повторять после завершения
             MediaPlayer.IsRepeating = true;
 
             foreach (var enemy in enemies)
@@ -220,7 +219,6 @@ namespace PixelAdventure
             {
                 case GameState.Menu:
                     UpdateMenu(gameTime);
-                    //Initialize();
                     break;
                 case GameState.Level1:
                     UpdateLevel1(gameTime);
@@ -232,7 +230,6 @@ namespace PixelAdventure
                     UpdatePause(gameTime);
                     break;
                 case GameState.GameOver:
-                    //Initialize();
                     UpdateGameOver(gameTime);
                     break;
                 case GameState.Win:
@@ -291,6 +288,10 @@ namespace PixelAdventure
 
         private void UpdateGamePlay(GameTime gameTime)
         {
+
+            if (Keyboard.GetState().IsKeyDown(Keys.R))
+                Initialize();
+
             playerController.Update(gameTime, gamePlay.platforms, gamePlay.coins, gravity);
 
             state = playerController.player.CollideWithEnemies(enemies);
@@ -311,10 +312,9 @@ namespace PixelAdventure
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                state = GameState.Level1;
+                state = GameState.GamePlay;
                 Initialize();
             }
-                
         }
         #endregion
 

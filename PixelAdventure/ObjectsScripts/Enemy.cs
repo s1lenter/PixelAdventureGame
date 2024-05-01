@@ -70,32 +70,27 @@ namespace PixelAdventure.ObjectsScripts
             }
         }
 
-        public override CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
+        public override CollideState Collide(Rectangle playerRectangle, Player player)
         {
-            var topRectangle = new Rectangle((int)Vector.X + 12, SpawnPoint.Y + 3, Size.X-15, 1);
-            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
+            var topRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, 1);
 
             if (playerRectangle.Intersects(topRectangle))
-            {
                 return CollideState.Kill;
-            }
             return CollideState.Fall;
         }
 
-        public override CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
+        public override CollideState IsFromTheLeft(Rectangle playerRectangle)
         {
-            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var leftRectangle = new Rectangle((int)Vector.X + 7, SpawnPoint.Y + 6, 1, Size.Y);
+            var leftRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 3, 1, Size.Y);
 
             if (playerRectangle.Intersects(leftRectangle))
                 return CollideState.Death;
             return CollideState.Fall;
         }
 
-        public override CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
+        public override CollideState IsFromTheRight(Rectangle playerRectangle)
         {
-            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
-            var rightRectangle = new Rectangle((int)Vector.X + Size.X, SpawnPoint.Y + 6, 1, Size.Y);
+            var rightRectangle = new Rectangle((int)Vector.X + Size.X, SpawnPoint.Y + 3, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))
                 return CollideState.Death;

@@ -48,20 +48,29 @@ namespace PixelAdventure.ObjectsScripts
                 Viewer.currentAnimation = Viewer.idle;
                 Viewer.currentAnimation.StartAnimation(gameTime);
             }
+            else if (player.IsJump)
+            {
+                Viewer.currentAnimation = Viewer.jump;
+                Viewer.currentAnimation.StartAnimation(gameTime);
+            }
         }
 
         public void AnimationGo(SpriteBatch _spriteBatch, Rectangle drawingRectangle)
         {
-            if (!player.GoLeft && player.IsMove)
+            
+            if (!player.GoLeft && player.IsMove && !player.IsJump)
                 Viewer.DrawWalkRight(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-            else if (player.GoLeft && player.IsMove)
+            else if (player.GoLeft && player.IsMove && !player.IsJump)
                 Viewer.DrawWalkLeft(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-            else if (!player.IsMove && !player.GoLeft)
+            else if (!player.IsMove && !player.GoLeft && !player.IsJump)
                 Viewer.DrawIdleRight(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-            else if (!player.IsMove && player.GoLeft)
+            else if (!player.IsMove && player.GoLeft && !player.IsJump)
                 Viewer.DrawIdleLeft(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-        }
 
-        
+            if (player.IsJump && player.GoLeft)
+                Viewer.DrawJumpLeft(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
+            else if (player.IsJump && !player.GoLeft)
+                Viewer.DrawJumpRight(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
+        }
     }
 }
