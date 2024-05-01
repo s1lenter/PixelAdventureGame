@@ -52,17 +52,17 @@ namespace PixelAdventure.ObjectsScripts
             var platformFly2 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 120 + flyPlatformSize.X, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly3 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 180 + flyPlatformSize.X * 2, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
 
-            var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(50, windowHeight - floorSize.Y - 30), 30, 90);
+            //var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(50, windowHeight - floorSize.Y - 30), 30, 90);
 
             platforms = new Platform[]
             {
-                platform1, platform2, platform4, platform3, finalPlatform, platformFly1, platformFly2, platformFly3, floorPlatform, movingPlatform
+                platform1, platform2, platform4, platform3, finalPlatform, platformFly1, platformFly2, platformFly3, floorPlatform, /*movingPlatform*/
             };
 
-            movingPlatforms = new MovingPlatform[]
-            {
-                movingPlatform,
-            };
+            //movingPlatforms = new MovingPlatform[]
+            //{
+            //    movingPlatform,
+            //};
 
             var coinSize = new Point(30,30);
 

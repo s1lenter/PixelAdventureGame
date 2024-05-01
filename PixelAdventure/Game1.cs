@@ -269,8 +269,8 @@ namespace PixelAdventure
                 state = GameState.Pause;
 
 
-            foreach (var movingPlatform in level1.movingPlatforms)
-                movingPlatform.Move(gameTime);
+            //foreach (var movingPlatform in level1.movingPlatforms)
+            //    movingPlatform.Move(gameTime);
 
             if (level1.finish.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
             {
@@ -377,8 +377,8 @@ namespace PixelAdventure
 
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.finish.SpawnPoint.X - 1, level1.finish.SpawnPoint.Y + 5), new Point(50,50)), Color.White);
 
-            foreach (var movingPlatform in level1.movingPlatforms)
-                _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
+            //foreach (var movingPlatform in level1.movingPlatforms)
+            //    _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, movingPlatform.SpawnPoint.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
