@@ -16,18 +16,14 @@ namespace PixelAdventure.ObjectsScripts
         private Rectangle rect;
         public PlayerController(SpriteBatch _spriteBatch)
         {
-            player = new Player(10, 800);
+            player = new Player(30, 850);
             rect = new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10);
             Viewer = new PlayerViewer(rect);
         }
 
         public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, /*List<Enemy> enemies,*/ float gravity) 
         {
-            //if (player.IsFall)
-            //{
-            //    gravity += 2f;
-                player.Vector.Y += gravity;
-            //}
+            player.Vector.Y += gravity;
 
             player.Move(gameTime);
 

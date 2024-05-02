@@ -39,9 +39,10 @@ namespace PixelAdventure.ObjectsScripts
             }
         }
 
-        public override CollideState Collide(Rectangle playerRectangle, Player player)
+        public override CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
         {
-            var topRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 1, Size.X, Size.Y / 2);
+            var topRectangle = new Rectangle((int)Vector.X + 3, SpawnPoint.Y - 10, Size.X - 3, Size.Y / 2);
+            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
 
             if (playerRectangle.Intersects(topRectangle))
             {
@@ -52,18 +53,20 @@ namespace PixelAdventure.ObjectsScripts
             return CollideState.Fall;
         }
 
-        public override CollideState IsFromTheLeft(Rectangle playerRectangle)
+        public override CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
         {
-            var leftRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 4, 1, Size.Y);
+            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
+            var leftRectangle = new Rectangle((int)Vector.X + 1, SpawnPoint.Y + 4, 1, 1);
 
             if (playerRectangle.Intersects(leftRectangle))
                 return CollideState.Left;
             return CollideState.Fall;
         }
 
-        public override CollideState IsFromTheRight(Rectangle playerRectangle)
+        public override CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
-            var rightRectangle = new Rectangle((int)Vector.X + Size.X - 1, SpawnPoint.Y + 4, 1, Size.Y);
+            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 12, playerSize.Y);
+            var rightRectangle = new Rectangle((int)Vector.X + Size.X - 1, SpawnPoint.Y + 4, 1, 1);
 
             if (playerRectangle.Intersects(rightRectangle))
                 return CollideState.Right;

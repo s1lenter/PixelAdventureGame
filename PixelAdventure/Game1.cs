@@ -84,6 +84,8 @@ namespace PixelAdventure
 
         private Level1 level1;
 
+        private Level2 level2;
+
         private Texture2D finishTexture;
 
         private Song song;
@@ -166,6 +168,8 @@ namespace PixelAdventure
 
             level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
 
+            level2 = new Level2(windowWidth, windowHeight, _spriteBatch);
+
             base.Initialize();
         }
 
@@ -206,8 +210,8 @@ namespace PixelAdventure
 
             song = Content.Load<Song>("81cebf7e45fdef7");
 
-            MediaPlayer.Play(song);
-            MediaPlayer.IsRepeating = true;
+            //MediaPlayer.Play(song);
+            //MediaPlayer.IsRepeating = true;
 
             foreach (var enemy in enemies)
                 enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
@@ -222,6 +226,9 @@ namespace PixelAdventure
                     break;
                 case GameState.Level1:
                     UpdateLevel1(gameTime);
+                    break;
+                case GameState.Level2:
+                    UpdateLevel2(gameTime);
                     break;
                 case GameState.GamePlay:
                     UpdateGamePlay(gameTime);
@@ -238,6 +245,11 @@ namespace PixelAdventure
             }
 
             base.Update(gameTime);
+        }
+
+        private void UpdateLevel2(GameTime gameTime)
+        {
+            playerController.Update(gameTime, level1.platforms, level1.coins, gravity);
         }
 
         private void UpdateWin(GameTime gameTime)
@@ -281,7 +293,7 @@ namespace PixelAdventure
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                state = GameState.Level1;
+                state = GameState.Level2;
                 Initialize();
             }
         }
@@ -328,6 +340,9 @@ namespace PixelAdventure
                 case GameState.Level1:
                     DrawLevel1(gameTime);
                     break;
+                case GameState.Level2:
+                    DrawLevel2(gameTime);
+                    break;
                 case GameState.GamePlay:
                     DrawGamePlay(gameTime);
                     break;
@@ -342,6 +357,21 @@ namespace PixelAdventure
                     break;
             }
             base.Draw(gameTime);
+        }
+
+        private void DrawLevel2(GameTime gameTime)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+            _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
+
+            playerController.AnimationController(gameTime);
+            playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+
+            foreach (var platform in level2.platforms)
+                if (platform.GetType() != typeof(MovingPlatform))
+                    mapCreator.DrawTexture(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
+            _spriteBatch.End();
         }
 
         private void DrawWin(GameTime gameTime)

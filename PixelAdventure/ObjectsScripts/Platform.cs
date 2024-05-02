@@ -22,17 +22,19 @@ namespace PixelAdventure.ObjectsScripts
             SpawnPoint = spawnPoint;
         }
 
-        public virtual CollideState Collide(Rectangle playerRectangle, Player player)
+        public virtual CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
         {
             var topRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y, Size.X, Size.Y);
+            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 14, playerSize.Y);
 
             if (playerRectangle.Intersects(topRectangle))
                 return CollideState.Top;
             return CollideState.Fall;
         }
 
-        public virtual CollideState IsFromTheLeft(Rectangle playerRectangle)
+        public virtual CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
         {
+            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 14, playerSize.Y);
             var leftRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y + 5, 1, Size.Y);
 
             if (playerRectangle.Intersects(leftRectangle))
@@ -40,8 +42,9 @@ namespace PixelAdventure.ObjectsScripts
             return CollideState.Fall;
         }
 
-        public virtual CollideState IsFromTheRight(Rectangle playerRectangle)
+        public virtual CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
+            var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 14, playerSize.Y);
             var rightRectangle = new Rectangle(SpawnPoint.X + Size.X, SpawnPoint.Y + 5, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))

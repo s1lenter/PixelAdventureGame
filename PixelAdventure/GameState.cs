@@ -11,6 +11,7 @@ namespace PixelAdventure
         //LevelCreatorTest,
         Menu,
         Level1,
+        Level2,
         GamePlay,
         Pause,
         Win,

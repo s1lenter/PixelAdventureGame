@@ -38,7 +38,7 @@ namespace PixelAdventure.ObjectsScripts
 
             var bottomPlatform1 = new Platform(platformSize, new Point(windowWidth / 2 + 100, windowHeight - floorSize.Y - 60));
 
-            var finalPlatform = new Platform(platformSize, new Point(windowWidth / 2 + 300, windowHeight - floorSize.Y - 60));
+            var finalPlatform = new Platform(platformSize, new Point(windowWidth / 2 + 300, windowHeight - floorSize.Y - 170));
 
             var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(windowWidth / 2 + 100 + platformSize.X, windowHeight - floorSize.Y - 70),
                 windowWidth / 2 + 200, windowWidth / 2 + 270);
