@@ -53,10 +53,16 @@ namespace PixelAdventure.ObjectsScripts
                 movingPlatform
             };
 
+            Enemy enemy = new(new Point(30, 30), new Point(100, windowHeight - 210), 50, 150);
+            Enemy enemy2 = new(new Point(30, 30), new Point(200, windowHeight - 210), 150, 250);
+            Enemy enemy3 = new(new Point(30, 30), new Point(300, windowHeight - 210), 250, 350);
+            Enemy enemy4 = new(new Point(30, 30), new Point(400, windowHeight - 210), 350, 450);
+
             enemies = new List<Enemy>
             {
-
+                enemy, enemy2, enemy3, enemy4,
             };
+
             var coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));
             coins = new List<Coin>
             {

@@ -22,6 +22,8 @@ namespace PixelAdventure
 
         public List<Trap> traps { get; private set; }
 
+        public List<Enemy> enemies { get; private set; }
+
         public Finish finish { get; private set; }
 
         public Level2(int windowWidth, int windowHeight, SpriteBatch spriteBatch)
@@ -46,6 +48,13 @@ namespace PixelAdventure
             platforms = new Platform[]
             {
                 floorPlatform,
+            };
+            var coinSize = new Point(30, 30);
+            coins = new List<Coin>
+            {
+                new(coinSize, new Point(1050, windowHeight-floorSize.Y-coinSize.Y)),
+                new(coinSize, new Point(1200, windowHeight-floorSize.Y-coinSize.Y)),
+                new(coinSize, new Point(1350, windowHeight-floorSize.Y-coinSize.Y)),
             };
         }
     }

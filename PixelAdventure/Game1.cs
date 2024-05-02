@@ -213,7 +213,7 @@ namespace PixelAdventure
             //MediaPlayer.Play(song);
             //MediaPlayer.IsRepeating = true;
 
-            foreach (var enemy in enemies)
+            foreach (var enemy in gamePlay.enemies)
                 enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
 
@@ -249,7 +249,7 @@ namespace PixelAdventure
 
         private void UpdateLevel2(GameTime gameTime)
         {
-            playerController.Update(gameTime, level1.platforms, level1.coins, gravity);
+            playerController.Update(gameTime, level2.platforms, level2.coins, gravity);
         }
 
         private void UpdateWin(GameTime gameTime)
@@ -293,7 +293,7 @@ namespace PixelAdventure
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                state = GameState.Level2;
+                state = GameState.GamePlay;
                 Initialize();
             }
         }
@@ -306,18 +306,21 @@ namespace PixelAdventure
 
             playerController.Update(gameTime, gamePlay.platforms, gamePlay.coins, gravity);
 
-            state = playerController.player.CollideWithEnemies(enemies);
-
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 state = GameState.Pause;
 
             if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
                 state = GameState.GameOver;
 
+            foreach (var enemy in gamePlay.enemies)
+            {
+                enemy.Move(gameTime);
+            }
+
             foreach (var movingPlatform in gamePlay.movingPlatforms)
                 movingPlatform.Move(gameTime);
 
-            enemy.Move(gameTime);
+            state = playerController.player.CollideWithEnemies(gamePlay.enemies);
         }
 
         private void UpdateGameOver(GameTime gameTime)
@@ -367,6 +370,9 @@ namespace PixelAdventure
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+
+            foreach (Coin coin in level2.coins)
+                coin.DrawCoin(_spriteBatch, coinTexture);
 
             foreach (var platform in level2.platforms)
                 if (platform.GetType() != typeof(MovingPlatform))
@@ -444,7 +450,7 @@ namespace PixelAdventure
             for (int i = 0; i < 10; i++)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + i * trapSize.X, trap.SpawnPoint.Y, trapSize.X, trapSize.Y), Color.White);
 
-            foreach (Enemy enemy in enemies)
+            foreach (Enemy enemy in gamePlay.enemies)
                 enemy.DrawEnemyAnimation(_spriteBatch);
 
             foreach (Coin coin in gamePlay.coins)
