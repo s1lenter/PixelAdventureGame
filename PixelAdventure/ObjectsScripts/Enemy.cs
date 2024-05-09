@@ -22,7 +22,7 @@ namespace PixelAdventure.ObjectsScripts
         public static Point currentFrameWalk = new Point(0, 0);
         private static Point spriteSizeWalk = new Point(6, 0);
 
-        public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound) : base(enemySize, spawnPoint, leftBound, rightBound)
+        public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound, string name) : base(enemySize, spawnPoint, leftBound, rightBound, name)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
             speed = 2.2f;
@@ -51,7 +51,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public bool GoLeft = false;
 
-        public override void Move(GameTime gameTime)
+        public override void HorizontalMove(GameTime gameTime)
         {
             Vector.X += speed;
             currentAnimation = walk;
@@ -73,7 +73,7 @@ namespace PixelAdventure.ObjectsScripts
         public override CollideState Collide(Vector2 playerVector, Point playerSize, Player player)
         {
             var topRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y, Size.X, 1);
-            var playerRectangle = new Rectangle((int)playerVector.X + 13, (int)playerVector.Y, playerSize.X - 25, playerSize.Y);
+            var playerRectangle = new Rectangle((int)playerVector.X + 13, (int)playerVector.Y, playerSize.X - 25, playerSize.Y - 1);
 
             if (playerRectangle.Intersects(topRectangle))
             {
@@ -84,7 +84,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public override CollideState IsFromTheLeft(Vector2 playerVector, Point playerSize)
         {
-            var playerRectangle = new Rectangle((int)playerVector.X + 13, (int)playerVector.Y, playerSize.X - 25, playerSize.Y);
+            var playerRectangle = new Rectangle((int)playerVector.X + 13, (int)playerVector.Y, playerSize.X - 25, playerSize.Y - 1);
             var leftRectangle = new Rectangle((int)Vector.X, SpawnPoint.Y + 3, 1, Size.Y);
 
             if (playerRectangle.Intersects(leftRectangle))
@@ -94,7 +94,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public override CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
-            var playerRectangle = new Rectangle((int)playerVector.X + 13, (int)playerVector.Y, playerSize.X - 25, playerSize.Y);
+            var playerRectangle = new Rectangle((int)playerVector.X + 13, (int)playerVector.Y, playerSize.X - 25, playerSize.Y - 1);
             var rightRectangle = new Rectangle((int)Vector.X + Size.X, SpawnPoint.Y + 3, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))

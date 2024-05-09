@@ -41,7 +41,7 @@ namespace PixelAdventure.ObjectsScripts
             var finalPlatform = new Platform(platformSize, new Point(windowWidth / 2 + 300, windowHeight - floorSize.Y - 170));
 
             var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(windowWidth / 2 + 100 + platformSize.X, windowHeight - floorSize.Y - 70),
-                windowWidth / 2 + 200, windowWidth / 2 + 270);
+                windowWidth / 2 + 200, windowWidth / 2 + 270, "horizontal");
 
             platforms = new Platform[]
             {
@@ -53,14 +53,14 @@ namespace PixelAdventure.ObjectsScripts
                 movingPlatform
             };
 
-            Enemy enemy = new(new Point(30, 30), new Point(100, windowHeight - 210), 50, 150);
-            Enemy enemy2 = new(new Point(30, 30), new Point(200, windowHeight - 210), 150, 250);
-            Enemy enemy3 = new(new Point(30, 30), new Point(300, windowHeight - 210), 250, 350);
-            Enemy enemy4 = new(new Point(30, 30), new Point(400, windowHeight - 210), 350, 450);
+            Enemy enemy = new(new Point(30, 30), new Point(100, windowHeight - 210), 50, 150, "one");
+            Enemy enemy2 = new(new Point(30, 30), new Point(200, windowHeight - 210), 150, 250, "two");
+            Enemy enemy3 = new(new Point(30, 30), new Point(300, windowHeight - 210), 250, 350, "three");
+            Enemy enemy4 = new(new Point(30, 30), new Point(400, windowHeight - 210), 350, 450, "four");
 
             enemies = new List<Enemy>
             {
-                enemy, enemy2, enemy3, enemy4,
+                enemy4,
             };
 
             var coin = new Coin(new Point(20, 20), new Point(200, windowHeight - floorSize.Y - 20));

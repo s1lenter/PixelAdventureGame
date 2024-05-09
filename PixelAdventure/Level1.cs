@@ -80,25 +80,15 @@ namespace PixelAdventure.ObjectsScripts
 
             finish = new Finish(new Point(10, 50), new Point(1700, windowHeight - floorSize.Y - finalPlatformSize2.Y - 50));
 
-            AddTraps(windowHeight - floorPlatform.Size.Y - 15);
+            AddTraps(165, windowHeight - floorPlatform.Size.Y - 15, 36);
+            AddTraps(405, windowHeight - floorPlatform.Size.Y - 15, 6);
+            AddTraps(615, windowHeight - floorPlatform.Size.Y - 15, 6);
         }
 
-        private void AddTraps(int y)
+        private void AddTraps(int x, int y, int count)
         {
-            for (int i = 0; i < 36; i++)
-            {
-                traps.Add(new Trap(new Point(15, 15), new Point(windowWidth / 2 - 15 + 15 * i, y)));
-            }
-
-            for (int i = 0; i < 6; i++)
-            {
-                traps.Add(new Trap(new Point(15, 15), new Point(405 + 15 * i, y)));
-            }
-
-            for (int i = 0; i < 6; i++)
-            {
-                traps.Add(new Trap(new Point(15, 15), new Point(615 + 15 * i, y)));
-            }
+            for (int i = 0; i < count; i++)
+                traps.Add(new Trap(new Point(15, 15), new Point(x + 15 * i, y)));
         }
     }
 }
