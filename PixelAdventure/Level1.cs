@@ -5,15 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace PixelAdventure.ObjectsScripts
 {
     internal class Level1
     {
+        private float gravity = 4.5f;
+
         private int windowWidth;
         private int windowHeight;
 
-        private PlayerController playerController;
+        //private PlayerController playerController;
         public Platform[] platforms { get; private set; }
         public MovingPlatform[] movingPlatforms { get; private set; }
         //public List<Enemy> enemies { get; private set; }
@@ -27,7 +30,7 @@ namespace PixelAdventure.ObjectsScripts
         {
             this.windowWidth = windowWidth;
             this.windowHeight = windowHeight;
-            playerController = new PlayerController(spriteBatch);
+            //playerController = new PlayerController(spriteBatch);
 
             var floorSize = new Point(windowWidth, 180);
             var platformSize = new Point(120, 30);
@@ -52,17 +55,10 @@ namespace PixelAdventure.ObjectsScripts
             var platformFly2 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 120 + flyPlatformSize.X, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly3 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 180 + flyPlatformSize.X * 2, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
 
-            //var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(50, windowHeight - floorSize.Y - 30), 30, 90);
-
             platforms = new Platform[]
             {
                 platform1, platform2, platform4, platform3, finalPlatform, platformFly1, platformFly2, platformFly3, floorPlatform, /*movingPlatform*/
             };
-
-            //movingPlatforms = new MovingPlatform[]
-            //{
-            //    movingPlatform,
-            //};
 
             var coinSize = new Point(30,30);
 
@@ -80,7 +76,7 @@ namespace PixelAdventure.ObjectsScripts
 
             finish = new Finish(new Point(10, 50), new Point(1700, windowHeight - floorSize.Y - finalPlatformSize2.Y - 50));
 
-            AddTraps(165, windowHeight - floorPlatform.Size.Y - 15, 36);
+            AddTraps(945, windowHeight - floorPlatform.Size.Y - 15, 36);
             AddTraps(405, windowHeight - floorPlatform.Size.Y - 15, 6);
             AddTraps(615, windowHeight - floorPlatform.Size.Y - 15, 6);
         }
@@ -89,6 +85,23 @@ namespace PixelAdventure.ObjectsScripts
         {
             for (int i = 0; i < count; i++)
                 traps.Add(new Trap(new Point(15, 15), new Point(x + 15 * i, y)));
+        }
+
+        public GameState UpdateLevel1(GameTime gameTime, PlayerController playerController)
+        {
+            playerController.Update(gameTime, platforms, coins, gravity);
+
+            foreach (Trap trap in traps)
+                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
+                    return GameState.GameOver;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+                return GameState.Pause;
+
+            if (finish.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
+                return GameState.Level2;
+
+            return GameState.Level1;
         }
     }
 }

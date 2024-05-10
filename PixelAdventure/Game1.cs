@@ -13,6 +13,7 @@ namespace PixelAdventure
     public class Game1 : Game
     {
         private GameState state;
+        private GameState currentLevel;
         #region
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -40,8 +41,8 @@ namespace PixelAdventure
 
         public Texture2D coinTexture;
 
-        SpriteFont highlight;
-        SpriteFont text;
+        private SpriteFont highlight;
+        private SpriteFont text;
 
         public Texture2D movingPlatformTexture;
 
@@ -58,11 +59,17 @@ namespace PixelAdventure
 
         private Song song;
 
+        Menu menu;
+
+        GameOver gameOver;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            currentLevel = GameState.Level1;
         }
         
         protected override void Initialize()
@@ -84,6 +91,10 @@ namespace PixelAdventure
             level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
 
             level2 = new Level2(windowWidth, windowHeight, _spriteBatch);
+
+            menu = new Menu(highlight, text, skyBackground);
+
+            gameOver = new GameOver(highlight, text, skyBackground);
 
             base.Initialize();
         }
@@ -132,19 +143,24 @@ namespace PixelAdventure
             switch (state)
             {
                 case GameState.Menu:
-                    UpdateMenu(gameTime);
+                    state = menu.UpdateMenu(gameTime);
+                    Initialize();
                     break;
                 case GameState.Level1:
-                    UpdateLevel1(gameTime);
+                    state = level1.UpdateLevel1(gameTime, playerController);
+                    if (state == GameState.Level2)
+                        Initialize();
                     break;
                 case GameState.Level2:
-                    UpdateLevel2(gameTime);
+                    currentLevel = GameState.Level2;
+                    state = level2.UpdateLevel2(gameTime, playerController);
                     break;
                 case GameState.Pause:
                     UpdatePause(gameTime);
                     break;
                 case GameState.GameOver:
-                    UpdateGameOver(gameTime);
+                    state = gameOver.UpdateGameOver(gameTime, currentLevel);
+                    Initialize();
                     break;
                 case GameState.Win:
                     UpdateWin(gameTime);
@@ -152,26 +168,6 @@ namespace PixelAdventure
             }
 
             base.Update(gameTime);
-        }
-
-        private void UpdateLevel2(GameTime gameTime)
-        {
-            playerController.Update(gameTime, level2.platforms, level2.coins, gravity);
-
-            foreach (var enemy in level2.enemies)
-                enemy.HorizontalMove(gameTime);
-
-            state = playerController.player.CollideWithEnemies(level2.enemies);
-
-            foreach (Trap trap in level2.traps)
-                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
-                    state = GameState.GameOver;
-
-            foreach (var movingPlatform in level2.movingPlatforms)
-            {
-                if (movingPlatform.Type == "horizontal")
-                    movingPlatform.HorizontalMove(gameTime);
-            }
         }
 
         private void UpdateWin(GameTime gameTime)
@@ -186,45 +182,6 @@ namespace PixelAdventure
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 state = GameState.Level2;
         }
-
-        private void UpdateLevel1(GameTime gameTime)
-        {
-            
-            playerController.Update(gameTime, level1.platforms, level1.coins, gravity);
-
-            foreach (Trap trap in level1.traps)
-                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
-                    state = GameState.GameOver;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.P))
-                state = GameState.Pause;
-
-            if (level1.finish.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
-            {
-                state = GameState.GamePlay;
-                Initialize();
-            }
-        }
-
-        #region
-        private void UpdateMenu(GameTime gameTime)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                state = GameState.Level2;
-                Initialize();
-            }
-        }
-
-        private void UpdateGameOver(GameTime gameTime)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                state = GameState.Level2;
-                Initialize();
-            }
-        }
-        #endregion
 
         protected override void Draw(GameTime gameTime)
         {

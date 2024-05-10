@@ -11,6 +11,8 @@ namespace PixelAdventure
 {
     internal class Level2
     {
+        private float gravity = 4.5f;
+
         private int windowHeight;
         private int windowWidth;
 
@@ -100,6 +102,28 @@ namespace PixelAdventure
         {
             for (int i = 0; i < count; i++)
                 traps.Add(new Trap(new Point(15, 15), new Point(x + 15 * i, y)));
+        }
+
+        public GameState UpdateLevel2(GameTime gameTime, PlayerController playerController)
+        {
+            playerController.Update(gameTime, platforms, coins, gravity);
+
+            foreach (var enemy in enemies)
+                enemy.HorizontalMove(gameTime);
+
+            if (playerController.player.CollideWithEnemies(enemies))
+                return GameState.GameOver;
+
+            foreach (Trap trap in traps)
+                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
+                    return GameState.GameOver;
+
+            foreach (var movingPlatform in movingPlatforms)
+            {
+                if (movingPlatform.Type == "horizontal")
+                    movingPlatform.HorizontalMove(gameTime);
+            }
+            return GameState.Level2;
         }
     }
 }

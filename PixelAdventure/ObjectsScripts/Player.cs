@@ -160,31 +160,32 @@ namespace PixelAdventure.ObjectsScripts
             }
         }
 
-        public GameState CollideWithEnemies(List<Enemy> enemies) //MODEL
+        public bool CollideWithEnemies(List<Enemy> enemies) //MODEL
         {
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (enemies[i].IsFromTheLeft(Vector, Size) == CollideState.Death &&
                     enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
-                    return GameState.GameOver;
+                    return true;
 
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death &&
                     enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
-                    return GameState.GameOver;
+                    return true;
 
                 else if (enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
                 {
                     Vector.Y -= 50;
                     enemies.RemoveAt(i);
+                    return false;
                 }
 
                 else if (enemies[i].IsFromTheLeft(Vector, Size) == CollideState.Death)
-                    return GameState.GameOver;
+                    return true;
 
                 else if (enemies[i].IsFromTheRight(Vector, Size) == CollideState.Death)
-                    return GameState.GameOver;
+                    return true;
             }
-            return GameState.Level2;
+            return false;
         }
 
         public void CollideWithCoins(List<Coin> coins) //MODEL
