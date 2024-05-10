@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.ObjectsScripts
+namespace PixelAdventure.PlayerScripts
 {
     internal class PlayerViewer
     {

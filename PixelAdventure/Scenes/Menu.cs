@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.Scenes
 {
     internal class Menu
     {
@@ -22,10 +22,10 @@ namespace PixelAdventure
             this.background = background;
         }
 
-        public GameState UpdateMenu(GameTime gameTime)
+        public GameState UpdateMenu(GameTime gameTime, GameState currentlevel)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                return GameState.Level1;
+                return currentlevel;
             return GameState.Menu;
         }
     }

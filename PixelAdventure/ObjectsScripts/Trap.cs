@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.ObjectsScripts
+namespace PixelAdventure
 {
-    internal class Trap : IObject
+    internal class Trap
     {
         public Point Size { get; set; }
         public Point SpawnPoint { get; set; }

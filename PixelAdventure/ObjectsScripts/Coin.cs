@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.ObjectsScripts
+namespace PixelAdventure
 {
-    internal class Coin : IObject
+    internal class Coin
     {
         public Point Size { get; set; }
         public Point SpawnPoint { get; set; }

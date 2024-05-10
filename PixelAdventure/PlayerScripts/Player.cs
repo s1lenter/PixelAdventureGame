@@ -14,7 +14,7 @@ using System.Reflection.Metadata;
 using System.Diagnostics.Metrics;
 using System.Reflection;
 
-namespace PixelAdventure.ObjectsScripts
+namespace PixelAdventure.PlayerScripts
 {
     internal class Player
     {
@@ -51,7 +51,7 @@ namespace PixelAdventure.ObjectsScripts
             Vector = new Vector2(startX, startY /*Game1.windowHeight - 100 - Size.Y*/);
             //Spawn = new Point((int)Vector.X, (int)Vector.Y);
             speed = 3;
-            jumpForce = 100;
+            jumpForce = 10;
             counter = 0;
         }
 
@@ -99,10 +99,7 @@ namespace PixelAdventure.ObjectsScripts
                         Jump(gameTime, gravity);
                     }
                     else
-                    {
                         Vector.X -= speed;
-                        //Vector.Y += gravity;
-                    }
                 }
 
                 if (platform.IsFromTheRight(Vector, Size) == CollideState.Right &&
@@ -116,10 +113,7 @@ namespace PixelAdventure.ObjectsScripts
                         Jump(gameTime, gravity);
                     }
                     else
-                    {
                         Vector.X += speed;
-                        //Vector.Y += gravity;
-                    }
                 }
 
                 else if (platform.Collide(Vector, Size, this) == CollideState.Top)
@@ -132,12 +126,12 @@ namespace PixelAdventure.ObjectsScripts
         public void Jump(GameTime gameTime, float gravity) //MODEL
         {
             var startY = Vector.Y;
-            
+
             if (Keyboard.GetState().IsKeyDown(Keys.W) && countJump == 0)
             {
                 speed = 4;
-                //Vector.Y += 10;
-                Vector.Y -= jumpForce;
+                for (int i = 1; i < 14; i++)
+                    Vector.Y -= jumpForce;
                 countJump++;
             }
             if (Vector.Y == startY)
@@ -149,14 +143,14 @@ namespace PixelAdventure.ObjectsScripts
             {
                 IsJump = true;
                 jumpForce = 0;
-                countJump--; 
+                countJump--;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.W) && Vector.Y == startY)
                 IsJump = false;
             if (Keyboard.GetState().IsKeyUp(Keys.W))
             {
                 IsJump = false;
-                jumpForce = 120;
+                jumpForce = 10;
             }
         }
 

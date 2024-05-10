@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Media;
+using PixelAdventure.Scenes;
+using PixelAdventure.PlayerScripts;
 
 namespace PixelAdventure
 {
@@ -24,8 +26,6 @@ namespace PixelAdventure
         private Texture2D trapTexture;
         private Texture2D cubeTexture;
         private Texture2D skyBackground;
-
-        private float gravity;
 
         public Texture2D playerWalkRight;
         public Texture2D playerWalkLeft;
@@ -63,13 +63,15 @@ namespace PixelAdventure
 
         GameOver gameOver;
 
+        Pause pause;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            currentLevel = GameState.Level1;
+            currentLevel = GameState.Level2;
         }
         
         protected override void Initialize()
@@ -79,10 +81,8 @@ namespace PixelAdventure
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.ApplyChanges();
 
-            windowHeight = Window.ClientBounds.Height; //480
-            windowWidth = Window.ClientBounds.Width; //800
-
-            gravity = 4.5f;
+            windowHeight = Window.ClientBounds.Height;
+            windowWidth = Window.ClientBounds.Width;
 
             playerController = new PlayerController(_spriteBatch);
 
@@ -95,6 +95,8 @@ namespace PixelAdventure
             menu = new Menu(highlight, text, skyBackground);
 
             gameOver = new GameOver(highlight, text, skyBackground);
+
+            pause = new Pause(highlight, text, skyBackground);
 
             base.Initialize();
         }
@@ -134,7 +136,7 @@ namespace PixelAdventure
             //MediaPlayer.Play(song);
             //MediaPlayer.IsRepeating = true;
 
-            foreach (var enemy in level2.enemies)
+            foreach (var enemy in level2.Enemies)
                 enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
 
@@ -143,10 +145,11 @@ namespace PixelAdventure
             switch (state)
             {
                 case GameState.Menu:
-                    state = menu.UpdateMenu(gameTime);
+                    state = menu.UpdateMenu(gameTime, currentLevel);
                     Initialize();
                     break;
                 case GameState.Level1:
+                    currentLevel = GameState.Level1;
                     state = level1.UpdateLevel1(gameTime, playerController);
                     if (state == GameState.Level2)
                         Initialize();
@@ -156,7 +159,7 @@ namespace PixelAdventure
                     state = level2.UpdateLevel2(gameTime, playerController);
                     break;
                 case GameState.Pause:
-                    UpdatePause(gameTime);
+                    state = pause.UpdatePause(gameTime, currentLevel);
                     break;
                 case GameState.GameOver:
                     state = gameOver.UpdateGameOver(gameTime, currentLevel);
@@ -173,14 +176,6 @@ namespace PixelAdventure
         private void UpdateWin(GameTime gameTime)
         {
             
-        }
-
-        private void UpdatePause(GameTime gameTime)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                state = GameState.Menu;
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                state = GameState.Level2;
         }
 
         protected override void Draw(GameTime gameTime)
@@ -218,20 +213,20 @@ namespace PixelAdventure
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
 
-            foreach (Coin coin in level2.coins)
+            foreach (Coin coin in level2.Coins)
                 coin.DrawCoin(_spriteBatch, coinTexture);
 
-            foreach (var trap in level2.traps)
+            foreach (var trap in level2.Traps)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
 
-            foreach (var platform in level2.platforms)
+            foreach (var platform in level2.Platforms)
                 if (platform.GetType() != typeof(MovingPlatform))
                     mapCreator.DrawTexture(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
 
-            foreach (var movingPlatform in level2.movingPlatforms)
+            foreach (var movingPlatform in level2.MovingPlatforms)
                 _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, (int)movingPlatform.Vector.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
 
-            foreach (Enemy enemy in level2.enemies)
+            foreach (Enemy enemy in level2.Enemies)
                 enemy.DrawEnemyAnimation(_spriteBatch);
 
             _spriteBatch.End();
@@ -258,17 +253,17 @@ namespace PixelAdventure
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
             _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
-            foreach (Coin coin in level1.coins)
+            foreach (Coin coin in level1.Coins)
                 coin.DrawCoin(_spriteBatch, coinTexture);
 
-            foreach (var platform in level1.platforms)
+            foreach (var platform in level1.Platforms)
                 if (platform.GetType() != typeof(MovingPlatform))
                     mapCreator.DrawTexture(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
 
-            foreach (var trap in level1.traps)
+            foreach (var trap in level1.Traps)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
 
-            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.finish.SpawnPoint.X - 1, level1.finish.SpawnPoint.Y + 5), new Point(50,50)), Color.White);
+            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.FinishObj.SpawnPoint.X - 1, level1.FinishObj.SpawnPoint.Y + 5), new Point(50,50)), Color.White);
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));

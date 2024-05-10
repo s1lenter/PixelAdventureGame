@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.ObjectsScripts
+namespace PixelAdventure.PlayerScripts
 {
     internal class PlayerController
     {
@@ -16,12 +16,12 @@ namespace PixelAdventure.ObjectsScripts
         private Rectangle rect;
         public PlayerController(SpriteBatch _spriteBatch)
         {
-            player = new Player(0, 800);
+            player = new Player(0, 400);
             rect = new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10);
             Viewer = new PlayerViewer(rect);
         }
 
-        public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, float gravity) 
+        public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, float gravity)
         {
             player.Vector.Y += gravity;
 
@@ -53,7 +53,7 @@ namespace PixelAdventure.ObjectsScripts
 
         public void AnimationGo(SpriteBatch _spriteBatch, Rectangle drawingRectangle)
         {
-            
+
             if (!player.GoLeft && player.IsMove && !player.IsJump)
                 Viewer.DrawWalkRight(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
             else if (player.GoLeft && player.IsMove && !player.IsJump)

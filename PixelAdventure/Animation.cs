@@ -11,8 +11,6 @@ namespace PixelAdventure
 {
     internal class Animation
     {
-        //private string name;
-        //private IObject gameObject;
         public int FrameHeight { get; set; }
         public int FrameWidth { get; set; }
         public Point currentFrame;
@@ -21,9 +19,8 @@ namespace PixelAdventure
         private int period;
 
         
-        public Animation(int frameHeight, int frameWidth, Point currentFrame, Point spriteSize, IObject gameObject = null)
+        public Animation(int frameHeight, int frameWidth, Point currentFrame, Point spriteSize)
         {
-            //this.gameObject = gameObject;
             FrameHeight = frameHeight;
             FrameWidth = frameWidth;
             this.currentFrame = currentFrame;

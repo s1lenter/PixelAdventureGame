@@ -8,14 +8,15 @@ using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PixelAdventure.PlayerScripts;
 
-namespace PixelAdventure.ObjectsScripts
+namespace PixelAdventure
 {
-    internal class Platform : IObject
+    internal class Platform
     {
-        public Point SpawnPoint { get; set; }
-        public Point Size { get; set; }
-        public Vector2 Vector { get; set; }
+        public Point SpawnPoint;
+        public Point Size;
+        public Vector2 Vector;
 
         public Platform(Point platformSize, Point spawnPoint)
         {
