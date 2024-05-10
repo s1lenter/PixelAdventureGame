@@ -48,7 +48,7 @@ namespace PixelAdventure.ObjectsScripts
         public virtual CollideState IsFromTheRight(Vector2 playerVector, Point playerSize)
         {
             var playerRectangle = new Rectangle((int)playerVector.X + 12, (int)playerVector.Y, playerSize.X - 14, playerSize.Y);
-            var rightRectangle = new Rectangle(SpawnPoint.X + Size.X - 10, SpawnPoint.Y + 5, 1, Size.Y);
+            var rightRectangle = new Rectangle(SpawnPoint.X + Size.X, SpawnPoint.Y + 5, 1, Size.Y);
 
             if (playerRectangle.Intersects(rightRectangle))
                 return CollideState.Right;

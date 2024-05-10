@@ -17,10 +17,10 @@ namespace PixelAdventure.ObjectsScripts
         protected int rightBound;
 
         public string Type { get; set; }
-        public MovingPlatform(Point platformSize, Point spawnPoint, int leftBound, int rightBound, string type) : base(platformSize, spawnPoint)
+        public MovingPlatform(Point platformSize, Point spawnPoint, int leftBound, int rightBound, float speed, string type) : base(platformSize, spawnPoint)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
-            speed = 0.6f;
+            this.speed = speed;
             this.leftBound = leftBound;
             this.rightBound = rightBound;
             Type = type;

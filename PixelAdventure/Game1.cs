@@ -251,6 +251,11 @@ namespace PixelAdventure
         {
             playerController.Update(gameTime, level2.platforms, level2.coins, gravity);
 
+            foreach (var enemy in level2.enemies)
+                enemy.HorizontalMove(gameTime);
+
+            state = playerController.player.CollideWithEnemies(level2.enemies);
+
             foreach (Trap trap in level2.traps)
                 if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
                     state = GameState.GameOver;
@@ -262,12 +267,6 @@ namespace PixelAdventure
                 //if (movingPlatform.Type == "vertical")
                 //    movingPlatform.VerticalMove(gameTime);
             }
-            foreach (var enemy in level2.enemies)
-            {
-                enemy.HorizontalMove(gameTime);
-            }
-
-            state = playerController.player.CollideWithEnemies(level2.enemies);
         }
 
         private void UpdateWin(GameTime gameTime)
@@ -294,10 +293,6 @@ namespace PixelAdventure
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 state = GameState.Pause;
-
-
-            //foreach (var movingPlatform in level1.movingPlatforms)
-            //    movingPlatform.Move(gameTime);
 
             if (level1.finish.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
             {
@@ -338,7 +333,7 @@ namespace PixelAdventure
             foreach (var movingPlatform in gamePlay.movingPlatforms)
                 movingPlatform.HorizontalMove(gameTime);
 
-            state = playerController.player.CollideWithEnemies(gamePlay.enemies);
+            state = playerController.player.CollideWithEnemies(gamePlay.enemies); //это нельзя в конец ставить
         }
 
         private void UpdateGameOver(GameTime gameTime)
