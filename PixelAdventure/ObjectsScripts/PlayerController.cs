@@ -21,7 +21,7 @@ namespace PixelAdventure.ObjectsScripts
             Viewer = new PlayerViewer(rect);
         }
 
-        public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, /*List<Enemy> enemies,*/ float gravity) 
+        public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, float gravity) 
         {
             player.Vector.Y += gravity;
 

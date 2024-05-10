@@ -15,7 +15,6 @@ namespace PixelAdventure.ObjectsScripts
     {
         public Point SpawnPoint { get; set; }
         public Point Size { get; set; }
-
         public Vector2 Vector { get; set; }
 
         public Platform(Point platformSize, Point spawnPoint)
@@ -54,15 +53,5 @@ namespace PixelAdventure.ObjectsScripts
                 return CollideState.Right;
             return CollideState.Fall;
         }
-
-        //public virtual CollideState CollideBottom(Vector2 playerVector, Point playerSize)
-        //{
-        //    var bottomRectangle = new Rectangle(SpawnPoint.X, SpawnPoint.Y + Size.Y / 2, Size.X, Size.Y / 2);
-        //    var playerRectangle = new Rectangle((int)playerVector.X, (int)playerVector.Y, playerSize.X, playerSize.Y);
-
-        //    if (playerRectangle.Intersects(bottomRectangle))
-        //        return CollideState.Bottom;
-        //    return CollideState.Fall;
-        //}
     }
 }
