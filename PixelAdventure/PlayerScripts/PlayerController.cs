@@ -16,7 +16,7 @@ namespace PixelAdventure.PlayerScripts
         private Rectangle rect;
         public PlayerController(SpriteBatch _spriteBatch)
         {
-            player = new Player(0, 400);
+            player = new Player(0, 800);
             rect = new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10);
             Viewer = new PlayerViewer(rect);
         }

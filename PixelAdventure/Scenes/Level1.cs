@@ -75,7 +75,7 @@ namespace PixelAdventure.Scenes
                 Traps.Add(new Trap(new Point(15, 15), new Point(x + 15 * i, y)));
         }
 
-        public GameState UpdateLevel1(GameTime gameTime, PlayerController playerController)
+        public GameState Update(GameTime gameTime, PlayerController playerController)
         {
             playerController.Update(gameTime, Platforms, Coins, gravity);
 
@@ -86,7 +86,7 @@ namespace PixelAdventure.Scenes
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return GameState.Pause;
 
-            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
+            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
                 return GameState.Level2;
 
             return GameState.Level1;

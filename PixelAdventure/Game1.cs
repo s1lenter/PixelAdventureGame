@@ -26,6 +26,7 @@ namespace PixelAdventure
         private Texture2D trapTexture;
         private Texture2D cubeTexture;
         private Texture2D skyBackground;
+        private Texture2D backgroundUI;
 
         public Texture2D playerWalkRight;
         public Texture2D playerWalkLeft;
@@ -65,11 +66,30 @@ namespace PixelAdventure
 
         Pause pause;
 
+        Win win;
+
+        private string[] fileNames;
+
+        private Texture2D textures;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            //fileNames = new string[]
+            //{
+            //    "tilemap",
+            //    "blackFloor", "sky","trap", "Coin",
+            //    "Dude_Monster_Walk_6", "Dude_Monster_Walk_Left", "Dude_Monster_Idle_4",
+            //    "Dude_Monster_Idle_Left", "Dude_Monster_Jump_8", "Dude_Monster_Jump_Left",
+            //    "Owlet_Monster_Walk_6", "Owlet_Monster_Walk_Left", "finish", 
+            //};
+
+            //textures = new Texture2D[]
+            //{
+
+            //};
 
             currentLevel = GameState.Level2;
         }
@@ -92,15 +112,16 @@ namespace PixelAdventure
 
             level2 = new Level2(windowWidth, windowHeight, _spriteBatch);
 
-            menu = new Menu(highlight, text, skyBackground);
+            menu = new Menu(highlight, text, backgroundUI);
 
-            gameOver = new GameOver(highlight, text, skyBackground);
+            gameOver = new GameOver(highlight, text, backgroundUI);
 
             pause = new Pause(highlight, text, skyBackground);
 
+            win = new Win(highlight, text, backgroundUI);
+
             base.Initialize();
         }
-
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -124,8 +145,8 @@ namespace PixelAdventure
 
             highlight = Content.Load<SpriteFont>("myText1");
             text = Content.Load<SpriteFont>("File");
-
             skyBackground = Content.Load<Texture2D>("sky");
+            backgroundUI = Content.Load<Texture2D>("backGroundUI");
 
             playerController.Viewer.InicializeSprites(playerWalkRight, playerWalkLeft, playerIdle, playerIdleLeft, playerJumpRight, playerJumpLeft);
 
@@ -135,9 +156,10 @@ namespace PixelAdventure
 
             //MediaPlayer.Play(song);
             //MediaPlayer.IsRepeating = true;
-
-            foreach (var enemy in level2.Enemies)
-                enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
+            
+            if (currentLevel == GameState.Level2)
+                foreach (var enemy in level2.Enemies)
+                    enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
 
         protected override void Update(GameTime gameTime)
@@ -145,18 +167,18 @@ namespace PixelAdventure
             switch (state)
             {
                 case GameState.Menu:
-                    state = menu.UpdateMenu(gameTime, currentLevel);
+                    state = menu.Update(gameTime, currentLevel);
                     Initialize();
                     break;
                 case GameState.Level1:
                     currentLevel = GameState.Level1;
-                    state = level1.UpdateLevel1(gameTime, playerController);
+                    state = level1.Update(gameTime, playerController);
                     if (state == GameState.Level2)
                         Initialize();
                     break;
                 case GameState.Level2:
                     currentLevel = GameState.Level2;
-                    state = level2.UpdateLevel2(gameTime, playerController);
+                    state = level2.Update(gameTime, playerController);
                     break;
                 case GameState.Pause:
                     state = pause.UpdatePause(gameTime, currentLevel);
@@ -166,16 +188,11 @@ namespace PixelAdventure
                     Initialize();
                     break;
                 case GameState.Win:
-                    UpdateWin(gameTime);
+                    state = win.Update();
                     break;
             }
 
             base.Update(gameTime);
-        }
-
-        private void UpdateWin(GameTime gameTime)
-        {
-            
         }
 
         protected override void Draw(GameTime gameTime)
@@ -183,7 +200,7 @@ namespace PixelAdventure
             switch (state)
             {
                 case GameState.Menu:
-                    DrawMenu(gameTime);
+                    menu.Draw(gameTime, _spriteBatch);
                     break;
                 case GameState.Level1:
                     DrawLevel1(gameTime);
@@ -195,10 +212,10 @@ namespace PixelAdventure
                     DrawPause(gameTime);
                     break;
                 case GameState.GameOver:
-                    DrawGameOver(gameTime);
+                    gameOver.DrawGameOver(gameTime, _spriteBatch);
                     break;
                 case GameState.Win:
-                    DrawWin(gameTime);
+                    win.Draw(gameTime, _spriteBatch);
                     break;
             }
             base.Draw(gameTime);
@@ -221,7 +238,7 @@ namespace PixelAdventure
 
             foreach (var platform in level2.Platforms)
                 if (platform.GetType() != typeof(MovingPlatform))
-                    mapCreator.DrawTexture(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
+                    mapCreator.DrawGround(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
 
             foreach (var movingPlatform in level2.MovingPlatforms)
                 _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, (int)movingPlatform.Vector.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
@@ -229,12 +246,10 @@ namespace PixelAdventure
             foreach (Enemy enemy in level2.Enemies)
                 enemy.DrawEnemyAnimation(_spriteBatch);
 
-            _spriteBatch.End();
-        }
+            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level2.FinishObj.SpawnPoint.X - 1, level2.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 
-        private void DrawWin(GameTime gameTime)
-        {
-            throw new NotImplementedException();
+
+            _spriteBatch.End();
         }
 
         private void DrawPause(GameTime gameTime)
@@ -242,8 +257,8 @@ namespace PixelAdventure
             _spriteBatch.Begin();
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
             _spriteBatch.DrawString(highlight, "Pause", new Vector2(100, 50), Color.Black);
-            _spriteBatch.DrawString(text, "Press space ESC to quit in menu", new Vector2(100, windowHeight - 100), Color.Black);
-            _spriteBatch.DrawString(text, "Press space SPACE to continue", new Vector2(100, windowHeight - 70), Color.Black);
+            _spriteBatch.DrawString(text, "Press ESC to quit in menu", new Vector2(100, windowHeight - 100), Color.Black);
+            _spriteBatch.DrawString(text, "Press SPACE to continue", new Vector2(100, windowHeight - 70), Color.Black);
             _spriteBatch.End();
         }
 
@@ -258,7 +273,7 @@ namespace PixelAdventure
 
             foreach (var platform in level1.Platforms)
                 if (platform.GetType() != typeof(MovingPlatform))
-                    mapCreator.DrawTexture(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
+                    mapCreator.DrawGround(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
 
             foreach (var trap in level1.Traps)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
@@ -269,25 +284,5 @@ namespace PixelAdventure
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
             _spriteBatch.End();
         }
-
-        #region
-        private void DrawMenu(GameTime gameTime)
-        {
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(highlight, "Pixel Adventure", new Vector2(100, 50), Color.Black);
-            _spriteBatch.DrawString(text, "Press SPACE to start", new Vector2(100, windowHeight - 50), Color.Black);
-            _spriteBatch.End();
-        }
-
-        private void DrawGameOver(GameTime gameTime)
-        {
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(highlight, "Game over!", new Vector2(100, 50), Color.Black);
-            _spriteBatch.DrawString(text, "Press space to start", new Vector2(100, windowHeight - 50), Color.Black);
-            _spriteBatch.End();
-        }
     }
-    #endregion
 }

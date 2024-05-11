@@ -8,7 +8,6 @@ namespace PixelAdventure.Scenes
 {
     enum GameState
     {
-        //LevelCreatorTest,
         Menu,
         Level1,
         Level2,

@@ -11,7 +11,7 @@ namespace PixelAdventure.Scenes
 {
     internal class MapCreator
     {
-        public void DrawTexture(SpriteBatch _spriteBatch, Texture2D texture, Point size, Point spawn)
+        public void DrawGround(SpriteBatch _spriteBatch, Texture2D texture, Point size, Point spawn)
         {
             _spriteBatch.Draw(texture, new Rectangle(spawn.X, spawn.Y + size.Y - 30, 30, 30), new Rectangle(19, 133, 18, 18), Color.White);
             _spriteBatch.Draw(texture, new Rectangle(spawn.X + size.X - 30, spawn.Y + size.Y - 30, 30, 30), new Rectangle(57, 133, 18, 18), Color.White);

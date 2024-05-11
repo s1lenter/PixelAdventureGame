@@ -154,7 +154,7 @@ namespace PixelAdventure.PlayerScripts
             }
         }
 
-        public bool CollideWithEnemies(List<Enemy> enemies) //MODEL
+        public bool CollideWithEnemies(List<Enemy> enemies, List<Coin> coins) //MODEL
         {
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -169,6 +169,7 @@ namespace PixelAdventure.PlayerScripts
                 else if (enemies[i].Collide(Vector, Size, this) == CollideState.Kill)
                 {
                     Vector.Y -= 50;
+                    coins.Add(new Coin(new Point(30,30), new Point((int)enemies[i].Vector.X, (int)enemies[i].Vector.Y)));
                     enemies.RemoveAt(i);
                     return false;
                 }
