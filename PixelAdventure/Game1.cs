@@ -114,7 +114,7 @@ namespace PixelAdventure
             playerController = new PlayerController(_spriteBatch);
 
             mapCreator = new MapCreator();
-            pause = new Pause(highlight, text, backgroundUI, select);
+            
 
             level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
 
@@ -127,7 +127,9 @@ namespace PixelAdventure
             else
                 menu = new Menu(highlight, text, backgroundUI, select, 0, 0);
 
-            gameOver = new GameOver(highlight, text, backgroundUI);
+            gameOver = new GameOver(highlight, text, backgroundUI, select);
+
+            pause = new Pause(highlight, text, backgroundUI, select);
 
             win = new Win(highlight, text, backgroundUI);
         }
@@ -195,11 +197,21 @@ namespace PixelAdventure
                 case GameState.Pause:
                     state = pause.UpdatePause(gameTime, currentLevel);
                     if (state == GameState.Menu)
+                    {
                         Initialize();
+                        currentLevel = GameState.Level1;
+                    }
+                        
                     break;
                 case GameState.GameOver:
                     state = gameOver.UpdateGameOver(gameTime, currentLevel);
-                    Initialize();
+                    if (state == currentLevel)
+                        Initialize();
+                    if (state == GameState.Menu)
+                    {
+                        Initialize();
+                        currentLevel = GameState.Level1;
+                    }
                     break;
                 case GameState.Win:
                     state = win.Update();

@@ -23,6 +23,8 @@ namespace PixelAdventure.Scenes
         private Vector2 selectVector;
         private int change = 100;
 
+        private int countChoose = 0;
+
         private int currentTime;
         private int period;
 
@@ -38,14 +40,13 @@ namespace PixelAdventure.Scenes
             this.period = period;
         }
 
-        int countChoose = 0;
         public GameState Update(GameTime gameTime, GameState currentLevel)
         {
             currentTime += gameTime.ElapsedGameTime.Milliseconds;
             if (currentTime > period)
             {
                 if (Keyboard.GetState().IsKeyDown(Keys.Down) && countChoose == 0 &&
-                selectVector.Y < 300)
+                selectVector.Y < 400)
                 {
                     selectVector.Y += change;
                     countChoose++;
@@ -56,7 +57,6 @@ namespace PixelAdventure.Scenes
                     selectVector.Y -= change;
                     countChoose++;
                 }
-
                 if (countChoose > 0)
                 {
                     change = 0;
@@ -67,7 +67,9 @@ namespace PixelAdventure.Scenes
 
                 if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.Y == 200)
                     return currentLevel;
-                else if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.Y == 300)
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.Y == 300)
+                    return currentLevel;
+                else if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.Y == 400)
                     return GameState.Quit;
             }
             return GameState.Menu;
@@ -81,7 +83,6 @@ namespace PixelAdventure.Scenes
             _spriteBatch.DrawString(highlight, "Pixel Adventure", new Vector2(100, 50), Color.Black);
             _spriteBatch.DrawString(text, "Play", new Vector2(100, 200), Color.Black);
             _spriteBatch.DrawString(text, "Quit", new Vector2(100, 300), Color.Black);
-            _spriteBatch.DrawString(text, "Press SPACE to start", new Vector2(100, windowHeight - 50), Color.Black);
             _spriteBatch.End();
         }
     }

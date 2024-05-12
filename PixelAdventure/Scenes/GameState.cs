@@ -9,6 +9,7 @@ namespace PixelAdventure.Scenes
     enum GameState
     {
         Menu,
+        LevelSelector,
         Level1,
         Level2,
         GamePlay,
