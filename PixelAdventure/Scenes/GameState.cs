@@ -15,5 +15,6 @@ namespace PixelAdventure.Scenes
         Pause,
         Win,
         GameOver,
+        Quit,
     }
 }

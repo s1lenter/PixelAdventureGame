@@ -9,6 +9,8 @@ using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Media;
 using PixelAdventure.Scenes;
 using PixelAdventure.PlayerScripts;
+using System.ComponentModel.Design;
+using System.Threading;
 
 namespace PixelAdventure
 {
@@ -72,6 +74,10 @@ namespace PixelAdventure
 
         private Texture2D textures;
 
+        private Texture2D select;
+
+        private int initializeCounter = 0;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -91,11 +97,12 @@ namespace PixelAdventure
 
             //};
 
-            currentLevel = GameState.Level2;
+            currentLevel = GameState.Level1;
         }
-        
+
         protected override void Initialize()
         {
+            initializeCounter++;
             _graphics.IsFullScreen = false;
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
@@ -107,20 +114,22 @@ namespace PixelAdventure
             playerController = new PlayerController(_spriteBatch);
 
             mapCreator = new MapCreator();
+            pause = new Pause(highlight, text, backgroundUI, select);
 
             level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
 
             level2 = new Level2(windowWidth, windowHeight, _spriteBatch);
 
-            menu = new Menu(highlight, text, backgroundUI);
+            base.Initialize();
+
+            if (initializeCounter > 1)
+                menu = new Menu(highlight, text, backgroundUI, select, 0, 1000);
+            else
+                menu = new Menu(highlight, text, backgroundUI, select, 0, 0);
 
             gameOver = new GameOver(highlight, text, backgroundUI);
 
-            pause = new Pause(highlight, text, skyBackground);
-
             win = new Win(highlight, text, backgroundUI);
-
-            base.Initialize();
         }
         protected override void LoadContent()
         {
@@ -130,7 +139,7 @@ namespace PixelAdventure
             movingPlatformTexture = Content.Load<Texture2D>("blackFloor");
 
             trapTexture = Content.Load<Texture2D>("trap");
-            
+
             playerWalkRight = Content.Load<Texture2D>("Dude_Monster_Walk_6");
             playerWalkLeft = Content.Load<Texture2D>("Dude_Monster_Walk_Left");
             playerIdle = Content.Load<Texture2D>("Dude_Monster_Idle_4");
@@ -152,14 +161,15 @@ namespace PixelAdventure
 
             finishTexture = Content.Load<Texture2D>("finish");
 
+            select = Content.Load<Texture2D>("select");
+
             song = Content.Load<Song>("81cebf7e45fdef7");
 
             //MediaPlayer.Play(song);
             //MediaPlayer.IsRepeating = true;
-            
-            if (currentLevel == GameState.Level2)
-                foreach (var enemy in level2.Enemies)
-                    enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
+
+            foreach (var enemy in level2.Enemies)
+                enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
 
         protected override void Update(GameTime gameTime)
@@ -168,7 +178,9 @@ namespace PixelAdventure
             {
                 case GameState.Menu:
                     state = menu.Update(gameTime, currentLevel);
-                    Initialize();
+                    //Initialize();
+                    if (state == GameState.Quit)
+                        Exit();
                     break;
                 case GameState.Level1:
                     currentLevel = GameState.Level1;
@@ -182,6 +194,8 @@ namespace PixelAdventure
                     break;
                 case GameState.Pause:
                     state = pause.UpdatePause(gameTime, currentLevel);
+                    if (state == GameState.Menu)
+                        Initialize();
                     break;
                 case GameState.GameOver:
                     state = gameOver.UpdateGameOver(gameTime, currentLevel);
@@ -209,7 +223,7 @@ namespace PixelAdventure
                     DrawLevel2(gameTime);
                     break;
                 case GameState.Pause:
-                    DrawPause(gameTime);
+                    pause.DrawPause(gameTime, _spriteBatch);
                     break;
                 case GameState.GameOver:
                     gameOver.DrawGameOver(gameTime, _spriteBatch);
@@ -278,7 +292,7 @@ namespace PixelAdventure
             foreach (var trap in level1.Traps)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
 
-            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.FinishObj.SpawnPoint.X - 1, level1.FinishObj.SpawnPoint.Y + 5), new Point(50,50)), Color.White);
+            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.FinishObj.SpawnPoint.X - 1, level1.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
