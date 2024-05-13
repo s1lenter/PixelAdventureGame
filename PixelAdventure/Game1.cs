@@ -70,11 +70,17 @@ namespace PixelAdventure
 
         Win win;
 
+        LevelSelector levelSelector;
+
         private string[] fileNames;
 
         private Texture2D textures;
 
         private Texture2D select;
+
+        private Texture2D level1Texture;
+        private Texture2D level2Texture;
+        private Texture2D level3Texture;
 
         private int initializeCounter = 0;
 
@@ -123,11 +129,13 @@ namespace PixelAdventure
             base.Initialize();
 
             if (initializeCounter > 1)
-                menu = new Menu(highlight, text, backgroundUI, select, 0, 1000);
+                menu = new Menu(highlight, text, backgroundUI, select, 0, 500);
             else
                 menu = new Menu(highlight, text, backgroundUI, select, 0, 0);
 
             gameOver = new GameOver(highlight, text, backgroundUI, select);
+
+            levelSelector = new LevelSelector(highlight, text, backgroundUI, select, 0, 500);
 
             pause = new Pause(highlight, text, backgroundUI, select);
 
@@ -165,6 +173,9 @@ namespace PixelAdventure
 
             select = Content.Load<Texture2D>("select");
 
+            level1Texture = Content.Load<Texture2D>("level1");
+            level2Texture = Content.Load<Texture2D>("level2");
+
             song = Content.Load<Song>("81cebf7e45fdef7");
 
             //MediaPlayer.Play(song);
@@ -184,6 +195,11 @@ namespace PixelAdventure
                     if (state == GameState.Quit)
                         Exit();
                     break;
+                case GameState.LevelSelector:
+                    state = levelSelector.Update(gameTime);
+                    if (state == GameState.Menu)
+                        Initialize();
+                    break;
                 case GameState.Level1:
                     currentLevel = GameState.Level1;
                     state = level1.Update(gameTime, playerController);
@@ -201,7 +217,6 @@ namespace PixelAdventure
                         Initialize();
                         currentLevel = GameState.Level1;
                     }
-                        
                     break;
                 case GameState.GameOver:
                     state = gameOver.UpdateGameOver(gameTime, currentLevel);
@@ -227,6 +242,9 @@ namespace PixelAdventure
             {
                 case GameState.Menu:
                     menu.Draw(gameTime, _spriteBatch);
+                    break;
+                case GameState.LevelSelector:
+                    levelSelector.Draw(gameTime, _spriteBatch, level1Texture, level2Texture);
                     break;
                 case GameState.Level1:
                     DrawLevel1(gameTime);
@@ -275,16 +293,6 @@ namespace PixelAdventure
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level2.FinishObj.SpawnPoint.X - 1, level2.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 
 
-            _spriteBatch.End();
-        }
-
-        private void DrawPause(GameTime gameTime)
-        {
-            _spriteBatch.Begin();
-            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(highlight, "Pause", new Vector2(100, 50), Color.Black);
-            _spriteBatch.DrawString(text, "Press ESC to quit in menu", new Vector2(100, windowHeight - 100), Color.Black);
-            _spriteBatch.DrawString(text, "Press SPACE to continue", new Vector2(100, windowHeight - 70), Color.Black);
             _spriteBatch.End();
         }
 

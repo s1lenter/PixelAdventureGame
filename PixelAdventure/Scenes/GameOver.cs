@@ -69,7 +69,7 @@ namespace PixelAdventure.Scenes
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(background, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.Draw(select, new Rectangle((int)selectVector.X, (int)selectVector.Y, 150, 65), Color.White);
+            _spriteBatch.Draw(select, new Rectangle((int)selectVector.X, (int)selectVector.Y, 450, 65), Color.White);
             _spriteBatch.DrawString(highlight, "Game over!", new Vector2(100, 50), Color.Black);
             _spriteBatch.DrawString(text, "Play Again", new Vector2(100, 200), Color.Black);
             _spriteBatch.DrawString(text, "Quit to menu", new Vector2(100, 300), Color.Black);

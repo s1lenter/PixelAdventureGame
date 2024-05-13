@@ -127,7 +127,7 @@ namespace PixelAdventure.PlayerScripts
         {
             var startY = Vector.Y;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W) && countJump == 0)
+            if ((Keyboard.GetState().IsKeyDown(Keys.W) && countJump == 0))
             {
                 speed = 4;
                 for (int i = 1; i < 14; i++)

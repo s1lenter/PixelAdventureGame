@@ -68,7 +68,7 @@ namespace PixelAdventure.Scenes
                 if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.Y == 200)
                     return currentLevel;
                 if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.Y == 300)
-                    return currentLevel;
+                    return GameState.LevelSelector;
                 else if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.Y == 400)
                     return GameState.Quit;
             }
@@ -79,10 +79,11 @@ namespace PixelAdventure.Scenes
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(background, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.Draw(select, new Rectangle((int)selectVector.X, (int)selectVector.Y, 150, 65), Color.White);
+            _spriteBatch.Draw(select, new Rectangle((int)selectVector.X, (int)selectVector.Y, 210, 65), Color.White);
             _spriteBatch.DrawString(highlight, "Pixel Adventure", new Vector2(100, 50), Color.Black);
             _spriteBatch.DrawString(text, "Play", new Vector2(100, 200), Color.Black);
-            _spriteBatch.DrawString(text, "Quit", new Vector2(100, 300), Color.Black);
+            _spriteBatch.DrawString(text, "Levels", new Vector2(100, 300), Color.Black);
+            _spriteBatch.DrawString(text, "Quit", new Vector2(100, 400), Color.Black);
             _spriteBatch.End();
         }
     }
