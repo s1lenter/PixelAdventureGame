@@ -20,6 +20,8 @@ namespace PixelAdventure
 
         public List<Trap> Traps { get; private set; }
 
+        public List<Saw> Saws { get; private set; }
+
         public Finish FinishObj { get; private set; }
 
         public Turret Turret { get; private set; }
@@ -45,7 +47,7 @@ namespace PixelAdventure
             var platformFly1 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 60, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly2 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 120 + flyPlatformSize.X, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly3 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 180 + flyPlatformSize.X * 2, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
-            Turret = new Turret(new Point(30, 30), new Point(200, windowHeight - floorSize.Y - 30));
+            Turret = new Turret(new Point(30, 30), new Point(700, windowHeight - floorSize.Y - 30));
             Platforms = new Platform[]
             {
                 platform1, /*platform2, platform4, platform3,*/ finalPlatform,
@@ -72,7 +74,9 @@ namespace PixelAdventure
 
             FinishObj = new Finish(new Point(10, 50), new Point(1700, windowHeight - floorSize.Y - finalPlatformSize2.Y - 50));
 
-            saw = new Saw(new Point(400, 800), new Point(100, 100));
+            saw = new Saw(new Point(50, 50), new Point(500, 900), 1, 800, 900);
+
+            Saws = new List<Saw> { saw };
         }
 
         private void AddTraps(int x, int y, int count)
@@ -86,7 +90,7 @@ namespace PixelAdventure
             playerController.Update(gameTime, Platforms, Coins, gravity);
 
             foreach (Trap trap in Traps)
-                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
+                if (trap.Collide(playerController.player.Vector, playerController.player.Size))
                     return GameState.GameOver;
 
             if (Turret.bullet.Collide(playerController.player.Vector, playerController.player.Size))
@@ -102,6 +106,8 @@ namespace PixelAdventure
                 return GameState.Level2;
 
             Turret.Shoot();
+
+            saw.Move();
 
             return GameState.Level3;
         }

@@ -125,7 +125,7 @@ namespace PixelAdventure.Scenes
                 return GameState.Pause;
 
             foreach (Trap trap in Traps)
-                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
+                if (trap.Collide(playerController.player.Vector, playerController.player.Size))
                     return GameState.GameOver;
 
             foreach (var movingPlatform in MovingPlatforms)

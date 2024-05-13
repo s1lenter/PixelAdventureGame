@@ -80,7 +80,7 @@ namespace PixelAdventure.Scenes
             playerController.Update(gameTime, Platforms, Coins, gravity);
 
             foreach (Trap trap in Traps)
-                if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
+                if (trap.Collide(playerController.player.Vector, playerController.player.Size))
                     return GameState.GameOver;
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))

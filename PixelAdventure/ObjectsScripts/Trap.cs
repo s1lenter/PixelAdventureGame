@@ -10,22 +10,22 @@ namespace PixelAdventure
     internal class Trap
     {
         public Point Size { get; set; }
-        public Point SpawnPoint { get; set; }
+        public Point Spawn { get; set; }
 
         private Rectangle topCollRect;
         private Rectangle bottomCollRect;
 
         public Trap(Point size, Point spawnPoint)
         {
-            SpawnPoint = spawnPoint;
+            Spawn = spawnPoint;
             Size = size;
-            topCollRect = new Rectangle(SpawnPoint.X + 5, SpawnPoint.Y, Size.X - 10, Size.Y);
-            bottomCollRect = new Rectangle(SpawnPoint.X, SpawnPoint.Y + 7, Size.X - 10, Size.Y);
+            topCollRect = new Rectangle(Spawn.X + 5, Spawn.Y, Size.X - 10, Size.Y);
+            bottomCollRect = new Rectangle(Spawn.X, Spawn.Y + 7, Size.X - 10, Size.Y);
         }
 
-        public bool CollideWithTrap(Vector2 playerVector, Point playerSize)
+        public virtual bool Collide(Vector2 playerVector, Point playerSize)
         {
-            Rectangle playerRectangle = new Rectangle(new Point((int)playerVector.X, (int)playerVector.Y), new Point(playerSize.X-15, playerSize.Y));
+            Rectangle playerRectangle = new (new Point((int)playerVector.X, (int)playerVector.Y), new Point(playerSize.X-15, playerSize.Y));
 
             if (playerRectangle.Intersects(bottomCollRect) || playerRectangle.Intersects(topCollRect))
                 return true;

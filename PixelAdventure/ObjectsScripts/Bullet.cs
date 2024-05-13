@@ -7,16 +7,12 @@ using System.Threading.Tasks;
 
 namespace PixelAdventure
 {
-    internal class Bullet
+    internal class Bullet : Trap
     {
-        public Point Spawn { get; private set; }
-        public Point Size { get; private set; }
-
         public Vector2 Vector;
+        protected float speed;
 
-        private float speed;
-
-        public Bullet(Point size, Point spawn)
+        public Bullet(Point size, Point spawn) : base(size, spawn)
         {
             Spawn = spawn;
             Size = size;
@@ -25,14 +21,14 @@ namespace PixelAdventure
             speed = 5;
         }
 
-        public void Move()
+        public virtual void Move()
         {
             Vector.X -= speed;
             if (Vector.X < Spawn.X - 100)
                 Vector.X = Spawn.X;
         }
 
-        public bool Collide(Vector2 playerVector, Point playerSize)
+        public override bool Collide(Vector2 playerVector, Point playerSize)
         {
             Rectangle playerRectangle = new Rectangle(new Point((int)playerVector.X, (int)playerVector.Y), new Point(playerSize.X, playerSize.Y));
             Rectangle collider = new Rectangle((int)Vector.X, (int)Vector.Y, Size.X, Size.Y);
