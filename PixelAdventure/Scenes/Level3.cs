@@ -22,6 +22,10 @@ namespace PixelAdventure
 
         public Finish FinishObj { get; private set; }
 
+        public Turret Turret { get; private set; }
+
+        public Saw saw { get; private set; }
+
         public Level3(int windowWidth, int windowHeight, SpriteBatch spriteBatch)
         {
             var floorSize = new Point(windowWidth, 180);
@@ -41,11 +45,11 @@ namespace PixelAdventure
             var platformFly1 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 60, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly2 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 120 + flyPlatformSize.X, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly3 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 180 + flyPlatformSize.X * 2, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
-
+            Turret = new Turret(new Point(30, 30), new Point(200, windowHeight - floorSize.Y - 30));
             Platforms = new Platform[]
             {
                 platform1, /*platform2, platform4, platform3,*/ finalPlatform,
-                platformFly1, platformFly2, platformFly3, floorPlatform,
+                platformFly1, platformFly2, platformFly3, floorPlatform, Turret,
             };
 
             var coinSize = new Point(30, 30);
@@ -67,6 +71,8 @@ namespace PixelAdventure
             //AddTraps(615, windowHeight - floorPlatform.Size.Y - 15, 6);
 
             FinishObj = new Finish(new Point(10, 50), new Point(1700, windowHeight - floorSize.Y - finalPlatformSize2.Y - 50));
+
+            saw = new Saw(new Point(400, 800), new Point(100, 100));
         }
 
         private void AddTraps(int x, int y, int count)
@@ -83,11 +89,19 @@ namespace PixelAdventure
                 if (trap.CollideWithTrap(playerController.player.Vector, playerController.player.Size))
                     return GameState.GameOver;
 
+            if (Turret.bullet.Collide(playerController.player.Vector, playerController.player.Size))
+                return GameState.GameOver;
+
+            if (saw.Collide(playerController.player.Vector,playerController.player.Size))
+                return GameState.GameOver;
+
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return GameState.Pause;
 
             if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
                 return GameState.Level2;
+
+            Turret.Shoot();
 
             return GameState.Level3;
         }

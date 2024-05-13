@@ -49,6 +49,9 @@ namespace PixelAdventure
 
         public Texture2D movingPlatformTexture;
 
+        public Texture2D bulletTexture;
+        public Texture2D sawTexture;
+
         MapCreator mapCreator;
         #endregion
 
@@ -179,6 +182,10 @@ namespace PixelAdventure
 
             level1Texture = Content.Load<Texture2D>("level1");
             level2Texture = Content.Load<Texture2D>("level2");
+
+            bulletTexture = Content.Load<Texture2D>("bullet");
+
+            sawTexture = Content.Load<Texture2D>("saw");
 
             song = Content.Load<Song>("81cebf7e45fdef7");
 
@@ -341,6 +348,20 @@ namespace PixelAdventure
 
             foreach (var trap in level3.Traps)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
+
+            _spriteBatch.Draw(bulletTexture, new Rectangle((int)level3.Turret.bullet.Vector.X, (int)level3.Turret.bullet.Vector.Y,
+                level3.Turret.bullet.Size.X, level3.Turret.bullet.Size.Y), Color.White);
+            _spriteBatch.Draw(cubeTexture, new Rectangle(level3.Turret.Spawn, level3.Turret.Size), new Rectangle(171,0,18,18), Color.White);
+
+            _spriteBatch.Draw(sawTexture,
+            level3.saw.Vector,
+            null,
+            Color.White,
+            level3.saw.angleRotate,
+            new Vector2(sawTexture.Width/2, sawTexture.Height/2),
+            0.05f,
+            SpriteEffects.FlipVertically,
+            0);
 
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level3.FinishObj.SpawnPoint.X - 1, level3.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 
