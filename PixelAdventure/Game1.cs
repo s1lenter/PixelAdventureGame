@@ -58,6 +58,8 @@ namespace PixelAdventure
 
         private Level2 level2;
 
+        private Level3 level3;
+
         private Texture2D finishTexture;
 
         private Song song;
@@ -103,7 +105,7 @@ namespace PixelAdventure
 
             //};
 
-            currentLevel = GameState.Level1;
+            currentLevel = GameState.Level3;
         }
 
         protected override void Initialize()
@@ -125,6 +127,8 @@ namespace PixelAdventure
             level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
 
             level2 = new Level2(windowWidth, windowHeight, _spriteBatch);
+
+            level3 = new Level3(windowWidth, windowHeight, _spriteBatch);
 
             base.Initialize();
 
@@ -192,23 +196,24 @@ namespace PixelAdventure
                 case GameState.Menu:
                     state = menu.Update(gameTime, currentLevel);
                     //Initialize();
-                    if (state == GameState.Quit)
-                        Exit();
+                    if (state == GameState.Quit) Exit();
                     break;
                 case GameState.LevelSelector:
                     state = levelSelector.Update(gameTime);
-                    if (state == GameState.Menu)
-                        Initialize();
+                    if (state == GameState.Menu) Initialize();
                     break;
                 case GameState.Level1:
                     currentLevel = GameState.Level1;
                     state = level1.Update(gameTime, playerController);
-                    if (state == GameState.Level2)
-                        Initialize();
+                    if (state == GameState.Level2) Initialize();
                     break;
                 case GameState.Level2:
                     currentLevel = GameState.Level2;
                     state = level2.Update(gameTime, playerController);
+                    break;
+                case GameState.Level3:
+                    currentLevel = GameState.Level3;
+                    state = level3.Update(gameTime, playerController);
                     break;
                 case GameState.Pause:
                     state = pause.UpdatePause(gameTime, currentLevel);
@@ -220,8 +225,7 @@ namespace PixelAdventure
                     break;
                 case GameState.GameOver:
                     state = gameOver.UpdateGameOver(gameTime, currentLevel);
-                    if (state == currentLevel)
-                        Initialize();
+                    if (state == currentLevel) Initialize();
                     if (state == GameState.Menu)
                     {
                         Initialize();
@@ -252,6 +256,9 @@ namespace PixelAdventure
                 case GameState.Level2:
                     DrawLevel2(gameTime);
                     break;
+                case GameState.Level3:
+                    DrawLevel3(gameTime);
+                    break;
                 case GameState.Pause:
                     pause.DrawPause(gameTime, _spriteBatch);
                     break;
@@ -263,6 +270,29 @@ namespace PixelAdventure
                     break;
             }
             base.Draw(gameTime);
+        }
+
+        private void DrawLevel1(GameTime gameTime)
+        {
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
+            _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
+
+            foreach (Coin coin in level1.Coins)
+                coin.DrawCoin(_spriteBatch, coinTexture);
+
+            foreach (var platform in level1.Platforms)
+                if (platform.GetType() != typeof(MovingPlatform))
+                    mapCreator.DrawGround(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
+
+            foreach (var trap in level1.Traps)
+                _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
+
+            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.FinishObj.SpawnPoint.X - 1, level1.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
+
+            playerController.AnimationController(gameTime);
+            playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+            _spriteBatch.End();
         }
 
         private void DrawLevel2(GameTime gameTime)
@@ -296,23 +326,23 @@ namespace PixelAdventure
             _spriteBatch.End();
         }
 
-        private void DrawLevel1(GameTime gameTime)
+        private void DrawLevel3(GameTime gameTime)
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
             _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
-            foreach (Coin coin in level1.Coins)
+            foreach (Coin coin in level3.Coins)
                 coin.DrawCoin(_spriteBatch, coinTexture);
 
-            foreach (var platform in level1.Platforms)
+            foreach (var platform in level3.Platforms)
                 if (platform.GetType() != typeof(MovingPlatform))
                     mapCreator.DrawGround(_spriteBatch, cubeTexture, platform.Size, platform.SpawnPoint);
 
-            foreach (var trap in level1.Traps)
+            foreach (var trap in level3.Traps)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.SpawnPoint.X + trap.Size.X, trap.SpawnPoint.Y, trap.Size.X, trap.Size.Y), Color.White);
 
-            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.FinishObj.SpawnPoint.X - 1, level1.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
+            _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level3.FinishObj.SpawnPoint.X - 1, level3.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
