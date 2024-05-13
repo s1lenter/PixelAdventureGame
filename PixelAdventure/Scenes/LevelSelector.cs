@@ -71,6 +71,8 @@ namespace PixelAdventure.Scenes
                     return GameState.Level1;
                 else if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.X == 450)
                     return GameState.Level2;
+                else if (Keyboard.GetState().IsKeyDown(Keys.Enter) && selectVector.X == 800)
+                    return GameState.Level3;
             }
             return GameState.LevelSelector;
         }

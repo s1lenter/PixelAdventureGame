@@ -24,7 +24,7 @@ namespace PixelAdventure
 
         public Finish FinishObj { get; private set; }
 
-        public Turret Turret { get; private set; }
+        public List<Turret> Turrets { get; private set; }
 
         public Saw saw { get; private set; }
 
@@ -47,11 +47,17 @@ namespace PixelAdventure
             var platformFly1 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 60, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly2 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 120 + flyPlatformSize.X, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
             var platformFly3 = new Platform(flyPlatformSize, new Point(windowWidth / 2 + 180 + flyPlatformSize.X * 2, windowHeight - floorSize.Y - platformSize.Y - platformSize2.Y));
-            Turret = new Turret(new Point(30, 30), new Point(700, windowHeight - floorSize.Y - 30));
+
+            var turret = new Turret(new Point(30, 30), new Point(700, windowHeight - floorSize.Y - 30));
+            var turret1 = new Turret(new Point(30, 30), new Point(800, windowHeight - floorSize.Y - 30));
+            var turret2 = new Turret(new Point(30, 30), new Point(900, windowHeight - floorSize.Y - 30));
+
+            Turrets = new List<Turret> { turret, turret1, turret2 };
+
             Platforms = new Platform[]
             {
                 platform1, /*platform2, platform4, platform3,*/ finalPlatform,
-                platformFly1, platformFly2, platformFly3, floorPlatform, Turret,
+                platformFly1, platformFly2, platformFly3, floorPlatform, turret, turret1, turret2,
             };
 
             var coinSize = new Point(30, 30);
@@ -74,7 +80,9 @@ namespace PixelAdventure
 
             FinishObj = new Finish(new Point(10, 50), new Point(1700, windowHeight - floorSize.Y - finalPlatformSize2.Y - 50));
 
-            saw = new Saw(new Point(50, 50), new Point(500, 900), 1, 800, 900);
+            saw = new Saw(new Point(50, 50), new Point(500, 900), 1, 800, 880);
+
+
 
             Saws = new List<Saw> { saw };
         }
@@ -93,21 +101,25 @@ namespace PixelAdventure
                 if (trap.Collide(playerController.player.Vector, playerController.player.Size))
                     return GameState.GameOver;
 
-            if (Turret.bullet.Collide(playerController.player.Vector, playerController.player.Size))
-                return GameState.GameOver;
+            foreach (var turret in Turrets)
+            {
+                turret.Shoot();
+                if (turret.bullet.Collide(playerController.player.Vector, playerController.player.Size))
+                    return GameState.GameOver;
+            }
 
-            if (saw.Collide(playerController.player.Vector,playerController.player.Size))
-                return GameState.GameOver;
+            foreach (Saw saw in Saws)
+            {
+                saw.Move();
+                if (saw.Collide(playerController.player.Vector, playerController.player.Size))
+                    return GameState.GameOver;
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return GameState.Pause;
 
-            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
-                return GameState.Level2;
-
-            Turret.Shoot();
-
-            saw.Move();
+            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
+                return GameState.Win;
 
             return GameState.Level3;
         }

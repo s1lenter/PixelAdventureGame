@@ -47,7 +47,7 @@ namespace PixelAdventure.Scenes
             var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(1000, windowHeight - floorSize.Y - 100), 1065, 1220, 1f, "horizontal");
             var movingPlatform1 = new MovingPlatform(movingPlatformSize, new Point(1500, windowHeight - floorSize.Y - 290), 1100, 1500, 2f, "horizontal");
             var movingPlatform2 = new MovingPlatform(movingPlatformSize, new Point(670, windowHeight - floorSize.Y - 330), 670, 1070, 2f, "horizontal");
-            var movingPlatform3 = new MovingPlatform(movingPlatformSize, new Point(400, windowHeight - floorSize.Y - 360), 410, 650, 2f, "horizontal");
+            var movingPlatform3 = new MovingPlatform(movingPlatformSize, new Point(400, windowHeight - floorSize.Y - 360), 410, 650, 3f, "horizontal");
 
             Platforms = new Platform[]
             {
@@ -113,12 +113,7 @@ namespace PixelAdventure.Scenes
                 enemy.HorizontalMove(gameTime);
 
             if (playerController.player.CollideWithEnemies(Enemies, Coins))
-            {
-                int x = 0;
-                while (x < 10000)
-                    x += 1;
                 return GameState.GameOver;
-            }
                 
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
@@ -134,8 +129,8 @@ namespace PixelAdventure.Scenes
                     movingPlatform.HorizontalMove(gameTime);
             }
 
-            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
-                return GameState.Win;
+            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
+                return GameState.Level3;
 
             return GameState.Level2;
         }

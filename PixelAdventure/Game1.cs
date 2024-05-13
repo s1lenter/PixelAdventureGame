@@ -108,7 +108,7 @@ namespace PixelAdventure
 
             //};
 
-            currentLevel = GameState.Level3;
+            currentLevel = GameState.Level1;
         }
 
         protected override void Initialize()
@@ -349,15 +349,19 @@ namespace PixelAdventure
             foreach (var trap in level3.Traps)
                 _spriteBatch.Draw(trapTexture, new Rectangle(trap.Spawn.X + trap.Size.X, trap.Spawn.Y, trap.Size.X, trap.Size.Y), Color.White);
 
-            _spriteBatch.Draw(bulletTexture, new Rectangle((int)level3.Turret.bullet.Vector.X, (int)level3.Turret.bullet.Vector.Y,
-                level3.Turret.bullet.Size.X, level3.Turret.bullet.Size.Y), Color.White);
-            _spriteBatch.Draw(cubeTexture, new Rectangle(level3.Turret.Spawn, level3.Turret.Size), new Rectangle(171,0,18,18), Color.White);
+            foreach (var turret in level3.Turrets)
+            {
+                _spriteBatch.Draw(bulletTexture, new Rectangle((int)turret.bullet.Vector.X, (int)turret.bullet.Vector.Y,
+                    turret.bullet.Size.X, turret.bullet.Size.Y), Color.White);
+                _spriteBatch.Draw(cubeTexture, new Rectangle(turret.Spawn, turret.Size), new Rectangle(171, 0, 18, 18), Color.White);
+            }
 
-            _spriteBatch.Draw(sawTexture, 
-                new Rectangle((int)level3.saw.Vector.X, (int)level3.saw.Vector.Y, 50, 50),
-                new Rectangle(0,0,sawTexture.Width, sawTexture.Height), Color.White,
-                level3.saw.angleRotate,
-                new Vector2(sawTexture.Width / 2, sawTexture.Height / 2), SpriteEffects.FlipVertically, 0);
+            foreach (var saw in level3.Saws)
+                _spriteBatch.Draw(sawTexture,
+                    new Rectangle((int)saw.Vector.X, (int)saw.Vector.Y, 50, 50),
+                    new Rectangle(0, 0, sawTexture.Width, sawTexture.Height), Color.White,
+                    level3.saw.angleRotate,
+                    new Vector2(sawTexture.Width / 2, sawTexture.Height / 2), SpriteEffects.FlipVertically, 0);
 
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level3.FinishObj.SpawnPoint.X - 1, level3.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 

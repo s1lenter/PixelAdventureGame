@@ -54,7 +54,7 @@ namespace PixelAdventure
         public override bool Collide(Vector2 playerVector, Point playerSize)
         {
             Rectangle playerRectangle = new((int)playerVector.X, (int)playerVector.Y, playerSize.X, playerSize.Y);
-            Rectangle collider = new((int)Vector.X - 20, (int)Vector.Y - 15, Size.X, Size.Y);
+            Rectangle collider = new((int)Vector.X - 20, (int)Vector.Y - 15, Size.X - 20, Size.Y - 15);
 
             if (playerRectangle.Intersects(collider))
                 return true;
