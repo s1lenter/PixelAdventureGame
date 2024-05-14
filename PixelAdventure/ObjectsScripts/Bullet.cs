@@ -18,14 +18,23 @@ namespace PixelAdventure
             Size = size;
             Vector = new Vector2(spawn.X, spawn.Y);
 
-            speed = 1;
+            speed = 3;
         }
 
-        public virtual void Move()
+        public virtual void Move(string direction)
         {
-            Vector.X -= speed;
-            if (Vector.X < Spawn.X - 100)
-                Vector.X = Spawn.X;
+            if (direction == "left")
+            {
+                Vector.X -= speed;
+                if (Vector.X < Spawn.X - 100)
+                    Vector.X = Spawn.X;
+            }
+            else if (direction == "right")
+            {
+                Vector.X += speed;
+                if (Vector.X > Spawn.X + 100)
+                    Vector.X = Spawn.X;
+            }
         }
 
         public override bool Collide(Vector2 playerVector, Point playerSize)

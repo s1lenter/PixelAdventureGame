@@ -33,7 +33,7 @@ namespace PixelAdventure
             }
         }
 
-        public override void Move()
+        public override void Move(string direction = null)
         {
             Vector.Y += speed;
             if (Vector.Y <= topBound)

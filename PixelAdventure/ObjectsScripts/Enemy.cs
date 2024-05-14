@@ -23,7 +23,7 @@ namespace PixelAdventure
         public static Point currentFrameWalk = new Point(0, 0);
         private static Point spriteSizeWalk = new Point(6, 0);
 
-        public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound, float speed,string name) : base(enemySize, spawnPoint, leftBound, rightBound, speed, name)
+        public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound, float speed, string name) : base(enemySize, spawnPoint, leftBound, rightBound, speed, name)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
             this.speed = speed;

@@ -1,5 +1,4 @@
-﻿using PixelAdventure.ObjectsScripts;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -122,10 +121,9 @@ namespace PixelAdventure
             windowHeight = Window.ClientBounds.Height;
             windowWidth = Window.ClientBounds.Width;
 
-            playerController = new PlayerController(_spriteBatch);
+            playerController = new PlayerController();
 
             mapCreator = new MapCreator();
-            
 
             level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
 
@@ -176,12 +174,19 @@ namespace PixelAdventure
 
             playerController.Viewer.InicializeSprites(playerWalkRight, playerWalkLeft, playerIdle, playerIdleLeft, playerJumpRight, playerJumpLeft);
 
+            foreach (var enemy in level2.Enemies)
+                enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
+
+            foreach (var enemy in level3.Enemies)
+                enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
+
             finishTexture = Content.Load<Texture2D>("finish");
 
             select = Content.Load<Texture2D>("select");
 
             level1Texture = Content.Load<Texture2D>("level1");
             level2Texture = Content.Load<Texture2D>("level2");
+            level3Texture = Content.Load<Texture2D>("level3");
 
             bulletTexture = Content.Load<Texture2D>("bullet");
 
@@ -191,9 +196,6 @@ namespace PixelAdventure
 
             //MediaPlayer.Play(song);
             //MediaPlayer.IsRepeating = true;
-
-            foreach (var enemy in level2.Enemies)
-                enemy.InicializeSprites(enemyWalkRight, enemyWalkLeft);
         }
 
         protected override void Update(GameTime gameTime)
@@ -202,7 +204,6 @@ namespace PixelAdventure
             {
                 case GameState.Menu:
                     state = menu.Update(gameTime, currentLevel);
-                    //Initialize();
                     if (state == GameState.Quit) Exit();
                     break;
                 case GameState.LevelSelector:
@@ -217,6 +218,7 @@ namespace PixelAdventure
                 case GameState.Level2:
                     currentLevel = GameState.Level2;
                     state = level2.Update(gameTime, playerController);
+                    if (state == GameState.Level3) Initialize();
                     break;
                 case GameState.Level3:
                     currentLevel = GameState.Level3;
@@ -241,6 +243,11 @@ namespace PixelAdventure
                     break;
                 case GameState.Win:
                     state = win.Update();
+                    if (state == GameState.Menu)
+                    {
+                        Initialize(); 
+                        currentLevel = GameState.Level1;
+                    }
                     break;
             }
 
@@ -339,6 +346,13 @@ namespace PixelAdventure
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
             _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
+            foreach (var saw in level3.Saws)
+                _spriteBatch.Draw(sawTexture,
+                    new Rectangle((int)saw.Vector.X, (int)saw.Vector.Y, 50, 50),
+                    new Rectangle(0, 0, sawTexture.Width, sawTexture.Height), Color.White,
+                    level3.movingSaw.angleRotate,
+                    new Vector2(sawTexture.Width / 2, sawTexture.Height / 2), SpriteEffects.FlipVertically, 0);
+
             foreach (Coin coin in level3.Coins)
                 coin.DrawCoin(_spriteBatch, coinTexture);
 
@@ -351,17 +365,19 @@ namespace PixelAdventure
 
             foreach (var turret in level3.Turrets)
             {
-                _spriteBatch.Draw(bulletTexture, new Rectangle((int)turret.bullet.Vector.X, (int)turret.bullet.Vector.Y,
-                    turret.bullet.Size.X, turret.bullet.Size.Y), Color.White);
+                _spriteBatch.Draw(bulletTexture, new Rectangle((int)turret.bulletLeft.Vector.X, (int)turret.bulletLeft.Vector.Y,
+                    turret.bulletLeft.Size.X, turret.bulletLeft.Size.Y), Color.White);
+
+                _spriteBatch.Draw(bulletTexture, new Rectangle((int)turret.bulletRight.Vector.X, (int)turret.bulletRight.Vector.Y,
+                    turret.bulletRight.Size.X, turret.bulletRight.Size.Y), Color.White);
                 _spriteBatch.Draw(cubeTexture, new Rectangle(turret.Spawn, turret.Size), new Rectangle(171, 0, 18, 18), Color.White);
             }
 
-            foreach (var saw in level3.Saws)
-                _spriteBatch.Draw(sawTexture,
-                    new Rectangle((int)saw.Vector.X, (int)saw.Vector.Y, 50, 50),
-                    new Rectangle(0, 0, sawTexture.Width, sawTexture.Height), Color.White,
-                    level3.saw.angleRotate,
-                    new Vector2(sawTexture.Width / 2, sawTexture.Height / 2), SpriteEffects.FlipVertically, 0);
+            foreach (Enemy enemy in level3.Enemies)
+                enemy.DrawEnemyAnimation(_spriteBatch);
+
+            foreach (var movingPlatform in level3.MovingPlatforms)
+                _spriteBatch.Draw(movingPlatformTexture, new Rectangle((int)movingPlatform.Vector.X, (int)movingPlatform.Vector.Y, movingPlatform.Size.X, movingPlatform.Size.Y), Color.White);
 
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level3.FinishObj.SpawnPoint.X - 1, level3.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 

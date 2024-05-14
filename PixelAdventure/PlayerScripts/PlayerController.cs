@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PixelAdventure.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace PixelAdventure.PlayerScripts
         public PlayerViewer Viewer;
         public Player player;
         private Rectangle rect;
-        public PlayerController(SpriteBatch _spriteBatch)
+        public PlayerController()
         {
-            player = new Player(0, 800);
+            player = new Player(0, 1000);
             rect = new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10);
             Viewer = new PlayerViewer(rect);
         }

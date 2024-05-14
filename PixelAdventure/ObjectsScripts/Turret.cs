@@ -11,15 +11,21 @@ namespace PixelAdventure
     {
         public Point Spawn { get; private set; }
         public new Point Size { get; private set; }
-        public Bullet bullet;
+        public Bullet bulletLeft;
+        public Bullet bulletRight;
         public Turret(Point size, Point spawn) : base(size, spawn)
         {
             Spawn = spawn;
             Size = size;
 
-            bullet = new Bullet(new Point(10, 10), new Point(Spawn.X, Spawn.Y + Size.Y/2 - 5));
+            bulletLeft = new Bullet(new Point(10, 10), new Point(Spawn.X, Spawn.Y + Size.Y/2 - 5));
+            bulletRight = new Bullet(new Point(10, 10), new Point(Spawn.X + Size.X - 10, Spawn.Y + Size.Y / 2 - 5));
         }
 
-        public void Shoot() => bullet.Move();
+        public void Shoot()
+        {
+            bulletLeft.Move("left");
+            bulletRight.Move("right");
+        }
     }
 }
