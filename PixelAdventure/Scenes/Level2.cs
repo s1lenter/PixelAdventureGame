@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using PixelAdventure.ObjectsScripts;
-using PixelAdventure.PlayerScripts;
+using PixelAdventure.ObjectsScripts.OtherObjects;
+using PixelAdventure.ObjectsScripts.Platforms;
+using PixelAdventure.ObjectsScripts.Traps;
 using System.Collections.Generic;
 
-namespace PixelAdventure.Scenes
+namespace PixelAdventure
 {
     internal class Level2
     {
@@ -130,7 +131,7 @@ namespace PixelAdventure.Scenes
                     movingPlatform.HorizontalMove(gameTime);
             }
 
-            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size))
+            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
                 return GameState.Level3;
 
             return GameState.Level2;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.ObjectsScripts.Platforms
 {
     internal class Turret : Platform
     {
@@ -18,7 +18,7 @@ namespace PixelAdventure
             Spawn = spawn;
             Size = size;
 
-            bulletLeft = new Bullet(new Point(10, 10), new Point(Spawn.X, Spawn.Y + Size.Y/2 - 5));
+            bulletLeft = new Bullet(new Point(10, 10), new Point(Spawn.X, Spawn.Y + Size.Y / 2 - 5));
             bulletRight = new Bullet(new Point(10, 10), new Point(Spawn.X + Size.X - 10, Spawn.Y + Size.Y / 2 - 5));
         }
 

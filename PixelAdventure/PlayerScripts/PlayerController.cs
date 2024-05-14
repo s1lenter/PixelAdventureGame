@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PixelAdventure.Scenes;
+using PixelAdventure.ObjectsScripts.OtherObjects;
+using PixelAdventure.ObjectsScripts.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.PlayerScripts
+namespace PixelAdventure
 {
     internal class PlayerController
     {

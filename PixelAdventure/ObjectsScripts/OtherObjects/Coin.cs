@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.ObjectsScripts.OtherObjects
 {
     internal class Coin
     {
@@ -25,7 +25,7 @@ namespace PixelAdventure
 
             if (playerRectangle.Intersects(coinRectangle))
                 return true;
-            return false;  
+            return false;
         }
 
         public void DrawCoin(SpriteBatch _spriteBatch, Texture2D texture)

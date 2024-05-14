@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using PixelAdventure.ObjectsScripts;
-using PixelAdventure.PlayerScripts;
+using PixelAdventure.ObjectsScripts.OtherObjects;
+using PixelAdventure.ObjectsScripts.Platforms;
+using PixelAdventure.ObjectsScripts.Traps;
 
-namespace PixelAdventure.Scenes
+namespace PixelAdventure
 {
     internal class Level1
     {

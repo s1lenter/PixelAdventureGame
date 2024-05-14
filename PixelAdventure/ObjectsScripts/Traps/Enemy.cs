@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PixelAdventure.PlayerScripts;
+using PixelAdventure.ObjectsScripts.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.ObjectsScripts.Traps
 {
     internal class Enemy : MovingPlatform
     {

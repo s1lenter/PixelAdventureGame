@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework.Media;
-using PixelAdventure.Scenes;
-using PixelAdventure.PlayerScripts;
 using System.ComponentModel.Design;
 using System.Threading;
+using PixelAdventure.ObjectsScripts.Platforms;
+using PixelAdventure.ObjectsScripts.Traps;
+using PixelAdventure.ObjectsScripts.OtherObjects;
 
 namespace PixelAdventure
 {
@@ -17,7 +18,7 @@ namespace PixelAdventure
     {
         private GameState state;
         private GameState currentLevel;
-        #region
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -29,30 +30,35 @@ namespace PixelAdventure
         private Texture2D skyBackground;
         private Texture2D backgroundUI;
 
-        public Texture2D playerWalkRight;
-        public Texture2D playerWalkLeft;
-        public Texture2D playerIdle;
-        public Texture2D playerIdleLeft;
-        public Texture2D playerJumpRight;
-        public Texture2D playerJumpLeft;
+        private Texture2D playerWalkRight;
+        private Texture2D playerWalkLeft;
+        private Texture2D playerIdle;
+        private Texture2D playerIdleLeft;
+        private Texture2D playerJumpRight;
+        private Texture2D playerJumpLeft;
 
-        public Texture2D enemyWalkRight;
-        public Texture2D enemyWalkLeft;
-        public Texture2D enemyDeadRight;
-        public Texture2D enemyDeadLeft;
+        private Texture2D enemyWalkRight;
+        private Texture2D enemyWalkLeft;
 
-        public Texture2D coinTexture;
+        private Texture2D coinTexture;
+
+        private Texture2D movingPlatformTexture;
+
+        private Texture2D bulletTexture;
+        private Texture2D sawTexture;
+
+        private Texture2D finishTexture;
+
+        private Texture2D level1Example;
+        private Texture2D level2Example;
+        private Texture2D level3Example;
+
+        private Texture2D select;
 
         private SpriteFont highlight;
         private SpriteFont text;
 
-        public Texture2D movingPlatformTexture;
-
-        public Texture2D bulletTexture;
-        public Texture2D sawTexture;
-
-        MapCreator mapCreator;
-        #endregion
+        private MapCreator mapCreator;
 
         private PlayerController playerController;
 
@@ -61,8 +67,6 @@ namespace PixelAdventure
         private Level2 level2;
 
         private Level3 level3;
-
-        private Texture2D finishTexture;
 
         private Song song;
 
@@ -76,16 +80,6 @@ namespace PixelAdventure
 
         LevelSelector levelSelector;
 
-        private string[] fileNames;
-
-        private Texture2D textures;
-
-        private Texture2D select;
-
-        private Texture2D level1Texture;
-        private Texture2D level2Texture;
-        private Texture2D level3Texture;
-
         private int initializeCounter = 0;
 
         public Game1()
@@ -93,20 +87,6 @@ namespace PixelAdventure
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            //fileNames = new string[]
-            //{
-            //    "tilemap",
-            //    "blackFloor", "sky","trap", "Coin",
-            //    "Dude_Monster_Walk_6", "Dude_Monster_Walk_Left", "Dude_Monster_Idle_4",
-            //    "Dude_Monster_Idle_Left", "Dude_Monster_Jump_8", "Dude_Monster_Jump_Left",
-            //    "Owlet_Monster_Walk_6", "Owlet_Monster_Walk_Left", "finish", 
-            //};
-
-            //textures = new Texture2D[]
-            //{
-
-            //};
-
             currentLevel = GameState.Level1;
         }
 
@@ -145,6 +125,9 @@ namespace PixelAdventure
             pause = new Pause(highlight, text, backgroundUI, select);
 
             win = new Win(highlight, text, backgroundUI);
+
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
         }
         protected override void LoadContent()
         {
@@ -184,22 +167,23 @@ namespace PixelAdventure
 
             select = Content.Load<Texture2D>("select");
 
-            level1Texture = Content.Load<Texture2D>("level1");
-            level2Texture = Content.Load<Texture2D>("level2");
-            level3Texture = Content.Load<Texture2D>("level3");
+            level1Example = Content.Load<Texture2D>("level1");
+            level2Example = Content.Load<Texture2D>("level2");
+            level3Example = Content.Load<Texture2D>("level3");
 
             bulletTexture = Content.Load<Texture2D>("bullet");
 
             sawTexture = Content.Load<Texture2D>("saw");
 
             song = Content.Load<Song>("81cebf7e45fdef7");
-
-            //MediaPlayer.Play(song);
-            //MediaPlayer.IsRepeating = true;
         }
 
         protected override void Update(GameTime gameTime)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.OemPlus))
+                MediaPlayer.Volume += 0.01f;
+            else if (Keyboard.GetState().IsKeyDown(Keys.OemMinus))
+                MediaPlayer.Volume -= 0.01f;
             switch (state)
             {
                 case GameState.Menu:
@@ -262,7 +246,7 @@ namespace PixelAdventure
                     menu.Draw(gameTime, _spriteBatch);
                     break;
                 case GameState.LevelSelector:
-                    levelSelector.Draw(gameTime, _spriteBatch, level1Texture, level2Texture);
+                    levelSelector.Draw(gameTime, _spriteBatch, level1Example, level2Example, level3Example);
                     break;
                 case GameState.Level1:
                     DrawLevel1(gameTime);

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.ObjectsScripts
+namespace PixelAdventure.ObjectsScripts.OtherObjects
 {
     internal class Finish
     {

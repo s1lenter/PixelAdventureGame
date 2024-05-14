@@ -13,8 +13,11 @@ using System.Net.Mime;
 using System.Reflection.Metadata;
 using System.Diagnostics.Metrics;
 using System.Reflection;
+using PixelAdventure.ObjectsScripts.Platforms;
+using PixelAdventure.ObjectsScripts.Traps;
+using PixelAdventure.ObjectsScripts.OtherObjects;
 
-namespace PixelAdventure.PlayerScripts
+namespace PixelAdventure
 {
     internal class Player
     {

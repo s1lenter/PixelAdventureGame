@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.Scenes
+namespace PixelAdventure
 {
     internal class LevelSelector
     {
@@ -77,17 +77,16 @@ namespace PixelAdventure.Scenes
             return GameState.LevelSelector;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch _spriteBatch, Texture2D level1, Texture2D level2)
+        public void Draw(GameTime gameTime, SpriteBatch _spriteBatch, Texture2D level1, Texture2D level2, Texture2D level3)
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(background, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
             _spriteBatch.Draw(level1, new Rectangle(100, 200, 300, 170), Color.White);
             _spriteBatch.Draw(level2, new Rectangle(450, 200, 300, 170), Color.White);
-            _spriteBatch.Draw(level1, new Rectangle(800, 200, 300, 170), Color.White);
+            _spriteBatch.Draw(level3, new Rectangle(800, 200, 300, 170), Color.White);
             _spriteBatch.Draw(select, new Rectangle((int)selectVector.X, (int)selectVector.Y, 300, 10), Color.White);
             _spriteBatch.DrawString(highlight, "Choose level", new Vector2(100, 50), Color.Black);
             _spriteBatch.DrawString(text, "Press ESC to quit menu", new Vector2(100, 900), Color.Black);
-            //_spriteBatch.DrawString(text, "Quit to menu", new Vector2(100, 300), Color.Black);
             _spriteBatch.End();
         }
     }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.ObjectsScripts.Traps
 {
     internal class Trap
     {
@@ -25,7 +25,7 @@ namespace PixelAdventure
 
         public virtual bool Collide(Vector2 playerVector, Point playerSize)
         {
-            Rectangle playerRectangle = new (new Point((int)playerVector.X, (int)playerVector.Y), new Point(playerSize.X-15, playerSize.Y));
+            Rectangle playerRectangle = new(new Point((int)playerVector.X, (int)playerVector.Y), new Point(playerSize.X - 15, playerSize.Y));
 
             if (playerRectangle.Intersects(bottomCollRect) || playerRectangle.Intersects(topCollRect))
                 return true;

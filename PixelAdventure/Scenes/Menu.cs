@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure.Scenes
+namespace PixelAdventure
 {
     internal class Menu
     {
@@ -84,6 +84,7 @@ namespace PixelAdventure.Scenes
             _spriteBatch.DrawString(text, "Play", new Vector2(100, 200), Color.Black);
             _spriteBatch.DrawString(text, "Levels", new Vector2(100, 300), Color.Black);
             _spriteBatch.DrawString(text, "Quit", new Vector2(100, 400), Color.Black);
+            _spriteBatch.DrawString(text, "Change the volume using \"+\" \"-\"", new Vector2(100, 950), Color.Black);
             _spriteBatch.End();
         }
     }

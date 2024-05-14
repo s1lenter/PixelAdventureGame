@@ -23,7 +23,7 @@ namespace PixelAdventure
 
             if (this.speed == 0)
             {
-                this.topBound = spawn.Y; 
+                this.topBound = spawn.Y;
                 this.bottomBound = spawn.Y;
             }
             else

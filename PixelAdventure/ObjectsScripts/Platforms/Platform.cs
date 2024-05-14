@@ -8,9 +8,8 @@ using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PixelAdventure.PlayerScripts;
 
-namespace PixelAdventure
+namespace PixelAdventure.ObjectsScripts.Platforms
 {
     internal class Platform
     {

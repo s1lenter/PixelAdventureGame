@@ -19,18 +19,6 @@
 /processorParam:Quality=Best
 /build:81cebf7e45fdef7.mp3
 
-#begin backgroundLevel2.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:backgroundLevel2.jpg
-
 #begin backGroundUI.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -42,18 +30,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:backGroundUI.jpg
-
-#begin Ball.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Ball.png
 
 #begin blackFloor.png
 /importer:TextureImporter
@@ -225,30 +201,6 @@
 /processorParam:TextureFormat=Compressed
 /build:myText1.spritefont
 
-#begin Owlet_Monster_Death_8.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Owlet_Monster_Death_8.png
-
-#begin Owlet_Monster_Death_Left.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Owlet_Monster_Death_Left.png
-
 #begin Owlet_Monster_Walk_6.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -272,18 +224,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Owlet_Monster_Walk_Left.png
-
-#begin Owlet_Monster.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Owlet_Monster.png
 
 #begin Player.png
 /importer:TextureImporter
