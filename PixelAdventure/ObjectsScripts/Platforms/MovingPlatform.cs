@@ -15,15 +15,12 @@ namespace PixelAdventure.ObjectsScripts.Platforms
 
         protected int leftBound;
         protected int rightBound;
-
-        public string Type { get; set; }
-        public MovingPlatform(Point platformSize, Point spawnPoint, int leftBound, int rightBound, float speed, string type) : base(platformSize, spawnPoint)
+        public MovingPlatform(Point platformSize, Point spawnPoint, int leftBound, int rightBound, float speed) : base(platformSize, spawnPoint)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
             this.speed = speed;
             this.leftBound = leftBound;
             this.rightBound = rightBound;
-            Type = type;
         }
 
         public virtual void HorizontalMove(GameTime gameTime)
@@ -65,10 +62,7 @@ namespace PixelAdventure.ObjectsScripts.Platforms
 
             if (playerRectangle.Intersects(topRectangle))
             {
-                if (Type == "horizontal")
-                    player.Vector.X += speed;
-                //if (Type == "vertical")
-                //    player.Vector.Y += 1;
+                player.Vector.X += speed;
                 return CollideState.Top;
             }
 

@@ -13,23 +13,21 @@ namespace PixelAdventure
 {
     internal class PlayerController
     {
-        public PlayerViewer Viewer;
-        public Player player;
-        private Rectangle rect;
+        public PlayerViewer Viewer { get; private set; }
+        public Player player { get; private set; }
         public PlayerController()
         {
             player = new Player(0, 1000);
-            rect = new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10);
-            Viewer = new PlayerViewer(rect);
+            Viewer = new PlayerViewer();
         }
 
-        public void Update(GameTime gameTime, Platform[] platforms, List<Coin> coins, float gravity)
+        public void Update(Platform[] platforms, List<Coin> coins, float gravity)
         {
             player.Vector.Y += gravity;
 
-            player.Move(gameTime);
+            player.Move();
 
-            player.CollideWithPlatforms(platforms, gravity, gameTime);
+            player.CollideWithPlatforms(platforms, gravity);
 
             player.CollideWithCoins(coins);
         }
@@ -53,7 +51,7 @@ namespace PixelAdventure
             }
         }
 
-        public void AnimationGo(SpriteBatch _spriteBatch, Rectangle drawingRectangle)
+        public void AnimationGo(SpriteBatch _spriteBatch)
         {
 
             if (!player.GoLeft && player.IsMove && !player.IsJump)

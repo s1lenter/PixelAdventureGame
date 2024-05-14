@@ -46,10 +46,10 @@ namespace PixelAdventure.Scenes.Levels
             var platformFly4 = new Platform(flyPlatformSize2, new Point(895, windowHeight - floorSize.Y - 80));
             var platformFly5 = new Platform(flyPlatformSize2, new Point(1260, windowHeight - floorSize.Y - 80));
 
-            var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(1000, windowHeight - floorSize.Y - 100), 1065, 1220, 1f, "horizontal");
-            var movingPlatform1 = new MovingPlatform(movingPlatformSize, new Point(1500, windowHeight - floorSize.Y - 290), 1100, 1500, 2f, "horizontal");
-            var movingPlatform2 = new MovingPlatform(movingPlatformSize, new Point(670, windowHeight - floorSize.Y - 330), 670, 1070, 2f, "horizontal");
-            var movingPlatform3 = new MovingPlatform(movingPlatformSize, new Point(400, windowHeight - floorSize.Y - 360), 410, 650, 3f, "horizontal");
+            var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(1000, windowHeight - floorSize.Y - 100), 1065, 1220, 1f);
+            var movingPlatform1 = new MovingPlatform(movingPlatformSize, new Point(1500, windowHeight - floorSize.Y - 290), 1100, 1500, 2f);
+            var movingPlatform2 = new MovingPlatform(movingPlatformSize, new Point(670, windowHeight - floorSize.Y - 330), 670, 1070, 2f);
+            var movingPlatform3 = new MovingPlatform(movingPlatformSize, new Point(400, windowHeight - floorSize.Y - 360), 410, 650, 3f);
 
             Platforms = new Platform[]
             {
@@ -63,11 +63,11 @@ namespace PixelAdventure.Scenes.Levels
                 movingPlatform, movingPlatform1, movingPlatform2, movingPlatform3
             };
 
-            Enemy enemy = new(new Point(30, 30), new Point(700, windowHeight - 210), 620, 840, 3f, "betweenTraps");
-            Enemy enemy1 = new(new Point(30, 30), new Point(900, windowHeight - floorSize.Y - 80 - enemy.Size.Y), 880, 1025, 2f, "onFlyPlatform1");
-            Enemy enemy2 = new(new Point(30, 30), new Point(1350, windowHeight - floorSize.Y - 80 - enemy.Size.Y), 1245, 1375, 2f, "onFlyPlatform1");
-            Enemy enemy3 = new(new Point(30, 30), new Point(200, 470), 150, 250, 2f, "final1");
-            Enemy enemy4 = new(new Point(30, 30), new Point(300, 470), 250, 350, 2f, "final2");
+            Enemy enemy = new(new Point(30, 30), new Point(700, windowHeight - 210), 620, 840, 3f);
+            Enemy enemy1 = new(new Point(30, 30), new Point(900, windowHeight - floorSize.Y - 80 - enemy.Size.Y), 880, 1025, 2f);
+            Enemy enemy2 = new(new Point(30, 30), new Point(1350, windowHeight - floorSize.Y - 80 - enemy.Size.Y), 1245, 1375, 2f);
+            Enemy enemy3 = new(new Point(30, 30), new Point(200, 470), 150, 250, 2f);
+            Enemy enemy4 = new(new Point(30, 30), new Point(300, 470), 250, 350, 2f);
 
             Enemies = new List<Enemy>()
             {
@@ -109,7 +109,7 @@ namespace PixelAdventure.Scenes.Levels
 
         public GameState Update(GameTime gameTime, PlayerController playerController)
         {
-            playerController.Update(gameTime, Platforms, Coins, gravity);
+            playerController.Update(Platforms, Coins, gravity);
 
             foreach (var enemy in Enemies)
                 enemy.HorizontalMove(gameTime);
@@ -126,10 +126,7 @@ namespace PixelAdventure.Scenes.Levels
                     return GameState.GameOver;
 
             foreach (var movingPlatform in MovingPlatforms)
-            {
-                if (movingPlatform.Type == "horizontal")
-                    movingPlatform.HorizontalMove(gameTime);
-            }
+                movingPlatform.HorizontalMove(gameTime);
 
             if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
                 return GameState.Level3;

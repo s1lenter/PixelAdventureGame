@@ -6,18 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.ObjectsScripts
 {
     internal class Animation
     {
-        public int FrameHeight { get; set; }
-        public int FrameWidth { get; set; }
-        public Point currentFrame;
+        public int FrameHeight { get; private set; }
+        public int FrameWidth { get; private set; }
+        private Point currentFrame;
         private Point spriteSize;
         private int currentTime;
         private int period;
 
-        
+
         public Animation(int frameHeight, int frameWidth, Point currentFrame, Point spriteSize)
         {
             FrameHeight = frameHeight;

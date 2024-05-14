@@ -20,10 +20,10 @@ namespace PixelAdventure.ObjectsScripts.Traps
         private static Dictionary<string, Texture2D> animationSprites;
         private static Dictionary<Texture2D, Animation> animations;
 
-        public static Point currentFrameWalk = new Point(0, 0);
+        private static Point currentFrameWalk = new Point(0, 0);
         private static Point spriteSizeWalk = new Point(6, 0);
 
-        public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound, float speed, string name) : base(enemySize, spawnPoint, leftBound, rightBound, speed, name)
+        public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound, float speed) : base(enemySize, spawnPoint, leftBound, rightBound, speed)
         {
             Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
             this.speed = speed;

@@ -78,7 +78,7 @@ namespace PixelAdventure.Scenes.Levels
 
         public GameState Update(GameTime gameTime, PlayerController playerController)
         {
-            playerController.Update(gameTime, Platforms, Coins, gravity);
+            playerController.Update(Platforms, Coins, gravity);
 
             foreach (Trap trap in Traps)
                 if (trap.Collide(playerController.player.Vector, playerController.player.Size))

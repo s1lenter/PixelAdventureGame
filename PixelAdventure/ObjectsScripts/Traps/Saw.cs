@@ -9,7 +9,7 @@ namespace PixelAdventure
 {
     internal class Saw : Bullet
     {
-        public float angleRotate;
+        public float angleRotate { get; private set; }
         private int topBound;
         private int bottomBound;
 

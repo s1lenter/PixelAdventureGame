@@ -248,7 +248,7 @@ namespace PixelAdventure
                     menu.Draw(gameTime, _spriteBatch);
                     break;
                 case GameState.LevelSelector:
-                    levelSelector.Draw(gameTime, _spriteBatch, level1Example, level2Example, level3Example);
+                    levelSelector.Draw(_spriteBatch, level1Example, level2Example, level3Example);
                     break;
                 case GameState.Level1:
                     DrawLevel1(gameTime);
@@ -291,7 +291,7 @@ namespace PixelAdventure
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level1.FinishObj.SpawnPoint.X - 1, level1.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 
             playerController.AnimationController(gameTime);
-            playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+            playerController.AnimationGo(_spriteBatch);
             _spriteBatch.End();
         }
 
@@ -302,7 +302,7 @@ namespace PixelAdventure
             _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
             playerController.AnimationController(gameTime);
-            playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+            playerController.AnimationGo(_spriteBatch);
 
             foreach (Coin coin in level2.Coins)
                 coin.DrawCoin(_spriteBatch, coinTexture);
@@ -336,7 +336,7 @@ namespace PixelAdventure
                 _spriteBatch.Draw(sawTexture,
                     new Rectangle((int)saw.Vector.X, (int)saw.Vector.Y, 50, 50),
                     new Rectangle(0, 0, sawTexture.Width, sawTexture.Height), Color.White,
-                    level3.movingSaw.angleRotate,
+                    level3.MovingSaw.angleRotate,
                     new Vector2(sawTexture.Width / 2, sawTexture.Height / 2), SpriteEffects.FlipVertically, 0);
 
             foreach (Coin coin in level3.Coins)
@@ -368,7 +368,7 @@ namespace PixelAdventure
             _spriteBatch.Draw(finishTexture, new Rectangle(new Point(level3.FinishObj.SpawnPoint.X - 1, level3.FinishObj.SpawnPoint.Y + 5), new Point(50, 50)), Color.White);
 
             playerController.AnimationController(gameTime);
-            playerController.AnimationGo(_spriteBatch, new Rectangle((int)playerController.player.Vector.X, (int)playerController.player.Vector.Y - 10, playerController.player.Size.X + 10, playerController.player.Size.Y + 10));
+            playerController.AnimationGo(_spriteBatch);
             _spriteBatch.End();
         }
     }

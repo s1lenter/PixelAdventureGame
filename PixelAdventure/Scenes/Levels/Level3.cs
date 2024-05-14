@@ -28,16 +28,13 @@ namespace PixelAdventure.Scenes.Levels
         public List<Turret> Turrets { get; private set; }
 
         public List<Enemy> Enemies { get; private set; }
-        public Saw movingSaw { get; private set; }
-        public Saw movingSaw1 { get; private set; }
+        public Saw MovingSaw { get; private set; }
+        public Saw MovingSaw1 { get; private set; }
 
         public Level3(int windowWidth, int windowHeight, SpriteBatch spriteBatch)
         {
             var floorSize = new Point(windowWidth, 180);
-            var platformSize = new Point(120, 30);
-            var platformSize2 = new Point(120, 120);
             var flyPlatformSize = new Point(60, 30);
-            var finalPlatformSize2 = new Point(450, 120);
 
             var movingPlatformSize = new Point(30, 5);
 
@@ -62,13 +59,10 @@ namespace PixelAdventure.Scenes.Levels
             var platformFly2 = new Platform(flyPlatformSize, new Point(1250, 550));
             var platformFly3 = new Platform(flyPlatformSize, new Point(1400, 550));
 
-            var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(1220, 290), 1220, 1570, 2f, "horizontal");
-            var movingPlatform1 = new MovingPlatform(movingPlatformSize, new Point(1500, 540), 1480, 1650, 2f, "horizontal");
-            var movingPlatform2 = new MovingPlatform(movingPlatformSize, new Point(670, windowHeight - floorSize.Y - 330), 670, 1070, 2f, "horizontal");
-            var movingPlatform3 = new MovingPlatform(movingPlatformSize, new Point(400, windowHeight - floorSize.Y - 360), 410, 650, 3f, "horizontal");
+            var movingPlatform = new MovingPlatform(movingPlatformSize, new Point(1220, 290), 1220, 1570, 2f);
+            var movingPlatform1 = new MovingPlatform(movingPlatformSize, new Point(1500, 540), 1480, 1650, 2f);
 
             var turret = new Turret(new Point(30, 30), new Point(1000, 270));
-            //var turret1 = new Turret(new Point(30, 30), new Point(570, 470));
             var turret2 = new Turret(new Point(30, 30), new Point(1650, windowHeight - floorSize.Y - 100));
 
             Turrets = new List<Turret> { turret, turret2 };
@@ -103,9 +97,9 @@ namespace PixelAdventure.Scenes.Levels
                 new(coinSize, new Point(1870, 520)),
             };
 
-            Enemy enemy = new(new Point(30, 30), new Point(500, 270), 500, 665, 3f, "betweenTraps");
-            Enemy enemy1 = new(new Point(30, 30), new Point(470, 470), 500, 570, 2f, "betweenTraps");
-            Enemy enemy2 = new(new Point(30, 30), new Point(470, 800), 950, 1150, 3f, "betweenTraps");
+            Enemy enemy = new(new Point(30, 30), new Point(500, 270), 500, 665, 3f);
+            Enemy enemy1 = new(new Point(30, 30), new Point(470, 470), 500, 570, 2f);
+            Enemy enemy2 = new(new Point(30, 30), new Point(470, 800), 950, 1150, 3f);
 
             Enemies = new List<Enemy>()
             {
@@ -129,8 +123,8 @@ namespace PixelAdventure.Scenes.Levels
             FinishObj = new Finish(new Point(10, 50), new Point(600, windowHeight - floorSize.Y - 70 - 50));
 
             var sawSize = new Point(50, 50);
-            movingSaw = new Saw(sawSize, new Point(810, 720), 2, 720, 810);
-            movingSaw1 = new Saw(sawSize, new Point(900, 810), 2, 720, 810);
+            MovingSaw = new Saw(sawSize, new Point(810, 720), 2, 720, 810);
+            MovingSaw1 = new Saw(sawSize, new Point(900, 810), 2, 720, 810);
             var saw1 = new Saw(sawSize, new Point(1700, 300), 0, 0, 0);
             var saw2 = new Saw(sawSize, new Point(800, 550), 0, 0, 0);
             var saw3 = new Saw(sawSize, new Point(900, 550), 0, 0, 0);
@@ -139,7 +133,7 @@ namespace PixelAdventure.Scenes.Levels
             var saw6 = new Saw(sawSize, new Point(1375, 830), 0, 0, 0);
             var saw7 = new Saw(sawSize, new Point(1275, 830), 0, 0, 0);
             var saw8 = new Saw(sawSize, new Point(1225, 830), 0, 0, 0);
-            Saws = new List<Saw> { saw1, saw2, saw3, saw4, movingSaw, movingSaw1, saw5, saw6, saw7, saw8 };
+            Saws = new List<Saw> { saw1, saw2, saw3, saw4, MovingSaw, MovingSaw1, saw5, saw6, saw7, saw8 };
         }
 
         private void AddTraps(int x, int y, int count)
@@ -152,7 +146,7 @@ namespace PixelAdventure.Scenes.Levels
 
         public GameState Update(GameTime gameTime, PlayerController playerController)
         {
-            playerController.Update(gameTime, Platforms, Coins, gravity);
+            playerController.Update(Platforms, Coins, gravity);
 
             if (playerController.player.Vector.Y > 800 && isStart == true)
             {
@@ -188,10 +182,7 @@ namespace PixelAdventure.Scenes.Levels
                 return GameState.GameOver;
 
             foreach (var movingPlatform in MovingPlatforms)
-            {
-                if (movingPlatform.Type == "horizontal")
-                    movingPlatform.HorizontalMove(gameTime);
-            }
+                movingPlatform.HorizontalMove(gameTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return GameState.Pause;

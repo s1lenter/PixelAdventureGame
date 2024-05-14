@@ -77,7 +77,7 @@ namespace PixelAdventure.Scenes.UI
             return GameState.LevelSelector;
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch _spriteBatch, Texture2D level1, Texture2D level2, Texture2D level3)
+        public void Draw(SpriteBatch _spriteBatch, Texture2D level1, Texture2D level2, Texture2D level3)
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(background, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using PixelAdventure.ObjectsScripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,8 @@ namespace PixelAdventure
         public Point currentFrameJump = new Point(0, 0);
         private Point spriteSizeJump = new Point(8, 0);
 
-        //private Rectangle drawingRect;
-
-        public PlayerViewer(Rectangle rect)
-        {
-            //drawingRect = rect;
-        }
-
         public void InicializeSprites(Texture2D walkRightSprite, Texture2D walkLeftSprite,
-            Texture2D idleRightSprite, Texture2D idleLeftSprite, Texture2D jumpRightSprite, Texture2D jumpLeftSprite) //VIEWER
+            Texture2D idleRightSprite, Texture2D idleLeftSprite, Texture2D jumpRightSprite, Texture2D jumpLeftSprite)
         {
             walk = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
             idle = new Animation(32, 32, currentFrameIdle, spriteSizeIdle);
@@ -65,7 +59,7 @@ namespace PixelAdventure
             currentAnimation = new Animation(32, 32, currentFrameWalk, spriteSizeWalk);
         }
 
-        public void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture, Animation animation, Rectangle drawingRectangle) //VIEWER
+        public void DrawCurrentAnimation(SpriteBatch _spriteBatch, Texture2D texture, Animation animation, Rectangle drawingRectangle)
         {
             _spriteBatch.Draw(texture,
                     drawingRectangle,

@@ -10,8 +10,8 @@ namespace PixelAdventure.ObjectsScripts.OtherObjects
 {
     internal class Coin
     {
-        public Point Size { get; set; }
-        public Point SpawnPoint { get; set; }
+        public Point Size { get; private set; }
+        public Point SpawnPoint { get; private set; }
         public Coin(Point size, Point spawn)
         {
             Size = size;
@@ -28,9 +28,6 @@ namespace PixelAdventure.ObjectsScripts.OtherObjects
             return false;
         }
 
-        public void DrawCoin(SpriteBatch _spriteBatch, Texture2D texture)
-        {
-            _spriteBatch.Draw(texture, new Rectangle(SpawnPoint, Size), Color.White);
-        }
+        public void DrawCoin(SpriteBatch _spriteBatch, Texture2D texture) => _spriteBatch.Draw(texture, new Rectangle(SpawnPoint, Size), Color.White);
     }
 }

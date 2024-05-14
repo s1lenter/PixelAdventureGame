@@ -11,8 +11,8 @@ namespace PixelAdventure.ObjectsScripts.Platforms
     {
         public Point Spawn { get; private set; }
         public new Point Size { get; private set; }
-        public Bullet bulletLeft;
-        public Bullet bulletRight;
+        public Bullet bulletLeft { get; private set; }
+        public Bullet bulletRight { get; private set; }
         public Turret(Point size, Point spawn) : base(size, spawn)
         {
             Spawn = spawn;

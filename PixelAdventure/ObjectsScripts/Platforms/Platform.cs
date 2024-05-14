@@ -13,15 +13,13 @@ namespace PixelAdventure.ObjectsScripts.Platforms
 {
     internal class Platform
     {
-        public Point SpawnPoint;
-        public Point Size;
-        public Vector2 Vector;
+        public Point SpawnPoint { get; private set; }
+        public Point Size { get; private set; }
 
         public Platform(Point platformSize, Point spawnPoint)
         {
             Size = platformSize;
             SpawnPoint = spawnPoint;
-            Vector = new Vector2(spawnPoint.X, spawnPoint.Y);
         }
 
         public virtual CollideState Collide(Vector2 playerVector, Point playerSize, Player player)

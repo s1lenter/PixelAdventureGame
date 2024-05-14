@@ -22,10 +22,6 @@ namespace PixelAdventure
     internal class Player
     {
         public Point Size { get; private set; }
-        //public static Point Spawn { get; private set; }
-
-        public Point ColliderSize;
-        public Point ColliderSpawn;
 
         public Vector2 Vector;
 
@@ -46,19 +42,16 @@ namespace PixelAdventure
         public bool IsStay;
         public bool IsWalk;
 
-        public Player(int startX, int startY) //CTOR
+        public Player(int startX, int startY)
         {
             Size = new Point(30, 30);
-            ColliderSpawn = new Point((int)Vector.X - 14, (int)Vector.Y - 7);
-            ColliderSize = new Point(18, 25);
-            Vector = new Vector2(startX, startY /*Game1.windowHeight - 100 - Size.Y*/);
-            //Spawn = new Point((int)Vector.X, (int)Vector.Y);
+            Vector = new Vector2(startX, startY);
             speed = 3;
             jumpForce = 10;
             counter = 0;
         }
 
-        public void Move(GameTime gameTime) //MODEL
+        public void Move()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
@@ -88,7 +81,7 @@ namespace PixelAdventure
                 Vector.X = Game1.windowWidth - Size.X;
         }
 
-        public void CollideWithPlatforms(Platform[] platforms, float gravity, GameTime gameTime) //MODEL
+        public void CollideWithPlatforms(Platform[] platforms, float gravity)
         {
             foreach (Platform platform in platforms)
             {
@@ -99,7 +92,7 @@ namespace PixelAdventure
                     {
                         Vector.X -= speed;
                         Vector.Y -= gravity;
-                        Jump(gameTime, gravity);
+                        Jump();
                     }
                     else
                         Vector.X -= speed;
@@ -113,7 +106,7 @@ namespace PixelAdventure
                     {
                         Vector.X += speed;
                         Vector.Y -= gravity;
-                        Jump(gameTime, gravity);
+                        Jump();
                     }
                     else
                         Vector.X += speed;
@@ -121,12 +114,12 @@ namespace PixelAdventure
 
                 else if (platform.Collide(Vector, Size, this) == CollideState.Top)
                 {
-                    Vector.Y = (int)platform.Vector.Y - Size.Y;
-                    Jump(gameTime, gravity);
+                    Vector.Y = platform.SpawnPoint.Y - Size.Y;
+                    Jump();
                 }
             }
         }
-        public void Jump(GameTime gameTime, float gravity) //MODEL
+        public void Jump()
         {
             var startY = Vector.Y;
 
@@ -157,7 +150,7 @@ namespace PixelAdventure
             }
         }
 
-        public bool CollideWithEnemies(List<Enemy> enemies, List<Coin> coins) //MODEL
+        public bool CollideWithEnemies(List<Enemy> enemies, List<Coin> coins)
         {
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -186,7 +179,7 @@ namespace PixelAdventure
             return false;
         }
 
-        public void CollideWithCoins(List<Coin> coins) //MODEL
+        public void CollideWithCoins(List<Coin> coins)
         {
             for (int i = 0; i < coins.Count; i++)
             {

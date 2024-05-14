@@ -9,8 +9,8 @@ namespace PixelAdventure.ObjectsScripts.Traps
 {
     internal class Trap
     {
-        public Point Size { get; set; }
-        public Point Spawn { get; set; }
+        public Point Size { get; protected set; }
+        public Point Spawn { get; protected set; }
 
         private Rectangle topCollRect;
         private Rectangle bottomCollRect;
