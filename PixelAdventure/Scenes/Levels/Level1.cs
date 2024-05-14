@@ -10,7 +10,7 @@ using PixelAdventure.ObjectsScripts.OtherObjects;
 using PixelAdventure.ObjectsScripts.Platforms;
 using PixelAdventure.ObjectsScripts.Traps;
 
-namespace PixelAdventure
+namespace PixelAdventure.Scenes.Levels
 {
     internal class Level1
     {
@@ -45,7 +45,7 @@ namespace PixelAdventure
 
             Platforms = new Platform[]
             {
-                platform1, platform2, platform4, platform3, finalPlatform, 
+                platform1, platform2, platform4, platform3, finalPlatform,
                 platformFly1, platformFly2, platformFly3, floorPlatform,
             };
 

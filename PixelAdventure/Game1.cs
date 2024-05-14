@@ -11,6 +11,8 @@ using System.Threading;
 using PixelAdventure.ObjectsScripts.Platforms;
 using PixelAdventure.ObjectsScripts.Traps;
 using PixelAdventure.ObjectsScripts.OtherObjects;
+using PixelAdventure.Scenes.Levels;
+using PixelAdventure.Scenes.UI;
 
 namespace PixelAdventure
 {

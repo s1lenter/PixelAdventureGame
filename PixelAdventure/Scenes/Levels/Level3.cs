@@ -10,7 +10,7 @@ using PixelAdventure.ObjectsScripts.Traps;
 using PixelAdventure.ObjectsScripts.Platforms;
 using PixelAdventure.ObjectsScripts.OtherObjects;
 
-namespace PixelAdventure
+namespace PixelAdventure.Scenes.Levels
 {
     internal class Level3
     {
@@ -54,7 +54,7 @@ namespace PixelAdventure
             var platform8 = new Platform(new Point(100, 30), new Point(1850, 550));
             var platform9 = new Platform(new Point(1500, 500), new Point(500, windowHeight - floorSize.Y - 70));
 
-            var platform10 = new Platform(new Point(100,30), new Point(1200, windowHeight - floorSize.Y - 160));
+            var platform10 = new Platform(new Point(100, 30), new Point(1200, windowHeight - floorSize.Y - 160));
             var platform11 = new Platform(new Point(100, 30), new Point(1300, windowHeight - floorSize.Y - 130));
             var platform12 = new Platform(new Point(100, 30), new Point(1400, windowHeight - floorSize.Y - 100));
 
@@ -139,7 +139,7 @@ namespace PixelAdventure
             var saw6 = new Saw(sawSize, new Point(1375, 830), 0, 0, 0);
             var saw7 = new Saw(sawSize, new Point(1275, 830), 0, 0, 0);
             var saw8 = new Saw(sawSize, new Point(1225, 830), 0, 0, 0);
-            Saws = new List<Saw> { saw1, saw2, saw3, saw4, movingSaw, movingSaw1 , saw5, saw6, saw7, saw8};
+            Saws = new List<Saw> { saw1, saw2, saw3, saw4, movingSaw, movingSaw1, saw5, saw6, saw7, saw8 };
         }
 
         private void AddTraps(int x, int y, int count)
@@ -151,7 +151,7 @@ namespace PixelAdventure
         private bool isStart = true;
 
         public GameState Update(GameTime gameTime, PlayerController playerController)
-        {  
+        {
             playerController.Update(gameTime, Platforms, Coins, gravity);
 
             if (playerController.player.Vector.Y > 800 && isStart == true)

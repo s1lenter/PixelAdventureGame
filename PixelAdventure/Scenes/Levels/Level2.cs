@@ -6,7 +6,7 @@ using PixelAdventure.ObjectsScripts.Platforms;
 using PixelAdventure.ObjectsScripts.Traps;
 using System.Collections.Generic;
 
-namespace PixelAdventure
+namespace PixelAdventure.Scenes.Levels
 {
     internal class Level2
     {
@@ -116,7 +116,7 @@ namespace PixelAdventure
 
             if (playerController.player.CollideWithEnemies(Enemies, Coins))
                 return GameState.GameOver;
-                
+
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return GameState.Pause;

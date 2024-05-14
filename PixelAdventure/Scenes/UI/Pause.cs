@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PixelAdventure
+namespace PixelAdventure.Scenes.UI
 {
     internal class Pause
     {
