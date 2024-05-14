@@ -20,8 +20,8 @@ namespace PixelAdventure.ObjectsScripts.Traps
         private static Dictionary<string, Texture2D> animationSprites;
         private static Dictionary<Texture2D, Animation> animations;
 
-        private static Point currentFrameWalk = new Point(0, 0);
-        private static Point spriteSizeWalk = new Point(6, 0);
+        private static Point currentFrameWalk = new (0, 0);
+        private static Point spriteSizeWalk = new (6, 0);
 
         public Enemy(Point enemySize, Point spawnPoint, int leftBound, int rightBound, float speed) : base(enemySize, spawnPoint, leftBound, rightBound, speed)
         {
@@ -117,11 +117,6 @@ namespace PixelAdventure.ObjectsScripts.Traps
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]]);
             else if (GoLeft)
                 DrawCurrentAnimation(_spriteBatch, animationSprites["walkLeft"], animations[animationSprites["walkLeft"]]);
-        }
-
-        public void StartAgain()
-        {
-            Vector.X = 0;
         }
     }
 }

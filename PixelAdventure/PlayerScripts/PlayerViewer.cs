@@ -67,34 +67,22 @@ namespace PixelAdventure
                     Color.White);
         }
 
-        public void DrawWalkRight(SpriteBatch _spriteBatch, Rectangle rect)
-        {
+        public void DrawWalkRight(SpriteBatch _spriteBatch, Rectangle rect) => 
             DrawCurrentAnimation(_spriteBatch, animationSprites["walkRight"], animations[animationSprites["walkRight"]], rect);
-        }
 
-        public void DrawWalkLeft(SpriteBatch _spriteBatch, Rectangle rect)
-        {
+        public void DrawWalkLeft(SpriteBatch _spriteBatch, Rectangle rect) => 
             DrawCurrentAnimation(_spriteBatch, animationSprites["walkLeft"], animations[animationSprites["walkLeft"]], rect);
-        }
 
-        public void DrawIdleRight(SpriteBatch _spriteBatch, Rectangle rect)
-        {
+        public void DrawIdleRight(SpriteBatch _spriteBatch, Rectangle rect) =>
             DrawCurrentAnimation(_spriteBatch, animationSprites["idleRight"], animations[animationSprites["idleRight"]], rect);
-        }
 
-        public void DrawIdleLeft(SpriteBatch _spriteBatch, Rectangle rect)
-        {
+        public void DrawIdleLeft(SpriteBatch _spriteBatch, Rectangle rect) =>
             DrawCurrentAnimation(_spriteBatch, animationSprites["idleLeft"], animations[animationSprites["idleLeft"]], rect);
-        }
 
-        public void DrawJumpRight(SpriteBatch _spriteBatch, Rectangle rect)
-        {
+        public void DrawJumpRight(SpriteBatch _spriteBatch, Rectangle rect) =>
             DrawCurrentAnimation(_spriteBatch, animationSprites["jumpRight"], animations[animationSprites["jumpRight"]], rect);
-        }
 
-        public void DrawJumpLeft(SpriteBatch _spriteBatch, Rectangle rect)
-        {
+        public void DrawJumpLeft(SpriteBatch _spriteBatch, Rectangle rect) =>
             DrawCurrentAnimation(_spriteBatch, animationSprites["jumpLeft"], animations[animationSprites["jumpLeft"]], rect);
-        }
     }
 }

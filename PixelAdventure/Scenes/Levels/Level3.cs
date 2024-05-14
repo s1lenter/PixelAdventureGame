@@ -31,7 +31,7 @@ namespace PixelAdventure.Scenes.Levels
         public Saw MovingSaw { get; private set; }
         public Saw MovingSaw1 { get; private set; }
 
-        public Level3(int windowWidth, int windowHeight, SpriteBatch spriteBatch)
+        public Level3(int windowWidth, int windowHeight)
         {
             var floorSize = new Point(windowWidth, 180);
             var flyPlatformSize = new Point(60, 30);
@@ -148,37 +148,37 @@ namespace PixelAdventure.Scenes.Levels
         {
             playerController.Update(Platforms, Coins, gravity);
 
-            if (playerController.player.Vector.Y > 800 && isStart == true)
+            if (playerController.Player.Vector.Y > 800 && isStart == true)
             {
-                playerController.player.Vector.Y = 200;
-                playerController.player.Vector.X = 1850;
-                playerController.player.GoLeft = true;
+                playerController.Player.Vector.Y = 200;
+                playerController.Player.Vector.X = 1850;
+                playerController.Player.GoLeft = true;
                 isStart = false;
             }
 
             foreach (Trap trap in Traps)
-                if (trap.Collide(playerController.player.Vector, playerController.player.Size))
+                if (trap.Collide(playerController.Player.Vector, playerController.Player.Size))
                     return GameState.GameOver;
 
             foreach (var turret in Turrets)
             {
                 turret.Shoot();
-                if (turret.bulletLeft.Collide(playerController.player.Vector, playerController.player.Size) ||
-                    turret.bulletRight.Collide(playerController.player.Vector, playerController.player.Size))
+                if (turret.bulletLeft.Collide(playerController.Player.Vector, playerController.Player.Size) ||
+                    turret.bulletRight.Collide(playerController.Player.Vector, playerController.Player.Size))
                     return GameState.GameOver;
             }
 
             foreach (Saw saw in Saws)
             {
                 saw.Move();
-                if (saw.Collide(playerController.player.Vector, playerController.player.Size))
+                if (saw.Collide(playerController.Player.Vector, playerController.Player.Size))
                     return GameState.GameOver;
             }
 
             foreach (var enemy in Enemies)
                 enemy.HorizontalMove(gameTime);
 
-            if (playerController.player.CollideWithEnemies(Enemies, Coins))
+            if (playerController.Player.CollideWithEnemies(Enemies, Coins))
                 return GameState.GameOver;
 
             foreach (var movingPlatform in MovingPlatforms)
@@ -187,7 +187,7 @@ namespace PixelAdventure.Scenes.Levels
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return GameState.Pause;
 
-            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
+            if (FinishObj.CollideWithFinish(playerController.Player.Vector, playerController.Player.Size) && Coins.Count == 0)
                 return GameState.Win;
 
             return GameState.Level3;

@@ -9,7 +9,7 @@ namespace PixelAdventure
 {
     internal class Saw : Bullet
     {
-        public float angleRotate { get; private set; }
+        public float AngleRotate { get; private set; }
         private int topBound;
         private int bottomBound;
 
@@ -18,7 +18,7 @@ namespace PixelAdventure
             Spawn = spawn;
             Size = size;
             Vector = new Vector2(spawn.X, spawn.Y);
-            angleRotate = 0;
+            AngleRotate = 0;
             this.speed = speed;
 
             if (this.speed == 0)
@@ -49,7 +49,7 @@ namespace PixelAdventure
             Spin();
         }
 
-        public void Spin() => angleRotate += 0.2f;
+        public void Spin() => AngleRotate += 0.2f;
 
         public override bool Collide(Vector2 playerVector, Point playerSize)
         {

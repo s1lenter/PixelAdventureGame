@@ -30,7 +30,7 @@ namespace PixelAdventure.Scenes.UI
             this.select = select;
         }
 
-        public GameState UpdatePause(GameTime gameTime, GameState currentLevel)
+        public GameState UpdatePause(GameState currentLevel)
         {
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down) && countChoose == 0 &&
@@ -61,7 +61,7 @@ namespace PixelAdventure.Scenes.UI
             return GameState.Pause;
         }
 
-        public void DrawPause(GameTime gameTime, SpriteBatch _spriteBatch)
+        public void DrawPause(SpriteBatch _spriteBatch)
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(background, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);

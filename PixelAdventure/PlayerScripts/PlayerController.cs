@@ -14,37 +14,37 @@ namespace PixelAdventure
     internal class PlayerController
     {
         public PlayerViewer Viewer { get; private set; }
-        public Player player { get; private set; }
+        public Player Player { get; private set; }
         public PlayerController()
         {
-            player = new Player(0, 1000);
+            Player = new Player(0, 1000);
             Viewer = new PlayerViewer();
         }
 
         public void Update(Platform[] platforms, List<Coin> coins, float gravity)
         {
-            player.Vector.Y += gravity;
+            Player.Vector.Y += gravity;
 
-            player.Move();
+            Player.Move();
 
-            player.CollideWithPlatforms(platforms, gravity);
+            Player.CollideWithPlatforms(platforms, gravity);
 
-            player.CollideWithCoins(coins);
+            Player.CollideWithCoins(coins);
         }
 
         public void AnimationController(GameTime gameTime)
         {
-            if (player.IsMove)
+            if (Player.IsMove)
             {
                 Viewer.currentAnimation = Viewer.walk;
                 Viewer.currentAnimation.StartAnimation(gameTime);
             }
-            else if (!player.IsMove)
+            else if (!Player.IsMove)
             {
                 Viewer.currentAnimation = Viewer.idle;
                 Viewer.currentAnimation.StartAnimation(gameTime);
             }
-            else if (player.IsJump)
+            else if (Player.IsJump)
             {
                 Viewer.currentAnimation = Viewer.jump;
                 Viewer.currentAnimation.StartAnimation(gameTime);
@@ -54,19 +54,19 @@ namespace PixelAdventure
         public void AnimationGo(SpriteBatch _spriteBatch)
         {
 
-            if (!player.GoLeft && player.IsMove && !player.IsJump)
-                Viewer.DrawWalkRight(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-            else if (player.GoLeft && player.IsMove && !player.IsJump)
-                Viewer.DrawWalkLeft(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-            else if (!player.IsMove && !player.GoLeft && !player.IsJump)
-                Viewer.DrawIdleRight(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-            else if (!player.IsMove && player.GoLeft && !player.IsJump)
-                Viewer.DrawIdleLeft(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
+            if (!Player.GoLeft && Player.IsMove && !Player.IsJump)
+                Viewer.DrawWalkRight(_spriteBatch, new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10));
+            else if (Player.GoLeft && Player.IsMove && !Player.IsJump)
+                Viewer.DrawWalkLeft(_spriteBatch, new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10));
+            else if (!Player.IsMove && !Player.GoLeft && !Player.IsJump)
+                Viewer.DrawIdleRight(_spriteBatch, new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10));
+            else if (!Player.IsMove && Player.GoLeft && !Player.IsJump)
+                Viewer.DrawIdleLeft(_spriteBatch, new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10));
 
-            if (player.IsJump && player.GoLeft)
-                Viewer.DrawJumpLeft(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
-            else if (player.IsJump && !player.GoLeft)
-                Viewer.DrawJumpRight(_spriteBatch, new Rectangle((int)player.Vector.X, (int)player.Vector.Y - 10, player.Size.X + 10, player.Size.Y + 10));
+            if (Player.IsJump && Player.GoLeft)
+                Viewer.DrawJumpLeft(_spriteBatch, new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10));
+            else if (Player.IsJump && !Player.GoLeft)
+                Viewer.DrawJumpRight(_spriteBatch, new Rectangle((int)Player.Vector.X, (int)Player.Vector.Y - 10, Player.Size.X + 10, Player.Size.Y + 10));
         }
     }
 }

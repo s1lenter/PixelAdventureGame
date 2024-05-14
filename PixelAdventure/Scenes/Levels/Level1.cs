@@ -23,7 +23,7 @@ namespace PixelAdventure.Scenes.Levels
 
         public Finish FinishObj { get; private set; }
 
-        public Level1(int windowWidth, int windowHeight, SpriteBatch spriteBatch)
+        public Level1(int windowWidth, int windowHeight)
         {
             var floorSize = new Point(windowWidth, 180);
             var platformSize = new Point(120, 30);
@@ -76,18 +76,18 @@ namespace PixelAdventure.Scenes.Levels
                 Traps.Add(new Trap(new Point(15, 15), new Point(x + 15 * i, y)));
         }
 
-        public GameState Update(GameTime gameTime, PlayerController playerController)
+        public GameState Update(PlayerController playerController)
         {
             playerController.Update(Platforms, Coins, gravity);
 
             foreach (Trap trap in Traps)
-                if (trap.Collide(playerController.player.Vector, playerController.player.Size))
+                if (trap.Collide(playerController.Player.Vector, playerController.Player.Size))
                     return GameState.GameOver;
 
             if (Keyboard.GetState().IsKeyDown(Keys.P))
                 return GameState.Pause;
 
-            if (FinishObj.CollideWithFinish(playerController.player.Vector, playerController.player.Size) && Coins.Count == 0)
+            if (FinishObj.CollideWithFinish(playerController.Player.Vector, playerController.Player.Size) && Coins.Count == 0)
                 return GameState.Level2;
 
             return GameState.Level1;

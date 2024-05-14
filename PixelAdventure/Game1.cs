@@ -107,11 +107,11 @@ namespace PixelAdventure
 
             mapCreator = new MapCreator();
 
-            level1 = new Level1(windowWidth, windowHeight, _spriteBatch);
+            level1 = new Level1(windowWidth, windowHeight);
 
-            level2 = new Level2(windowWidth, windowHeight, _spriteBatch);
+            level2 = new Level2(windowWidth, windowHeight);
 
-            level3 = new Level3(windowWidth, windowHeight, _spriteBatch);
+            level3 = new Level3(windowWidth, windowHeight);
 
             base.Initialize();
 
@@ -198,7 +198,7 @@ namespace PixelAdventure
                     break;
                 case GameState.Level1:
                     currentLevel = GameState.Level1;
-                    state = level1.Update(gameTime, playerController);
+                    state = level1.Update(playerController);
                     if (state == GameState.Level2) Initialize();
                     break;
                 case GameState.Level2:
@@ -211,7 +211,7 @@ namespace PixelAdventure
                     state = level3.Update(gameTime, playerController);
                     break;
                 case GameState.Pause:
-                    state = pause.UpdatePause(gameTime, currentLevel);
+                    state = pause.UpdatePause(currentLevel);
                     if (state == GameState.Menu)
                     {
                         Initialize();
@@ -219,7 +219,7 @@ namespace PixelAdventure
                     }
                     break;
                 case GameState.GameOver:
-                    state = gameOver.UpdateGameOver(gameTime, currentLevel);
+                    state = gameOver.UpdateGameOver(currentLevel);
                     if (state == currentLevel) Initialize();
                     if (state == GameState.Menu)
                     {
@@ -245,7 +245,7 @@ namespace PixelAdventure
             switch (state)
             {
                 case GameState.Menu:
-                    menu.Draw(gameTime, _spriteBatch);
+                    menu.Draw(_spriteBatch);
                     break;
                 case GameState.LevelSelector:
                     levelSelector.Draw(_spriteBatch, level1Example, level2Example, level3Example);
@@ -260,13 +260,13 @@ namespace PixelAdventure
                     DrawLevel3(gameTime);
                     break;
                 case GameState.Pause:
-                    pause.DrawPause(gameTime, _spriteBatch);
+                    pause.DrawPause(_spriteBatch);
                     break;
                 case GameState.GameOver:
-                    gameOver.DrawGameOver(gameTime, _spriteBatch);
+                    gameOver.DrawGameOver(_spriteBatch);
                     break;
                 case GameState.Win:
-                    win.Draw(gameTime, _spriteBatch);
+                    win.Draw(_spriteBatch);
                     break;
             }
             base.Draw(gameTime);
@@ -276,7 +276,7 @@ namespace PixelAdventure
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
+            _spriteBatch.DrawString(text, "Score: " + playerController.Player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
             foreach (Coin coin in level1.Coins)
                 coin.DrawCoin(_spriteBatch, coinTexture);
@@ -299,7 +299,7 @@ namespace PixelAdventure
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
+            _spriteBatch.DrawString(text, "Score: " + playerController.Player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
             playerController.AnimationController(gameTime);
             playerController.AnimationGo(_spriteBatch);
@@ -330,13 +330,13 @@ namespace PixelAdventure
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(skyBackground, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
-            _spriteBatch.DrawString(text, "Score: " + playerController.player.counter.ToString(), new Vector2(0, 0), Color.Black);
+            _spriteBatch.DrawString(text, "Score: " + playerController.Player.counter.ToString(), new Vector2(0, 0), Color.Black);
 
             foreach (var saw in level3.Saws)
                 _spriteBatch.Draw(sawTexture,
                     new Rectangle((int)saw.Vector.X, (int)saw.Vector.Y, 50, 50),
                     new Rectangle(0, 0, sawTexture.Width, sawTexture.Height), Color.White,
-                    level3.MovingSaw.angleRotate,
+                    level3.MovingSaw.AngleRotate,
                     new Vector2(sawTexture.Width / 2, sawTexture.Height / 2), SpriteEffects.FlipVertically, 0);
 
             foreach (Coin coin in level3.Coins)

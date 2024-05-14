@@ -34,7 +34,7 @@ namespace PixelAdventure.Scenes.UI
             selectVector = new Vector2(90, 200);
         }
 
-        public GameState UpdateGameOver(GameTime gameTime, GameState currentLevel)
+        public GameState UpdateGameOver(GameState currentLevel)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Down) && countChoose == 0 &&
             selectVector.Y < 300)
@@ -65,7 +65,7 @@ namespace PixelAdventure.Scenes.UI
             return GameState.GameOver;
         }
 
-        public void DrawGameOver(GameTime gameTime, SpriteBatch _spriteBatch)
+        public void DrawGameOver(SpriteBatch _spriteBatch)
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(background, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);

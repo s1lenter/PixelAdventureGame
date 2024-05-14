@@ -10,7 +10,7 @@ namespace PixelAdventure.ObjectsScripts.Platforms
 {
     internal class MovingPlatform : Platform
     {
-        public new Vector2 Vector;
+        public Vector2 Vector;
         protected float speed;
 
         protected int leftBound;

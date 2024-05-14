@@ -30,7 +30,7 @@ namespace PixelAdventure.Scenes.UI
                 return GameState.Menu;
             return GameState.Win;
         }
-        public void Draw(GameTime gameTime, SpriteBatch _spriteBatch)
+        public void Draw(SpriteBatch _spriteBatch)
         {
             _spriteBatch.Begin();
             _spriteBatch.Draw(background, new Rectangle(0, 0, windowWidth, windowHeight), Color.White);
